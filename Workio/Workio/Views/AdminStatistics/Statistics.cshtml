@@ -1,0 +1,685 @@
+﻿@{
+    ViewData["Title"] = @localizer.Get("Statistics");
+}
+
+<h1>@localizer.Get("Statistics") @DateTime.Now.Year</h1>
+<link rel="stylesheet" href="~/css/adminStatistics.css" type="text/css">
+@if (User.IsInRole("Admin") || User.IsInRole("Mod"))
+{
+
+
+    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+           id="user-stats-tab"
+           data-mdb-toggle="tab"
+           href="#user-stats-tab-content"
+           role="tab"
+           aria-controls="user-stats-tab-content"
+           aria-selected="true">@localizer.Get("Users")</a>
+        </li>
+
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+           id="team-stats-tab"
+           data-mdb-toggle="tab"
+           href="#team-stats-tab-content"
+           role="tab"
+           aria-controls="team-stats-tab-content"
+           aria-selected="false">@localizer.Get("Teams")</a>
+        </li>
+
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+           id="events-stats-tab"
+           data-mdb-toggle="tab"
+           href="#events-stats-tab-content"
+           role="tab"
+           aria-controls="events-stats-tab-content"
+           aria-selected="false">@localizer.Get("Events")</a>
+        </li>
+
+
+
+    </ul>
+    <div class="tab-content" id="ex2-content">
+        <div aria-labelledby="user-stats-tab-content" role="tabpanel" class="tab-pane show active" id="user-stats-tab-content">
+            <div id="users-stats" class="row row-cols-2 row-cols-md-2 g-4">
+                    <div class="col" style="width: 100%;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="total-users">
+                                <p>@localizer.Get("StatsUsersRegistations")</p>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>@localizer.Get("TotalUsersRegistered"): <span>@ViewBag.TotalUsers</span></li>
+                                    <li>@localizer.Get("UsersRegisteredthisYear"): <span>@ViewBag.UsersRegisteredThisYear</span></li>
+                                </ul>
+                            </div>
+                            <div id="totalUsers-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="col full-w-col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="fw-bold" style="font-size:large" id="users-with-team">
+                                    <p>@localizer.Get("UsersWithTeam")</p>
+                                </div>
+                                <ul>
+                                    <li>@ViewBag.FoundTeam @localizer.Get("StatsAllValueOutOfValue") @ViewBag.TotalUsers</li>
+                                </ul>
+                                <div id="usersWithTeam-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col full-w-col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="fw-bold" style="font-size:large" id="users-with-team">
+                                    <p>@localizer.Get("AdminStatsOtherData")</p>
+                                </div>
+                                <div>
+                                <ul>
+                                    <li><span>@localizer.Get("UsersBanned"): @ViewBag.BannedUsers</span></li>
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                
+            </div>
+        </div>
+
+        <div aria-labelledby="team-stats-tab-content" role="tabpanel" class="tab-pane fade" id="team-stats-tab-content">
+            <div id="teams-stats" class="row row-cols-2 row-cols-md-2 g-4">
+
+                <div class="col" style="width: 100%;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="total-teams">
+                                <p>@localizer.Get("StatsTeamsCreations")</p>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>@localizer.Get("TotalTeamsCreated"): <span>@ViewBag.TotalTeams</span></li>
+                                    <li>@localizer.Get("TeamsCreatedthisYear"): <span>@ViewBag.TeamsCreatedThisYear</span></li>
+                                </ul>
+                            </div>
+                            <div id="totalTeams-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col full-w-col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="teams-completed">
+                                <p>@localizer.Get("TeamsStatus"): </p>
+                            </div>
+                            <div id="teamsCompleted-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col full-w-col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="users-with-team">
+                                <p>@localizer.Get("AdminStatsOtherData")</p>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>@localizer.Get("TeamsSuspended"): @ViewBag.SuspendedTeams</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div aria-labelledby="events-stats-tab-content" role="tabpanel" class="tab-pane fade" id="events-stats-tab-content">
+
+            <div id="events-stats" class="row row-cols-2 row-cols-md-2 g-4">
+
+                <div class="col" style="width: 100%;">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="total-events">
+                                <p>@localizer.Get("StatsEventsCreations")</p>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>@localizer.Get("TotalEventsCreated"): <span>@ViewBag.TotalEvents</span></li>
+                                    <li>@localizer.Get("EventsCreatedThisYear"): <span>@ViewBag.EventsCreatedThisYear</span></li>
+                                </ul>
+                            </div>
+                            <div class="chart-container" id="totalEvents-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col full-w-col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="interested-users">
+                                <p>@localizer.Get("UsersInterestedinEvents")</p>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li><span id="total-users-interessed-in-events"></span> @localizer.Get("StatsAllValueOutOfValue") @ViewBag.TotalUsers</li>
+                                </ul>
+                            </div>
+                            <div class="chart-container" id="interested-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col full-w-col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="fw-bold" style="font-size:large" id="userTeam-interested">
+                                <!--<p>@localizer.Get("UsersVSTeamsInterestinEvents"): </p>-->
+                                <p>@localizer.Get("StatsEventsInteressesOrigins")</p>
+                            </div>
+                            <div id="events-interesses-origin-extra-info">
+                                <ul>
+                                    <li style="visibility: hidden;"></li>
+                                    <!--<li>Users: @ViewBag.UsersInterestedInEvents</li>
+                                    <li>Teams: @ViewBag.TeamsInterestedInEvents</li>-->
+                                </ul>
+                            </div>
+                            <div class="chart-container" id="userTeamInterested-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col full-w-col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="fw-bold" style="font-size:large" id="users-with-team">
+                                    <p>@localizer.Get("AdminStatsOtherData")</p>
+                                </div>
+                                <div>
+                                <ul>
+                                    <li><span>@localizer.Get("EventsSuspended"): @ViewBag.SuspendedEvents</span></li>
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/lib/GoogleCharts/loader.js"></script>
+    <script type="text/javascript">
+        //-------------------- The language translations from the ASP net goes there! -----------------------
+        //Usage: translation.noGraphDataAvailable
+        var translation = {
+            noGraphDataUsersPerMonth: '@localizer.Get("StatsUsersNoGraphDataUsersPerMonth")',
+            noGraphDataUsersWithTeam: '@localizer.Get("StatsUsersNoGraphDataUsersWithTeam")',
+            noGraphDataTeamsPerMonth: '@localizer.Get("StatsTeamsNoGraphDataTeamsPerMonth")',
+            noGraphDataTeamsStates: '@localizer.Get("StatsTeamsNoGraphDataTeamsStates")',
+            noGraphDataEventsPerMonth: '@localizer.Get("StatsEventsNoGraphDataEventsPerMonth")',
+            noGraphDataEventsUsersInteressed: '@localizer.Get("StatsEventsNoGraphDataEventsUsersInteressed")',
+            noGraphDataEventInteressesOrigin: '@localizer.Get("StatsEventsNoGraphDataEventInteressesOrigin")',
+        };
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function isJsonEmpty(json) {
+            if (Object.keys(json).length === 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        var tabs = document.querySelectorAll('#ex1 .nav-link');
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                drawCharts();
+            });
+        });
+
+        var dataLoaded = false;
+        var chartsData = {
+            totalUser: null,
+            usersWithTeam: null,
+            totalTeams: null,
+            totalTeamsStates: null,
+            totalEvents: null,
+            eventsInteresse: null,
+            userTeamUnteressedInEvents: null
+        }
+
+        var chartsTotals = {
+            totalUser: {total: 0},
+            usersWithTeam: {total: 0},
+            totalTeams: {total: 0},
+            totalTeamsStates: {total: 0},
+            totalEvents: {total: 0},
+            eventsInteresse: {total: 0, totalInteressed: 0},
+            userTeamUnteressedInEvents: {total: 0}
+        }
+
+        function drawTotalUsersChart() {
+            // Total Users graph
+            var dataTotalUsers = new google.visualization.DataTable();
+
+            dataTotalUsers.addColumn('string', 'Month');
+            dataTotalUsers.addColumn('number', '@localizer.Get("StatsUsersPerMonthUsersLegend")');
+
+            if (chartsData.totalUser != undefined) {
+                dataTotalUsers.addRows(chartsData.totalUser);
+            }
+
+            var optionsTotalUsers = {
+                title: '@localizer.Get("UsersRegisteredPerMonth")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                vAxis: {
+                    format: '0' // Set the format to display only integer values
+                }
+            };
+
+            var totalUsersChart = new google.visualization.LineChart(document.getElementById('totalUsers-chart'));
+
+            //Verify if exists any data to display
+            if (dataTotalUsers.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('totalUsers-chart').innerHTML = translation.noGraphDataUsersPerMonth;
+            } else {
+                // Draw the chart with data and options
+                totalUsersChart.draw(dataTotalUsers, optionsTotalUsers);
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            } 
+        }
+
+        function drawUsersWithTeamsChart() {
+            //Piechart users with teams
+            var dataUsersWithTeam = new google.visualization.DataTable();
+
+            dataUsersWithTeam.addColumn('string', 'Found team or not');
+            dataUsersWithTeam.addColumn('number', 'Number of Users');
+
+            if (chartsData.usersWithTeam != undefined) {
+                dataUsersWithTeam.addRows(chartsData.usersWithTeam);
+            }
+
+            var optionsUsersWithTeam = {
+                //title: '@localizer.Get("UsersWhoFoundTeam")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var usersWithTeamChart = new google.visualization.PieChart(document.getElementById('usersWithTeam-chart'));
+
+            //Verify if exists any data to display
+            if (dataUsersWithTeam.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('usersWithTeam-chart').innerHTML = translation.noGraphDataUsersWithTeam;
+            } else {
+                // Draw the chart with data and options
+                usersWithTeamChart.draw(dataUsersWithTeam, optionsUsersWithTeam);
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            } 
+        }
+
+        function drawTotalTeamsChart() {
+            // Total Teams graph
+            var dataTotalTeams = new google.visualization.DataTable();
+
+            dataTotalTeams.addColumn('string', 'Month');
+            dataTotalTeams.addColumn('number', '@localizer.Get("StatsTeamsPerMonthTeamsLegend")');
+
+            if (chartsData.totalTeams != undefined) {
+                dataTotalTeams.addRows(chartsData.totalTeams);
+            }
+
+            var optionsTotalTeams = {
+                title: '@localizer.Get("TeamsCreatedPerMonth")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                vAxis: {
+                    format: '0' // Set the format to display only integer values
+                }
+            };
+
+            var totalTeamsChart = new google.visualization.LineChart(document.getElementById('totalTeams-chart'));
+
+            //Verify if exists any data to display
+            if (dataTotalTeams.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('totalTeams-chart').innerHTML = translation.noGraphDataTeamsPerMonth;
+            } else {
+                // Draw the chart with data and options
+                totalTeamsChart.draw(dataTotalTeams, optionsTotalTeams);
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            }
+        }
+
+        function drawTotalTeamsStates() {
+            // Teams completed
+            var dataUserTeamsCompleted = new google.visualization.DataTable();
+
+            dataUserTeamsCompleted.addColumn('string', 'Interested');
+            dataUserTeamsCompleted.addColumn('number', 'Number of interested');
+
+            if (chartsData.totalTeamsStates != undefined) {
+                dataUserTeamsCompleted.addRows(chartsData.totalTeamsStates);
+            }
+
+            var optionsTeamsCompleted = {
+                //title: '@localizer.Get("TeamsStatus")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var teamsCompletedChart = new google.visualization.PieChart(document.getElementById('teamsCompleted-chart'));
+
+            //Verify if exists any data to display
+            if (dataUserTeamsCompleted.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('teamsCompleted-chart').innerHTML = translation.noGraphDataTeamsStates;
+            } else {
+                // Draw the chart with data and options
+                teamsCompletedChart.draw(dataUserTeamsCompleted, optionsTeamsCompleted);
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            } 
+        }
+
+        function drawTotalEventsChart() {
+            // Total Events graph
+            var dataTotalEvents = new google.visualization.DataTable();
+
+            dataTotalEvents.addColumn('string', 'Month');
+            dataTotalEvents.addColumn('number', '@localizer.Get("StatsEventsPerMonthEventsLegend")');
+
+            if (chartsData.totalEvents != undefined) {
+                dataTotalEvents.addRows(chartsData.totalEvents);
+            }
+
+            var optionsTotalEvents = {
+                title: '@localizer.Get("EventsCreatedPerMonth")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                vAxis: {
+                    format: '0' // Set the format to display only integer values
+                }
+            };
+
+            var totalEventsChart = new google.visualization.LineChart(document.getElementById('totalEvents-chart'));
+
+            //Verify if exists any data to display
+            if (dataTotalEvents.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('totalEvents-chart').innerHTML = translation.noGraphDataEventsPerMonth;
+                document.getElementById("total-users-interessed-in-events").innerHTML = chartsTotals.eventsInteresse.totalInteressed;
+            } else {
+                // Draw the chart with data and options
+                totalEventsChart.draw(dataTotalEvents, optionsTotalEvents);
+
+                document.getElementById("total-users-interessed-in-events").innerHTML = chartsTotals.eventsInteresse.totalInteressed;
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            } 
+        }
+
+        function drawEventsIteresseChart() {
+            // Interested graph
+            var dataInterested = new google.visualization.DataTable();
+
+            dataInterested.addColumn('string', 'Interested');
+            dataInterested.addColumn('number', 'Number of Users');
+
+            if (chartsData.eventsInteresse != undefined) {
+                dataInterested.addRows(chartsData.eventsInteresse);
+            }
+
+            var optionsInterested = {
+                //title: '@localizer.Get("InterestedInEvents")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var InterestedChart = new google.visualization.PieChart(document.getElementById('interested-chart'));
+
+            //Verify if exists any data to display
+            if (dataInterested.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('interested-chart').innerHTML = translation.noGraphDataEventsUsersInteressed;
+            } else {
+                // Draw the chart with data and options
+                InterestedChart.draw(dataInterested, optionsInterested);
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            } 
+        }
+
+        function drawUserTeamInteressedInEvents() {
+            //User and Team Interested Graph
+            var dataUserTeamInterested = new google.visualization.DataTable();
+
+            dataUserTeamInterested.addColumn('string', 'Interested');
+            dataUserTeamInterested.addColumn('number', 'Number of interested');
+
+            if (chartsData.userTeamUnteressedInEvents != undefined) {
+                dataUserTeamInterested.addRows(chartsData.userTeamUnteressedInEvents);
+            }
+
+            var optionsUserTeamInterested = {
+                //title: '@localizer.Get("UsersVSTeamsInterest")',
+                legend: { 
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var userTeamInterestedChart = new google.visualization.PieChart(document.getElementById('userTeamInterested-chart'));
+
+            //Verify if exists any data to display
+            if (dataUserTeamInterested.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById("events-interesses-origin-extra-info").style.display = "none";
+                document.getElementById('userTeamInterested-chart').innerHTML = translation.noGraphDataEventInteressesOrigin;
+            } else {
+                // Draw the chart with data and options
+                userTeamInterestedChart.draw(dataUserTeamInterested, optionsUserTeamInterested);
+                //eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            } 
+        }
+
+        function loadChartsData(callback) {
+            var jsonDataTotalUsers = $.ajax({
+                url: "/AdminStatistics/TotalUserStats",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            totalUserJson = JSON.parse(jsonDataTotalUsers);
+            if (!isJsonEmpty(totalUserJson)) {
+                chartsTotals.totalUser.total = totalUserJson.total;
+                chartsData.totalUser = JSON.parse(JSON.stringify(totalUserJson.data, null, 2));
+            }
+
+            var jsonDataUsersWithTeam = $.ajax({
+                url: "/AdminStatistics/UsersWithTeam",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            usersWithTeamJson = JSON.parse(jsonDataUsersWithTeam);
+            if (!isJsonEmpty(usersWithTeamJson)) {
+                chartsTotals.usersWithTeam.total = usersWithTeamJson.total;
+                chartsData.usersWithTeam = JSON.parse(JSON.stringify(usersWithTeamJson.data, null, 2));
+            }
+
+            var jsonDataTotalTeams = $.ajax({
+                url: "/AdminStatistics/TotalTeamsStats",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            totalTeamsJson = JSON.parse(jsonDataTotalTeams);
+            if (!isJsonEmpty(totalTeamsJson)) {
+                chartsTotals.totalTeams.total = totalTeamsJson.total;
+                chartsData.totalTeams = JSON.parse(JSON.stringify(totalTeamsJson.data, null, 2));
+            }
+
+            var jsonDataTeamsCompleted = $.ajax({
+                url: "/AdminStatistics/TeamsCompleted",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            teamsCompletedJson = JSON.parse(jsonDataTeamsCompleted);
+            if (!isJsonEmpty(teamsCompletedJson)) {
+                chartsTotals.totalTeamsStates.total = teamsCompletedJson.total;
+                chartsData.totalTeamsStates = JSON.parse(JSON.stringify(teamsCompletedJson.data, null, 2));
+            }
+
+            var jsonDataTotalEvents = $.ajax({
+                url: "/AdminStatistics/TotalEventsStats",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            totalEventsJson = JSON.parse(jsonDataTotalEvents);
+            if (!isJsonEmpty(totalEventsJson)) {
+                chartsTotals.totalEvents.total = totalEventsJson.total;
+                chartsData.totalEvents = JSON.parse(JSON.stringify(totalEventsJson.data, null, 2));
+            }
+
+            var jsonDataInterested = $.ajax({
+                url: "/AdminStatistics/InterestedInEvents",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            eventsInteresseJson = JSON.parse(jsonDataInterested);
+            if (!isJsonEmpty(eventsInteresseJson)) {
+                chartsTotals.eventsInteresse.total = eventsInteresseJson.total;
+                chartsTotals.eventsInteresse.totalInteressed = eventsInteresseJson.totalInteressed;
+                chartsData.eventsInteresse = JSON.parse(JSON.stringify(eventsInteresseJson.data, null, 2));
+            }
+
+            var jsonDataUserTeamInterested = $.ajax({
+                url: "/AdminStatistics/InterestedUsersandTeams",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            userTeamInteressedJson = JSON.parse(jsonDataUserTeamInterested);
+            if (!isJsonEmpty(userTeamInteressedJson)) {
+                chartsTotals.userTeamUnteressedInEvents.total = userTeamInteressedJson.total;
+                chartsData.userTeamUnteressedInEvents = JSON.parse(JSON.stringify(userTeamInteressedJson.data, null, 2));
+            }
+
+            callback();
+        }
+
+        function redrawCharts() {
+            //Utilizadores
+            drawTotalUsersChart();
+
+            drawUsersWithTeamsChart();
+
+            //Equipas
+            drawTotalTeamsChart();
+
+            drawTotalTeamsStates();
+
+            //Eventos
+            drawTotalEventsChart();
+
+            drawEventsIteresseChart();
+
+            //Interesses vs
+            drawUserTeamInteressedInEvents();
+        }
+
+        function drawCharts() {
+            //Previne o google charts de dar sempre load ao trocar de tab. Nos não temos bd infinita.
+            if (!dataLoaded) {
+                loadChartsData(function() {
+                    //Utilizadores
+                    drawTotalUsersChart();
+
+                    drawUsersWithTeamsChart();
+
+                    //Equipas
+                    drawTotalTeamsChart();
+
+                    drawTotalTeamsStates();
+
+                    //Eventos
+                    drawTotalEventsChart();
+
+                    drawEventsIteresseChart();
+
+                    //Interesses vs
+                    drawUserTeamInteressedInEvents();
+
+                    dataLoaded = true;
+                });
+            }
+            else {
+                redrawCharts();
+            }
+        }
+
+        $(window).resize(function () {
+            redrawCharts();
+        });
+
+        /*$(window).resize(function () {
+            drawCharts();
+        });*/
+
+
+    </script>
+}

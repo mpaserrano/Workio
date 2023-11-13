@@ -1,0 +1,119 @@
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using System.Text.Json
+@using System.Text.Json.Serialization
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-route-id="@ViewData["id"]">@localizer.Get("User")</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Name</li>
+    </ol>
+</nav>
+@if (ViewBag.Skills != null && ViewBag.SkillsCount > 0)
+{
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-10">
+                    <h5 class="card-title">@localizer.Get("Skills")</h5>
+                    @{
+                        if (ViewBag.Skills != null)
+                        {
+                            <ul class="list-group list-group-light">
+                                @foreach (SkillModel skill in ViewBag.Skills)
+                                {
+                                    @if (ViewBag.EditMode == true)
+                                    {
+                                        <a class="list-group-item d-flex justify-content-between align-items-center" onclick="edit_skills(this, @JsonSerializer.Serialize(@skill, new JsonSerializerOptions() { ReferenceHandler = ReferenceHandler.Preserve }))">
+                                            <partial name="Components/SkillCard" model="skill" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <partial name="Components/SkillCard" model="skill" />
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        }
+                    }
+                </div>
+                @if (ViewBag.OwnProfile)
+                {
+                    <div class="col-2">
+                        <div class="justify-content-end" style="display: flex;">
+                            <a role="button" data-mdb-toggle="modal" data-mdb-target="#skillsModal">
+                                <i class="fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
+                            </a>
+                            @if (!ViewBag.EditMode)
+                            {
+                                <a role="button" asp-controller="User" asp-action="EditModeSkill">
+                                    <i class="fa-solid fa-pencil fa-xl"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <ul class="list-group list-group-light">
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+    <div>@localizer.Get("NoData")</div>
+}
+
+@if (ViewBag.OwnProfile)
+{
+    <!-- Modal -->
+    <partial name="Components/SkillModalViewComponent" />
+    @if (ViewBag.EditMode)
+    {
+        <script>
+            const editSkillsModal = document.getElementById('skillsModal')
+            function edit_skills(clickedElement, skillObj) {
+                const modalTitle = editSkillsModal.querySelector('.modal-title')
+                const name = editSkillsModal.querySelector('#Name')
+
+                modalTitle.TextContent = "Edit Skill"
+                name.value = skillObj.Name
+
+                editSkillsModal.querySelector('#skillForm').action = "EditSkill?id=" + skillObj.SkillId
+
+                let deleteButton = document.createElement("a")
+                deleteButton.classList.add("btn")
+                deleteButton.classList.add("btn-danger")
+                deleteButton.name = "deleteSkill"
+                deleteButton.id = "deleteSkill"
+                deleteButton.title = "@localizer.Get("Delete")"
+                deleteButton.innerHTML = "@localizer.Get("Delete")"
+                deleteButton.type = "button"
+                editSkillsModal.querySelector('.modal-footer').insertBefore(deleteButton, editSkillsModal.querySelector("#submit-skill"))
+
+                // Add a click event listener to the delete button
+                deleteButton.addEventListener('click', function () {
+                    // Find the form element
+                    const form = document.querySelector('form#skillForm');
+                    if (form) {
+                        // Set the form action URL with the skill id
+                        form.action = "DeleteSkill?id=" + encodeURIComponent(skillObj.SkillId);
+                        // Submit the form
+                        form.submit();
+                    }
+                });
+
+                var footer = editSkillsModal.querySelector('.modal-footer')
+
+                const myModal = new mdb.Modal(editSkillsModal)
+                myModal.show()
+            }
+        </script>
+    }
+}

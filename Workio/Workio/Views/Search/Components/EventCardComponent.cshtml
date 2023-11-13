@@ -1,0 +1,198 @@
+@model Workio.Models.Events.Event
+@inject Workio.Services.Interfaces.IUserService _userService
+@inject Workio.Services.Events.IEventsService _eventService
+@inject SignInManager<User> SignInManager
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="card h-100">
+    <img class="card-img-top" style="object-fit: cover" src="/public/uploads/events/banners/@Model.BannerPicturePath" width="60" height="90" alt="Event Banner">
+    <div class="card-body text-align:center">
+        <h5 class="card-title" style="text-align:center"><b>@Model.Title</b></h5>
+        <p></p>
+        <p class="card-text">
+            <b>@localizer.Get("Creator"):</b>
+            @{
+                var owner = await _userService.GetUser(new Guid(Model.UserId));
+                var upvotes = await _eventService.GetNumberOfUpvotes(Model.EventId);
+                var downvotes = await _eventService.GetNumberOfDownvotes(Model.EventId);
+            }
+            @owner.Name
+        </p>
+        <p></p>
+        <p class="card-text">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                var creator = await _eventService.isCreator(Model.EventId);
+                var hasupvoted = await _eventService.AlreadyUpvoted(Model.EventId);
+                var hasdownvoted = await _eventService.AlreadyDownvoted(Model.EventId);
+                var isFinished = await _eventService.isFinished(Model.EventId);
+                <input type="hidden" id="hasUpvoted" value="@hasupvoted" />
+                <input type="hidden" id="hasDownvoted" value="@hasdownvoted" />
+                @if (!creator && !isFinished)
+                {
+                    @if (!hasupvoted)
+                    {
+                        <a href="#" onclick="upvoteEvent('@Url.Action("Upvote", "Events", new { id = Model.EventId })')"><i class="fa-regular fa-thumbs-up"></i></a>
+                        <b>@upvotes</b>
+
+                        <span>Upvotes </span>
+
+                    }
+                    else
+                    {
+                        <a href="#" onclick="RemoveUpvoteEvent('@Url.Action("RemoveUpvote", "Events", new { id = Model.EventId })')"><i class="fa-solid fa-thumbs-up"></i></a>
+                        <b>@upvotes</b>
+
+                        <span>Upvotes </span>
+                    }
+                    @if (hasdownvoted)
+                    {
+                        <a href="#" onclick="RemoveDownvoteEvent('@Url.Action("RemoveDownvote", "Events", new { id = Model.EventId })')"><i class="fa-solid fa-thumbs-down"></i></a>
+                        <b>@downvotes</b>
+
+                        <span>Downvotes </span>
+                    }
+                    else
+                    {
+                        <a href="#" onclick="downvoteEvent('@Url.Action("Downvote", "Events", new { id = Model.EventId })')"><i class="fa-regular fa-thumbs-down"></i></a>
+                        <b>@downvotes</b>
+
+                        <span>Downvotes </span>
+                    }
+
+                }
+            }
+            else
+            {
+                <b>@upvotes</b>
+
+                <span>Upvotes </span>
+                <b>@downvotes</b>
+
+                <span>Downvotes </span>
+            }
+        <p>
+        <p class="card-text"><b>@localizer.Get("Date"): </b>@Model.StartDate <b>   —   </b> @Model.EndDate</p>
+        <p class="card-text">
+            <b>@localizer.Get("Status"):</b>
+                    @if (Model.IsBanned)
+                    {
+                <span class="badge rounded-pill badge-danger">@localizer.Get("BannedSingularM")</span>
+                    }
+                    else
+                    {
+                        @switch (Model.State)
+                        {
+                            case (Workio.Models.Events.EventState.Open):
+                                {
+                            <span class="badge rounded-pill badge-success">@localizer.Get("Open")</span>
+                                    break;
+                                }
+                            case (Workio.Models.Events.EventState.OnGoing):
+                                {
+                            <span class="badge rounded-pill badge-info">@localizer.Get("OnGoing")</span>
+                                    break;
+                                }
+                            case (Workio.Models.Events.EventState.Finish):
+                                {
+                            <span class="badge rounded-pill badge-danger">@localizer.Get("Finished")</span>
+                                    break;
+                                }
+                        }
+                    }
+        </p>
+        <div class="card-footer">
+            <div class=" d-flex align-items-center">
+                <span class="align-self-center me-auto">@Model.CreatedAt.Humanize()</span>
+                <a asp-action="Details" asp-controller="Events" asp-route-id="@Model.EventId">@localizer.Get("SeeMore")</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function upvoteEvent(url) {
+        var hasUpvoted = document.getElementById("hasUpvoted").value;
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function (result) {
+                if (hasUpvoted) {
+                    toastr.error("You have already upvoted this event.");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 500);
+                }
+                else {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 500);
+                }// Wait for 0.5 seconds before reloading so that toast notification appears
+            },
+            error: function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500); // Wait for 0.5 seconds before reloading so that toast notification appears
+            }
+        });
+    }
+
+    function RemoveUpvoteEvent(url) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500);
+            },
+            error: function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500);
+            }
+        });
+    }
+
+    function RemoveDownvoteEvent(url) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500);
+            },
+            error: function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500);
+            }
+        });
+    }
+
+    function downvoteEvent(url) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function (result) {
+                if (hasDownvoted == "True") {
+                    toastr.error("You have already downvoted this event.");
+                }
+                else {
+                }
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500); // Wait for 0.5 seconds before reloading so that toast notification appears
+            },
+            error: function () {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500); // Wait for 0.5 seconds before reloading so that toast notification appears
+            }
+        });
+    }
+
+
+</script>

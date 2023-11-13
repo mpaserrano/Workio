@@ -1,0 +1,145 @@
+﻿@model Workio.Models.RequestEntityStatus
+
+@{
+    ViewData["Title"] = @localizer.Get("Edit");
+}
+
+<h1>@localizer.Get("Edit")</h1>
+
+<h4>@localizer.Get("EntityStatusRequest")</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <input type="hidden" asp-for="Id" />
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <textarea asp-for="Motivation" name="Motivation" rows="4" class="form-control" id="Description" required ></textarea>
+                        <label asp-for="Motivation" class="form-label">@localizer.Get("Reason")</label>
+                        <span asp-validation-for="Motivation" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-group col-12">
+                    <label asp-for="FilePath" class="form-label">@localizer.Get("File")</label>
+                    <div class="input-group">
+                        <input asp-for="FilePath" id="file-input" type="file" class="form-control form-control-lg" accept=".pdf" required />
+                        <button type="button" class="btn btn-link" data-mdb-ripple-color="dark" onclick="clearFile()">@localizer.Get("Clear")</button>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="FilePath" id="file-error-message" class="invalid-feedback">@localizer.Get("Must have a PDF")</span>
+                </div>
+            </div>
+            <p></p>
+            <div class="form-group">
+                <input type="submit" value="@localizer.Get("SubmitRequest")" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<p></p>
+<p></p>
+<div>
+    <a asp-action="Create">@localizer.Get("Back")</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function clearFile() {
+            document.getElementById('file-input').value = "";
+        }
+
+        $(document).ready(function () {
+
+            function fileFormatValidation() {
+                    var fileInput = document.getElementById("file-input");
+                    var fileImageError = document.getElementById("file-error-message");
+
+                    const file = fileInput.files[0];
+
+                    if (file != undefined) {
+                        const fileType = file['type'];
+                        const validFileTypes = ['application/pdf'];
+                        if (!validFileTypes.includes(fileType)) {
+                            fileImageError.style.display = "block";
+                            fileInput.style.color = "#dc4c64";
+                            fileInput.style.borderColor = "#dc4c64";
+                            fileInput.focus();
+                            clearFile();
+                            return false;
+                        }
+                    }
+                    else{
+                        fileImageError.style.display = "block";
+                        fileInput.style.color = "#dc4c64";
+                        fileInput.style.borderColor = "#dc4c64";
+                        fileInput.focus();
+                        return false;
+                    }
+
+                    fileImageError.style.display = "none";
+                    fileInput.style.color = null;
+                    fileInput.style.borderColor = null;
+                    return true;
+                }
+
+            $("#file-input").change(function () {
+                const file = this.files[0];
+
+                if (file != undefined) {
+                    const fileType = file['type'];
+                    const validFileTypes = ['application/pdf'];
+                    if (!validFileTypes.includes(fileType)) {
+                        document.getElementById("file-error-message").style.display = "block";
+                        this.style.color = "#dc4c64";
+                        this.style.borderColor = "#dc4c64";
+                        clearFile();
+                        return false;
+                    }
+                    else {
+                        document.getElementById("file-error-message").style.display = "none";
+                        this.style.color = null;
+                        this.style.borderColor = null;
+                    }
+                }
+            });
+
+            function customValidatons() {
+                var isValid = true;
+
+                if (!fileFormatValidation() && isValid != false) {
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                    }
+                    if (!customValidatons()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        });
+    </script>
+}

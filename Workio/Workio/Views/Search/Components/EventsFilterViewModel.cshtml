@@ -1,0 +1,44 @@
+﻿@using Workio.Models.Events;
+@using Workio.Models.Filters;
+@model Workio.Models.Filters.EventsFilterViewModel;
+
+@{
+}
+<form asp-controller="Events" asp-action="Index" id="eventFilters" method="get">
+    <div class="row mb-2">
+        <div class="col">
+            @foreach (Filter<Event> filter in Model.filters)
+            {
+                <div class="form-check form-check-inline">
+                    <th>
+                        <input class="form-check-input" type="checkbox" name="selectedFilters" value="@filter.Index" @(Model.selectedFilters.Contains(filter.Index) ? "checked" : "")>
+                        @switch (filter.Name)
+                        {
+                            case ("Open"):
+                                {
+                                    <label class="badge rounded-pill badge-success">@localizer.Get("Open")</label>
+                                    break;
+                                }
+                            case ("On Going"):
+                                {
+                                    <label class="badge rounded-pill badge-primary">@localizer.Get("OnGoing")</label>
+                                    break;
+                                }
+                            case ("Finish"):
+                                {
+                                    <label class="badge rounded-pill badge-danger">@localizer.Get("Finished")</label>
+                                    break;
+                                }
+                            default:
+                                {
+                                    <label class="badge rounded-pill badge-secondary">@localizer.Get("Open")</label>
+                                    break;
+                                }
+                        }
+                    </th>
+                </div>
+            }
+        </div>
+    </div>
+</form>
+

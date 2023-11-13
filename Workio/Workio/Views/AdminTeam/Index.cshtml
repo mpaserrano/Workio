@@ -1,0 +1,457 @@
+﻿@model IEnumerable<Workio.Models.Admin.Logs.UserActionLog>
+@inject Workio.Services.Interfaces.IUserService _userService
+@inject Workio.Services.Teams.ITeamsService _teamService
+
+@{
+    ViewData["Title"] = "Manage Teams";
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+<link href="/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+    .table-user-profile-picture {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .myTable td {
+        vertical-align: middle;
+    }
+
+        .myTable td .table-user-profile-picture {
+            margin-right: 10px;
+        }
+
+    .logs-content .myTable {
+        width: 100% !important;
+    }
+</style>
+
+<h1>@localizer.Get("Teams")</h1>
+
+<div class="row g-3 align-items-center mb-4">
+    <div class="col-md-12">
+        <label for="teamType" class="control-label">@localizer.Get("Status")</label>
+        <select id="teamType" name="teamType" class="form-select">
+            <option value="all">@localizer.Get("AllF")</option>
+            <option value="open">@localizer.Get("OpenPluralF")</option>
+            <option value="closed">@localizer.Get("ClosedPluralF")</option>
+            <option value="finished">@localizer.Get("FinishedPluralF")</option>
+            <option value="banned">@localizer.Get("BannedPluralF")</option>
+        </select>
+    </div>
+</div>
+<div class="teams-content">
+    <table id="ManageTeamsTable" class="table myTable">
+        <thead>
+            <tr>
+                <th>
+                    @localizer.Get("Team")
+                </th>
+                <th>
+                    @localizer.Get("Creator")
+                </th>
+                <th>
+                    @localizer.Get("Status")
+                </th>
+                <th>
+                    @localizer.Get("CreationDate")
+                </th>
+                <th>
+                    @localizer.Get("Actions")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    <script src="/lib/DataTables/datatables.min.js"></script>
+    <script>
+
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+        var tableAllTeamConfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminTeam/GetAllTeamData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageTeamsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Teams/Details/' + rowData.teamId + '">' + rowData.teamName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.ownerId + '">' + rowData.ownerName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Closed")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'createdAt' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned) {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/UnbanTeam/' + rowData.teamId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/BanTeam/' + rowData.teamId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableOpenTeamConfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminTeam/GetOpenTeamData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageTeamsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Teams/Details/' + rowData.teamId + '">' + rowData.teamName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.ownerId + '">' + rowData.ownerName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Closed")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'createdAt' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned) {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link" onclick="addActionToForm(\'/AdminTeam/UnbanTeam/' + rowData.teamId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link" onclick="addActionToForm(\'/AdminTeam/BanTeam/' + rowData.teamId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableClosedTeamConfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminTeam/GetClosedTeamData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageTeamsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Teams/Details/' + rowData.teamId + '">' + rowData.teamName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.ownerId + '">' + rowData.ownerName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Closed")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'createdAt' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned) {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/UnbanTeam/' + rowData.teamId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/BanTeam/' + rowData.teamId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableFinishedTeamConfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminTeam/GetFinishedTeamData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageTeamsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Teams/Details/' + rowData.teamId + '">' + rowData.teamName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.ownerId + '">' + rowData.ownerName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Closed")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'createdAt' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned) {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/UnbanTeam/' + rowData.teamId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/BanTeam/' + rowData.teamId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableBannedTeamConfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminTeam/GetBannedTeamData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageTeamsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Teams/Details/' + rowData.teamId + '">' + rowData.teamName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.ownerId + '">' + rowData.ownerName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Closed")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'createdAt' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned) {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/UnbanTeam/' + rowData.teamId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else {
+                            return '<a href="/AdminTeam/Details/' + rowData.teamId + '">@localizer.Get("Details")</a>  ' + '<a class="link pointer" onclick="addActionToForm(\'/AdminTeam/BanTeam/' + rowData.teamId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+
+        $(document).ready(function () {
+            var tableElement = $('#ManageTeamsTable');
+            var table = $('#ManageTeamsTable').DataTable(tableAllTeamConfig);
+
+            $('#teamType').change(function () {
+                console.log($(this).val());
+                if ($(this).val() == "all") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableAllTeamConfig);
+                }
+                else if ($(this).val() == "open") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableOpenTeamConfig);
+                }
+                else if ($(this).val() == "closed") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableClosedTeamConfig);
+                }
+                else if ($(this).val() == "finished") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableFinishedTeamConfig);
+                }
+                else if ($(this).val() == "banned") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableBannedTeamConfig);
+                }
+                else {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableAllTeamConfig);
+                }
+               
+
+            });
+        });
+
+    </script>
+}

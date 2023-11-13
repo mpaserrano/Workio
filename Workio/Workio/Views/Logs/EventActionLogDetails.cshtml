@@ -1,0 +1,74 @@
+﻿@model Workio.Models.Admin.Logs.EventActionLog
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<style>
+    .log-profile-image .card {
+        height: 100%;
+        text-align: center;
+    }
+
+    .log-object-info .card {
+        height: 100%;
+    }
+
+    .log-profile-picture {
+        max-width: 86px;
+    }
+</style>
+
+<h1>@localizer.Get("Details")</h1>
+
+<div>
+    <h4>@localizer.Get("EventModerationLog")</h4>
+    <hr />
+    <div class="row">
+        <div class="mb-4 log-object-info">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-start mb-1">
+                        <span class="fw-bold">
+                            @localizer.Get("EventTitle"):&nbsp;
+                        </span>
+                        @Model.ChangedEvent.Title
+                    </div>
+                    <div class="d-flex justify-content-start mb-1">
+                        <span class="fw-bold">
+                            @localizer.Get("Date"):&nbsp;
+                        </span>
+                        @Model.CreatedDate
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-start mb-1">
+                    <span class="fw-bold">
+                        @localizer.Get("Action"):&nbsp;
+                    </span>
+                    @Model.ActionLogType
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h4>@localizer.Get("Description")</h4>
+                <p style="text-align: justify;">@Model.ActionDescription</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-primary">@localizer.Get("Back")</a>
+</div>

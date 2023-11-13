@@ -1,0 +1,55 @@
+﻿@using Workio.Models.Filters;
+@model Workio.Models.Filters.TeamsFilterViewModel;
+
+@{
+}
+<form asp-controller="Teams" asp-action="Index" id="teamFilters" method="get">
+    <div class="row mb-2">
+        <div class="col">
+            @foreach (Filter<Team> filter in Model.filters)
+            {
+                @if (filter.FilterType == FilterType.Checkbox)
+                {
+                    <div class="form-check form-check-inline">
+                        <th>
+                            <input class="form-check-input" type="checkbox" name="selectedFilters" value="@filter.Index" @(Model.selectedFilters.Contains(filter.Index) ? "checked" : "")>
+                            @switch (filter.Name)
+                            {
+                                case ("Open"):
+                                    {
+                                        <label class="badge rounded-pill badge-success">@localizer.Get("Open")</label>
+                                        break;
+                                    }
+                                case ("Closed"):
+                                    {
+                                        <label class="badge rounded-pill badge-danger">@localizer.Get("Closed")</label>
+                                        break;
+                                    }
+                                case ("Finish"):
+                                    {
+                                        <label class="badge rounded-pill badge-danger">@localizer.Get("Finished")</label>
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        <label class="badge rounded-pill badge-secondary">@localizer.Get(filter.Name)</label>
+                                        break;
+                                    }
+                            }
+                        </th>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-outline">
+                <input type="text" asp-for="Name" id="team-input-search" class="form-control" />
+                <label class="form-label" for="team-input-search">@localizer.Get("Search Team")</label>
+                <div class="form-helper">@localizer.Get("Search for a team name, skill or position")</div>
+            </div>
+        </div>
+    </div>
+</form>
+

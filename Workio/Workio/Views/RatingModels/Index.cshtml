@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Workio.Models.RatingModel>
+
+@{
+    ViewData["Title"] = @localizer.Get("Index");
+}
+
+<h1>@localizer.Get("Index")</h1>
+
+<p>
+    <a asp-action="Create">@localizer.Get("CreateNew")</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReceiverId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaterId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceiverId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaterId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.RatingId">@localizer.Get("Edit")</a> |
+                    <a asp-action="Details" asp-route-id="@item.RatingId">@localizer.Get("Details")</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RatingId">@localizer.Get("Delete")</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

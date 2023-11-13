@@ -1,0 +1,354 @@
+﻿@model IEnumerable<Workio.Models.Admin.Logs.UserActionLog>
+
+@{
+    ViewData["Title"] = "Index";
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+<link href="/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+    .table-user-profile-picture {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .myTable td {
+        vertical-align: middle;
+    }
+
+    .myTable td .table-user-profile-picture {
+        margin-right: 10px;
+    }
+
+    .logs-content .myTable {
+        width: 100%!important;
+    }
+</style>
+
+<h1>@localizer.Get("Logs")</h1>
+
+<div class="row g-3 align-items-center mb-4">
+    <div class="col-md-12">
+        <label for="logType" class="control-label">@localizer.Get("ShowingLogsFor")</label>
+        <select id="logType" name="logType" class="form-select">
+            <option value="usersModeration">@localizer.Get("UsersModeration")</option>
+            <option value="teamsModeration">@localizer.Get("TeamsModeration")</option>
+            <option value="eventsModeration">@localizer.Get("EventsModeration")</option>
+            <option value="administrationChanges">@localizer.Get("Changes")</option>
+        </select>
+    </div>
+</div>
+<div class="logs-content">
+    <table id="logsTable" class="table myTable">
+        <thead>
+            <tr>
+                <th>
+                    @localizer.Get("Author")
+                </th>
+                <th>
+                    @localizer.Get("ActionType")
+                </th>
+                <th>
+                    @localizer.Get("ChangedUser")
+                </th>
+                <th>
+                    @localizer.Get("Date")
+                </th>
+                <th>
+                    @localizer.Get("Actions")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    <script src="/lib/DataTables/datatables.min.js"></script>
+    <script>
+        /*$(document).ready(function () {
+            $("#myTable").DataTable({
+                paging: true,
+                responsive: true,
+            });
+        });*/
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+        var usersModerationTableConfigs = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/Logs/GetUsersLogsData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#logsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.authorProfilePic == null || rowData.authorProfilePic == "") {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.authorName + '</a>'
+                        }
+                        else {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.authorProfilePic + '"/>' + rowData.authorName + '</a>'
+                        }
+
+                    }
+                },
+                { data: 'actionType' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.changedUserProfilePic == null || rowData.changedUserProfilePic == "") {
+                            return '<a href="/User/Index/' + rowData.changedUserId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.changedUserName + '</a>'
+                        }
+                        else {
+                            return '<a href="/User/Index/' + rowData.changedUserId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.changedUserProfilePic + '">' + rowData.changedUserName + '</a>'
+                        }
+                    }
+                },
+                { data: 'timestamp' },
+                {
+                    data: "id",
+                    render: function (dataField) {
+                        return '<a href="/Logs/Details/' + dataField + '">@localizer.Get("Details")</a>';
+                    }
+                }
+            ]
+        };
+
+        var teamsModerationTableConfigs = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/Logs/GetTeamsLogsData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#logsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.authorProfilePic == null || rowData.authorProfilePic == "") {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.authorName + '</a>'
+                        }
+                        else {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.authorProfilePic + '"/>' + rowData.authorName + '</a>'
+                        }
+
+                    }
+                },
+                { data: 'actionType' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="/Teams/Details/' + rowData.changedTeamId + '">' + rowData.changedTeamName + '</a>'
+                    }
+                },
+                { data: 'timestamp' },
+                {
+                    data: "id",
+                    render: function (dataField) {
+                        return '<a href="/Logs/TeamActionLogDetails/' + dataField + '">Details</a>';
+                    }
+                }
+            ]
+        };
+
+        var eventsModerationTableConfigs = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/Logs/GetEventsLogsData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#logsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.authorProfilePic == null || rowData.authorProfilePic == "") {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.authorName + '</a>'
+                        }
+                        else {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.authorProfilePic + '"/>' + rowData.authorName + '</a>'
+                        }
+
+                    }
+                },
+                { data: 'actionType' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="/Events/Details/' + rowData.changedEventId + '">' + rowData.changedEventName + '</a>'
+                    }
+                },
+                { data: 'timestamp' },
+                {
+                    data: "id",
+                    render: function (dataField) {
+                        return '<a href="/Logs/EventActionLogDetails/' + dataField + '">@localizer.Get("Details")</a>';
+                    }
+                }
+            ]
+        };
+
+        var adminModerationTableConfigs = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/Logs/GetAdminLogsData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#logsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.authorProfilePic == null || rowData.authorProfilePic == "") {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.authorName + '</a>'
+                        }
+                        else {
+                            return '<a href="/User/Index/' + rowData.authorId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.authorProfilePic + '"/>' + rowData.authorName + '</a>'
+                        }
+
+                    }
+                },
+                { data: 'actionType' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<span>' + rowData.description + '</span>'
+                    }
+                },
+                { data: 'timestamp' },
+                {
+                    data: "id",
+                    render: function (dataField) {
+                        return '<a href="/Logs/AdministrationActionLogDetails/' + dataField + '">@localizer.Get("Details")</a>';
+                    }
+                }
+            ]
+        };
+
+        $(document).ready(function () {
+            var tableElement = $('#logsTable');
+
+            var selectBox = $('#logType');
+            var choice = usersModerationTableConfigs;
+
+            const storedOption = sessionStorage.getItem('selectedOption');
+
+            console.log(storedOption);
+
+            if (storedOption != null) {
+                selectBox.val(storedOption);
+            }
+
+            if (storedOption == "usersModeration") {
+                choice = usersModerationTableConfigs;
+            }
+            else if (storedOption == "teamsModeration") {
+                choice = teamsModerationTableConfigs;
+            }
+            else if (storedOption == "eventsModeration") {
+                choice = eventsModerationTableConfigs;
+            }
+            else if (storedOption == "administrationChanges") {
+                choice = adminModerationTableConfigs;
+            }
+            else {
+                choice = usersModerationTableConfigs;
+            }
+
+            
+            var table = $('#logsTable').DataTable(choice);
+
+            $('#logType').change(function () {
+                console.log($(this).val());
+
+                if ($(this).val() == "usersModeration") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    $("#logsTable thead tr").html("<th> @localizer.Get("Author") </th> <th> @localizer.Get("ActionType") </th> <th> @localizer.Get("ChangedUser") </th> <th>@localizer.Get("Date")</th><th>@localizer.Get("Actions")</th>");
+                    tableElement.DataTable(usersModerationTableConfigs);
+                    //table.ajax.url("/Logs/GetData").load();
+                }
+                else if ($(this).val() == "teamsModeration") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    $("#logsTable thead tr").html("<th>@localizer.Get("Author")</th><th>@localizer.Get("ActionType")</th><th>@localizer.Get("ChangedTeam")</th><th>@localizer.Get("Date")</th><th>@localizer.Get("Actions")</th>");
+                    tableElement.DataTable(teamsModerationTableConfigs);
+                }
+                else if ($(this).val() == "eventsModeration") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    $("#logsTable thead tr").html("<th>@localizer.Get("Author")</th><th>@localizer.Get("ActionType")</th><th>@localizer.Get("ChangedEvent")</th><th>@localizer.Get("Date")</th><th>@localizer.Get("Actions")</th>");
+                    tableElement.DataTable(eventsModerationTableConfigs);
+                }
+                else {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    $("#logsTable thead tr").html("<th>@localizer.Get("Author")</th><th>@localizer.Get("ActionType")</th><th>@localizer.Get("Description")</th><th>@localizer.Get("Date")</th><th>@localizer.Get("Actions")</th>");
+                    tableElement.DataTable(adminModerationTableConfigs);
+                }
+                
+            });
+
+            function handleSelectChange() {
+                // Store the selected value in localStorage
+                sessionStorage.setItem('selectedOption', selectBox.val());
+            }
+
+            // Add an event listener to the select element to detect changes
+            selectBox.on('change', handleSelectChange);
+        });
+    </script>
+}

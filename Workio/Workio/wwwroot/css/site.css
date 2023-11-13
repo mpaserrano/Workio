@@ -1,0 +1,106 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.Google {
+    background-image: url("../icons/google.svg");
+    display: block;
+    width: 48px;
+    height: 48px;
+}
+
+.Microsoft {
+    background-image: url("../icons/microsoft.svg");
+    display: block;
+    width: 48px;
+    height: 48px;
+}
+.Facebook {
+    background-image: url("../icons/facebook.svg");
+    display: block;
+    width: 48px;
+    height: 48px;
+}
+
+.Portugal {
+    background-image: url("../icons/portugal.svg");
+    display: block;
+}
+
+.UK {
+    background-image: url("../icons/uk.svg");
+    display: block;
+}
+
+.btn-icon {
+    background-color: transparent;
+    border: 0px;
+}
+
+.pfp {
+    width: 52px;
+    height: 52px;
+}
+
+.profile-name {
+    font-size: 18pt;
+}
+
+.carousel-control-prev-icon:after {
+    content: "\f053";
+}
+
+.carousel-control-next-icon:after {
+    content: "\f054";
+}
+
+.readonly-style {
+    background-color: #e9ecef !important;
+}
+
+.profile-preview img {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.profile-preview p {
+    font-size: 12px;
+}
+
+.profile-picture-preview {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.unread-badge {
+    display: block;
+}
+
+.read-badge {
+    display: none;
+}
+
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.pointer {
+    cursor: pointer;
+}

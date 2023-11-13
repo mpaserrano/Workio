@@ -1,0 +1,65 @@
+﻿@model Workio.Models.RatingModel
+
+@{
+    ViewData["Title"] = @localizer.Get("Edit");
+}
+
+<h1>@localizer.Get("Edit")</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" id="my-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RatingId" />
+            <input type="hidden" asp-for="ReceiverId" />
+            <input type="hidden" asp-for="RaterId" />
+            <div class="form-group">
+                <label class="form-label" for="Rating">@localizer.Get("Rating")</label>
+                <div class="range">
+                    <input type="range" class="form-range" min="0" max="5" id="Rating" asp-for="Rating" />
+                </div>
+                <span asp-validation-for="Rating" id="rating-error-message" class="invalid-feedback">@localizer.Get("RatingValid")</span>
+            </div>
+            <div class="form-group mt-3">
+                <div class="form-outline">
+                    <textarea class="form-control" rows="4" asp-for="Comment"></textarea>
+                    <label class="form-label" for="Comment">@localizer.Get("Comment")</label>
+                </div>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3 mb-3">
+                <input type="submit" value="@localizer.Get("Submit")" class="btn btn-primary" id="submit-button" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<button type="button" class="btn btn-light me-3" data-mdb-ripple-color="dark" onclick="location.href='@Url.Action("RateUser", "RatingModels", new { id = ViewBag.ReceiverId })'">
+    @localizer.Get("Back")
+</button>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById("my-form").addEventListener("submit", function () {
+            var submitButton = document.querySelector("#my-form input[type='submit']");
+            submitButton.disabled = true;
+        });
+        const ratingInput = document.getElementById("Rating");
+        const ratingError = document.getElementById("rating-error-message");
+        const submitButton = document.querySelector("#my-form input[type='submit']");
+
+        ratingInput.addEventListener("input", function () {
+            if (ratingInput.value > 5 || ratingInput.value < 0) {
+                ratingError.style.display = "block";
+                submitButton.disabled = true;
+            } else {
+                ratingError.style.display = "none";
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+}

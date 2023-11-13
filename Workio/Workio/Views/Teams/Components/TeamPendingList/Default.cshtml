@@ -1,0 +1,24 @@
+﻿@model List<PendingUserTeam>
+@{
+    Layout = "";
+}
+<div style="display: none;" class="team-details-requests-pending-amount" style="">@Model.Count</div>
+@foreach (PendingUserTeam request in Model)
+{
+    <tr>
+        <td>
+            <partial name="Components/TeamUserComponent" model="@request.User" />
+        </td>
+        @if (ViewBag.Owner)
+        {
+            <td>
+                <a asp-action="AcceptUser" asp-route-id="@request.Id" asp-route-teamId="@request.TeamId" type="button" class="btn btn-link btn-sm btn-rounded">
+                    @localizer.Get("Accept")
+                </a>
+                <a asp-action="RejectUser" asp-route-requestId="@request.Id" asp-route-id="@request.TeamId" type="button" class="btn btn-link btn-sm btn-rounded">
+                    @localizer.Get("Reject")
+                </a>
+            </td>
+        }
+    </tr>
+}

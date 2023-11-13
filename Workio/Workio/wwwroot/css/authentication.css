@@ -1,0 +1,46 @@
+﻿@media screen and (max-width: 767px) {
+    #login-submit{
+        margin: auto;
+        width: 98.5vw!important;
+    }
+
+    #registerSubmit {
+        margin: auto;
+        width: 98.5vw !important;
+    }
+}
+
+.logo-hr {
+    margin-top: 0;
+    width: 100vw;
+    margin-left: -11px;
+}
+
+
+.mt-lg-5 {
+    margin-top: 0px !important;
+}
+
+.auth-method-icon {
+    width: auto;
+}
+
+.logo-img {
+    max-height: 38px;
+    margin-right: 5px!important;
+}
+
+.language-container {
+    display: flex;
+}
+
+.language-divisor {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.language-selector-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}

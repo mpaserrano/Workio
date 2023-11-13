@@ -1,0 +1,236 @@
+﻿@using Workio.Utils;
+@model PaginatedList<Workio.Models.ReportUser>
+@{
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+<link href="/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+
+    #userReportsTable td {
+        vertical-align: middle;
+    }
+
+    #teamReportsTable td {
+        vertical-align: middle;
+    }
+
+    #eventReportsTable td {
+        vertical-align: middle;
+    }
+
+    table {
+        width: 100% !important;
+    }
+
+</style>
+
+<a asp-action="ReportReasons" asp-controller="AdminReports" class="btn btn-primary">@localizer.Get("ReportReasons")</a>
+
+<ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+    @if (User.IsInRole("Admin") || User.IsInRole("Mod"))
+    {
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+           id="user-reports-tab"
+           data-mdb-toggle="tab"
+           href="#user-reports-tab-content"
+           role="tab"
+           aria-controls="user-reports-tab-content"
+           aria-selected="true">@localizer.Get("Users")</a>
+        </li>
+
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+           id="team-reports-tab"
+           data-mdb-toggle="tab"
+           href="#team-reports-tab-content"
+           role="tab"
+           aria-controls="team-reports-tab-content"
+           aria-selected="false">@localizer.Get("Teams")</a> <!-- trocar para "Teams"-->
+        </li>
+
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+           id="events-reports-tab"
+           data-mdb-toggle="tab"
+           href="#events-reports-tab-content"
+           role="tab"
+           aria-controls="events-reports-tab-content"
+           aria-selected="false">@localizer.Get("Events")</a> <!-- trocar para "Events"-->
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+           id="archive-reports-tab"
+           data-mdb-toggle="tab"
+           href="#archive-reports-tab-content"
+           role="tab"
+           aria-controls="archive-reports-tab-content"
+           aria-selected="false">@localizer.Get("Archived")</a> <!-- trocar para "Events"-->
+        </li>
+    }
+
+</ul>
+<div class="tab-content" id="ex2-content">
+    <div aria-labelledby="user-reports-tab-content" role="tabpanel" class="tab-pane show active" id="user-reports-tab-content">
+        <partial name="Components/ReportUserComponent" />
+    </div>
+
+    <div aria-labelledby="team-reports-tab-content" role="tabpanel" class="tab-pane fade" id="team-reports-tab-content">
+        <partial name="Components/ReportTeamComponent" />
+    </div>
+
+    <div aria-labelledby="events-reports-tab-content" role="tabpanel" class="tab-pane fade" id="events-reports-tab-content">
+        <partial name="Components/ReportEventComponent" />
+    </div>
+    <div aria-labelledby="archive-reports-tab-content" role="tabpanel" class="tab-pane fade" id="archive-reports-tab-content">
+        <partial name="Components/ReportArchiveComponent" />
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script src="/lib/DataTables/datatables.min.js"></script>
+    <script>
+        /*$(document).ready(function () {
+            $("#myTable").DataTable({
+                paging: true,
+                responsive: true,
+            });
+        });*/
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+
+        $(document).ready(function () {
+            $('#userReportsTable').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                searching: false,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminReports/GetDataUserReports',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#usersActionLogDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'reporter.name' },
+                    { data: 'reportedUser.name' },
+                    { data: 'reportReason.reason' },
+                    { data: 'date' },
+                    {
+                        data: "id",
+                        render: function (dataField) {
+                            return '<a href="/AdminReports/DetailsUser/' + dataField + '">@localizer.Get("Details")</a> | <a href="#" onClick="addActionToForm(\'/AdminReports/AcceptUserReport/' + dataField + '\')">@localizer.Get("Ban")</a> | <a href="#" onclick="addActionToForm(\'/AdminReports/RejectUserReport/' + dataField + '\')">@localizer.Get("Reject")</a>';
+                        }
+
+                    }
+                ]
+            });
+            $('#teamReportsTable').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                searching: false,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminReports/GetDataTeamReports',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#usersActionLogDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'reporter.name' },
+                    { data: 'reportedTeam.teamName' },
+                    { data: 'reportReason.reason' },
+                    { data: 'date' },
+                    {
+                        data: "id",
+                        render: function (dataField) {
+                            return '<a href="/AdminReports/DetailsTeam/' + dataField + '">@localizer.Get("Details")</a> | <a href="#" onClick="addActionToForm(\'/AdminReports/AcceptTeamReport/' + dataField + '\')" >@localizer.Get("Ban")</a> | <a href="#" onclick="addActionToForm(\'/AdminReports/RejectTeamReport/' + dataField + '\')" >@localizer.Get("Reject")</a>';
+                        }
+
+                    }
+                ]
+            });
+            $('#eventReportsTable').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                searching: false,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminReports/GetDataEventReports',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#usersActionLogDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'reporter.name' },
+                    { data: 'reportedEvent.title' },
+                    { data: 'reportReason.reason' },
+                    { data: 'date' },
+                    {
+                        data: "id",
+                        render: function (dataField) {
+                            return '<a href="/AdminReports/DetailsEvent/' + dataField + '">@localizer.Get("Details")</a> | <a href="#" onclick="addActionToForm(\'/AdminReports/AcceptEventReport/' + dataField + '\')" >@localizer.Get("Ban")</a> | <a href="#" onclick="addActionToForm(\'/AdminReports/RejectEventReport/' + dataField + '\')" >@localizer.Get("Reject")</a>';
+                        }
+
+                    }
+                ]
+            });
+            $('#archiveReportsTable').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                searching: false,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminReports/GetDataArchiveReports',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#usersActionLogDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'reporter.name' },
+                    { data: 'reportReason.reason' },
+                    { data: 'date' },
+                ]
+            });
+        });
+
+    </script>
+}

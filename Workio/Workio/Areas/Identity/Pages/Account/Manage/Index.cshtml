@@ -1,0 +1,130 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = @localizer.Get("Profile");
+    ViewData["ActivePage"] = ManageNavPages.Index;
+
+    byte[] GetImageBytes(IFormFile file)
+    {
+        using var memoryStream = new MemoryStream();
+        file.CopyTo(memoryStream);
+        return memoryStream.ToArray();
+    }
+}
+
+<h3>@localizer.Get("Profile")</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row g-3 align-item-center mb-4">
+                <div class="text-center">
+                    <img id="profilePicture" class="rounded-circle pfp" src="~/pfp/@Model.Input.ProfilePictureName">
+                </div>
+            </div>
+            <div class="row g-4 align-items-center mb-4">
+                <div class="form-group col-12">
+                    <label asp-for="Input.ProfilePicture" class="form-label">@localizer.Get("ProfilePicture")</label>
+                    <div class="input-group">
+                        <input asp-for="Input.ProfilePicture" type="file" class="form-control form-control-lg" accept=".png,.jpg,.jpeg,.gif,.tif" onchange="changeImage(this)" />
+                        <button type="button" class="btn btn-link" data-mdb-ripple-color="dark" onclick="clearFile()">@localizer.Get("Clear")</button>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.ProfilePicture" id="ProfilePictureInvalid" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.Name" class="form-control form-control-lg" />
+                    <label asp-for="Input.Name" class="form-label">@localizer.Get("Name")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.Name" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <textarea asp-for="Input.AboutMe" type="text" class="form-control" rows="12"></textarea>
+                    <label asp-for="Input.AboutMe" class="form-label">@localizer.Get("AboutMe")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.AboutMe" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.GitHub" class="form-control form-control-lg" />
+                    <label asp-for="Input.GitHub" class="form-label">@localizer.Get("GitHub")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.GitHub" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.LinkedIn" class="form-control form-control-lg" />
+                    <label asp-for="Input.LinkedIn" class="form-label">@localizer.Get("LinkedIn")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.LinkedIn" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">@localizer.Get("Save")</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function clearFile() {
+            document.getElementById('Input_ProfilePicture').value = "";
+            document.getElementById('profilePicture').src = "/pfp/default.png"
+        }
+
+        function changeImage(input) {
+            if (input.files[0] == null) {
+                document.getElementById('profilePicture').src = "/pfp/default.png"
+            }
+            else {
+                console.log(input.files[0])
+                if (isFileExtensionAllowed(input.files[0].name)) {
+                    document.getElementById('profilePicture').src = window.URL.createObjectURL(input.files[0])
+                    document.getElementById('ProfilePictureInvalid').textContent = ""
+                }
+                else {
+                    document.getElementById('Input_ProfilePicture').value = "";
+                    document.getElementById('ProfilePictureInvalid').textContent = '@localizer.Get("Invalid image file. Only .png, .jpg, .jpeg, .gif, and .tif files are allowed.")'
+                }
+            }
+        }
+
+        function isFileExtensionAllowed(filename) {
+            var allowedExtensions = [".png", ".jpg", ".jpeg", ".gif", ".tif"];
+            var fileExtension = "." + filename.split(".").pop().toLowerCase();
+
+            return allowedExtensions.includes(fileExtension);
+        }
+    </script>
+    <script>
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

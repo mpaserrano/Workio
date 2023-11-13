@@ -1,0 +1,67 @@
+﻿@model Workio.Models.Team
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" asp-action="TeamEnrollment" asp-controller="EventEnrollments" asp-route-id="@ViewData["id"]" class="needs-validation" novalidate>
+                    <div class="row g-3 align-items-center mb-4">    
+                        <div class="col-md-12">
+                            <label asp-for="TeamId" class="form-label" style="font-size:30px">@localizer.Get("Team")</label>
+                            <select asp-for="TeamId" class="form-select" asp-items="ViewBag.OwnedTeams" required></select>
+                            <span asp-validation-for="TeamId" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                        </div>
+                    </div>
+                    <div>
+                        @localizer.Get("DontHaveATeam") <a asp-action="Create" asp-controller="Teams">@localizer.Get("Here")</a>.
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <a asp-action="Details" asp-controller="Events" asp-route-id="@ViewData["Id"]" class="btn btn-primary">@localizer.Get("Back")</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <input type="submit" value="@localizer.Get("Submit")" class="btn btn-danger" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+
+<script>
+    (() => {
+        'use strict';
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation');
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+</div>

@@ -1,0 +1,303 @@
+﻿@model IEnumerable<Workio.Models.RequestEntityStatus>
+
+@{
+    ViewData["Title"] = "EntityRequestsIndex";
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+<link href="/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+    .table-user-profile-picture {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .requests-content td {
+        vertical-align: middle;
+    }
+
+    .requests-content .table-user-profile-picture {
+        margin-right: 10px;
+    }
+
+    .requests-content .myTable {
+        width: 100%!important;
+    }
+</style>
+
+<div class="row g-3 align-items-center mb-4">
+    <div class="col-md-12">
+        <label for="requestType" class="control-label">@localizer.Get("ShowingRequestsFor")</label>
+        <select id="requestType" name="requestType" class="form-select">
+            <option value="all">@localizer.Get("AllM")</option>
+            <option value="approved">@localizer.Get("Approved")</option>
+            <option value="rejected">@localizer.Get("Rejected")</option>
+            <option value="pending">@localizer.Get("Pending")</option>
+        </select>
+    </div>
+</div>
+<div class="requests-content">
+    <table id="requestsDataTable" class="table myTable">
+        <thead>
+            <tr>
+                <th>
+                    @localizer.Get("Name")
+                </th>
+                <th>
+                    @localizer.Get("Email")
+                </th>
+                <th>
+                    @localizer.Get("Reason")
+                </th>
+                 <th>
+                    @localizer.Get("File")
+                </th>
+                <th>
+                    @localizer.Get("DateOfSubmission")
+                </th>
+                <th>
+                     @localizer.Get("State")
+                </th>
+                <th>
+                    @localizer.Get("Details")
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="/lib/DataTables/datatables.min.js"></script>
+    <script>
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+        var allrequestsTableConfigs = {
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminEntities/GetRequestAll',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#requestsDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'username'},
+                    { data: 'email'},
+                    { data: 'motivation'},
+                    { data: 'alteredFileName'},
+                    { data: 'requestDate'},
+                    { data: 'requestState',
+                        render: function (data){
+                            if(data == 0){
+                                return '<span class="badge rounded-pill badge-warning">' + "@localizer.Get("Pending")" + '</span>'
+                            }
+                            if(data == 1){
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                            if(data == 2){
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Rejected")" + '</span>'
+                            }
+                            return '<span class="badge rounded-pill badge-approved">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                        },
+                    {
+                        data: 'id',
+                        render: function (dataField) {
+                            return '<a href="/RequestEntityStatus/Details/' + dataField + '">@localizer.Get("Details")</a>';
+                        }
+                   }
+
+                ]
+         };
+
+          var requestsapprovedTableConfigs = {
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminEntities/GetRequestApproved',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#requestsDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'username'},
+                    { data: 'email'},
+                    { data: 'motivation'},
+                    { data: 'alteredFileName'},
+                    { data: 'requestDate'},
+                    { data: 'requestState',
+                        render: function (data){
+                            if(data == 0){
+                                return '<span class="badge rounded-pill badge-warning">' + "@localizer.Get("Pending")" + '</span>'
+                            }
+                            if(data == 1){
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                            if(data == 2){
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Rejected")" + '</span>'
+                            }
+                            return '<span class="badge rounded-pill badge-approved">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                        },
+                    {
+                        data: 'id',
+                        render: function (dataField) {
+                            return '<a href="/RequestEntityStatus/Details/' + dataField + '">Details</a>';
+                        }
+                    }
+                ]
+         };
+
+         var requestspendingTableConfigs = {
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminEntities/GetRequestPending',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#requestsDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'username'},
+                    { data: 'email'},
+                    { data: 'motivation'},
+                    { data: 'alteredFileName'},
+                    { data: 'requestDate'},
+                    { data: 'requestState',
+                        render: function (data){
+                            if(data == 0){
+                                return '<span class="badge rounded-pill badge-warning">' + "@localizer.Get("Pending")" + '</span>'
+                            }
+                            if(data == 1){
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                            if(data == 2){
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Rejected")" + '</span>'
+                            }
+                            return '<span class="badge rounded-pill badge-approved">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                        },
+                    {
+                        data: 'id',
+                        render: function (dataField) {
+                            return '<a href="/RequestEntityStatus/Details/' + dataField + '">Details</a>';
+                        }
+                    }
+                ]
+         };
+
+         var requestsrejectedTableConfigs= {
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminEntities/GetRequestRejected',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#requestsDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'username'},
+                    { data: 'email'},
+                    { data: 'motivation'},
+                    { data: 'alteredFileName'},
+                    { data: 'requestDate'},
+                    { data: 'requestState',
+                        render: function (data){
+                            if(data == 0){
+                                return '<span class="badge rounded-pill badge-warning">' + "@localizer.Get("Pending")" + '</span>'
+                            }
+                            if(data == 1){
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                            if(data == 2){
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Rejected")" + '</span>'
+                            }
+                            return '<span class="badge rounded-pill badge-approved">' + "@localizer.Get("Approved")" + '</span>'
+                            }
+                        },
+                    {
+                        data: 'id',
+                        render: function (dataField) {
+                            return '<a href="/RequestEntityStatus/Details/' + dataField + '">Details</a>';
+                        }
+                    }
+                ]
+         };
+         $(document).ready(function () {
+            var tableElement = $('#requestsDataTable');
+            var table = $('#requestsDataTable').DataTable(allrequestsTableConfigs);
+
+            $('#requestType').change(function () {
+                console.log($(this).val());
+                if ($(this).val() == "all") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(allrequestsTableConfigs);
+                }
+                else if ($(this).val() == "approved") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(requestsapprovedTableConfigs);
+
+                }
+                else if ($(this).val() == "rejected") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(requestsrejectedTableConfigs);
+                }
+                else if ($(this).val() == "pending") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(requestspendingTableConfigs);
+                }
+                else {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(allrequestsTableConfigs);
+                }
+                });
+        });
+    </script>
+}

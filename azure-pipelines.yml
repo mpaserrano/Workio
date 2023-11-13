@@ -1,0 +1,53 @@
+trigger:
+  - master
+  - development
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  MigrationName: $[format('{0}-{1}', 'Initial', counter(format('{0}-{1}', 'Initial', '-'), 1))]
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install DotNet 6.0.x'
+  inputs:
+    version: '6.0.x'
+    includePreviewVersions: true
+
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGetTool'
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNet restore'
+  inputs:
+    command: restore
+    projects: '**/**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run XUnit tests'
+  inputs:
+    command: test
+    projects: '**/Workio.Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNet publish'
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/Workio.AutomationTests/*.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'

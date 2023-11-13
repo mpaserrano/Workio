@@ -1,0 +1,99 @@
+﻿@model Workio.Models.ExperienceModel
+@inject CommonLocalizationService localizer
+
+<div class="modal fade" id="experiencesModal" tabindex="-1" data-mdb-backdrop="static" aria-labelledby="experiencesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="User" asp-action="AddExperience" asp-route-showMore="@ViewData["showMore"]" id="experienceForm" class="needs-validation" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="experiencesModalLabel">@localizer.Get("Experiences")</h5>
+                    <button type="reset" class="btn-close" id="closeModal" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input asp-for="WorkTitle" name="WorkTitle" type="text" class="form-control" id="WorkTitle" required />
+                                <label asp-for="WorkTitle" for="WorkTitle" class="form-label">@localizer.Get("WorkTitle")</label>
+                                <span asp-validation-for="WorkTitle" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input asp-for="Company" name="Company" type="text" class="form-control" id="Company" required />
+                                <label asp-for="Company" for="Company" class="form-label">@localizer.Get("Company")</label>
+                                <span asp-validation-for="Company" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <textarea asp-for="Description" name="Description" class="form-control" id="Description" rows="4" required></textarea>
+                                <label asp-for="Description" for="Description" class="form-label">@localizer.Get("Description")</label>
+                                <span asp-validation-for="Description" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input asp-for="StartDate" name="StartDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" id="StartDate" required />
+                                <label asp-for="StartDate" for="StartDate" class="form-label">@localizer.Get("StartDate")</label>
+                                <span asp-validation-for="StartDate" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input asp-for="EndDate" name="EndDate" data-toggle="datepicker" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" id="EndDate" />
+                                <label asp-for="EndDate" for="EndDate" class="form-label">@localizer.Get("EndDate")</label>
+                                <span asp-validation-for="EndDate" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" id="closeModal2" data-mdb-dismiss="modal">@localizer.Get("Close")</button>
+                    <button type="submit" class="btn btn-primary" id="submit-experience">@localizer.Get("Save changes")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        'use strict';
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation');
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        document.getElementById('closeModal').addEventListener("click", resetModal)
+        document.getElementById('closeModal2').addEventListener("click", resetModal)
+
+        function resetModal() {
+            let deleteButton = document.getElementById('deleteExperience')
+
+            if (deleteButton != null) {
+                deleteButton.remove()
+            }
+
+            document.getElementById('experiencesModal').querySelector('#experienceForm').action = "/User/AddExperience?showMore=True"
+        }
+    })();
+</script>

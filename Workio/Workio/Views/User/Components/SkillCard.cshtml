@@ -1,0 +1,47 @@
+﻿@model SkillModel
+@inject UserManager<User> UserManager;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="d-flex align-items-center">
+    <div class="ms-3">
+        <div class="row">
+            <p class="fw-bold mb-1">@Model.Name</p>
+        </div>
+        <div class="row">
+            @if (!ViewBag.OwnProfile && SignInManager.IsSignedIn(User))
+            {
+                <div class="col-2">
+                    @{
+                        var userId = UserManager.GetUserAsync(User).Result.Id;
+                        @if(Model.Endorsers != null)
+                        {
+                            @if(Model.Endorsers.Any(s => s.Id == userId))
+                            {
+                                <a alt="Remove endorse" asp-controller="User" asp-action="RemoveEndorsement" asp-route-skillId="@Model.SkillId" asp-route-id="@ViewData["id"]" asp-route-returnUrl="@Context.Request.Path"><i class="fa-solid fa-heart"></i></a>
+                            }
+                            else
+                            {
+                                <a title="Endorse" asp-controller="User" asp-action="AddEndorsement" asp-route-sk="@Model.SkillId" asp-route-id="@ViewData["id"]" asp-route-returnUrl="@Context.Request.Path"><i class="fa-regular fa-heart"></i></a>
+                            }
+                        }
+                    }
+                </div>
+            }
+            <div class="col">
+                @if (@Model.Endorsers != null && @Model.Endorsers.Count > 0)
+                {
+                    <p>@Model.Endorsers.Count @localizer.Get("Endorsements")</p>
+                }
+                else
+                {
+                    <p>0 @localizer.Get("Endorsements")</p>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

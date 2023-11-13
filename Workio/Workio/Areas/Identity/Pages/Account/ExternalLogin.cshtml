@@ -1,0 +1,42 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = @localizer.Get("Register");
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<h2 class="text-center" id="external-login-title">@localizer.Get("ExternalLoginAccPt1") @Model.ProviderDisplayName @localizer.Get("ExternalLoginAccPt2")</h2>
+<hr />
+
+<p id="external-login-description" class="text-info text-center">
+    @localizer.Get("ExternalLoginRegSucc1") <strong>@Model.ProviderDisplayName</strong>.
+    @localizer.Get("ExternalLoginRegSucc2")
+</p>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.Name" class="form-control form-control-lg" />
+                    <label asp-for="Input.Name" class="form-label">@localizer.Get("Name")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.Name" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <button type="submit" class="w-100 btn btn-lg btn-primary">@localizer.Get("Register")</button>
+            </div>
+            <div class="row">
+                <a asp-page="./Register" class="w-100 btn btn-lg btn-danger">@localizer.Get("Cancel")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

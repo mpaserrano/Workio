@@ -1,0 +1,476 @@
+﻿@inject Workio.Services.Interfaces.IUserService _userService
+
+@{
+    ViewData["Title"] = "Manage Events";
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+<link href="/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+    .table-user-profile-picture {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .myTable td {
+        vertical-align: middle;
+    }
+
+        .myTable td .table-user-profile-picture {
+            margin-right: 10px;
+        }
+
+    .logs-content .myTable {
+        width: 100% !important;
+    }
+</style>
+
+<h1>@localizer.Get("ManageEvents")</h1>
+
+<div class="row g-3 align-items-center mb-4">
+    <div class="col-md-12">
+        <label for="eventType" class="control-label">@localizer.Get("Status")</label>
+        <select id="eventType" name="eventType" class="form-select">
+            <option value="all">@localizer.Get("AllM")</option>
+            <option value="open">@localizer.Get("Open")</option>
+            <option value="ongoing">@localizer.Get("OnGoing")</option>
+            <option value="finished">@localizer.Get("Finished")</option>
+            <option value="banned">@localizer.Get("BannedPluralM")</option>
+        </select>
+    </div>
+</div>
+<div class="events-content">
+    <table id="ManageEventsTable" class="table myTable">
+        <thead>
+            <tr>
+                <th>
+                    @localizer.Get("Event")
+                </th>
+                <th>
+                    @localizer.Get("Creator")
+                </th>
+                <th>
+                    @localizer.Get("Status")
+                </th>
+                <th>
+                    @localizer.Get("StartDate")
+                </th>
+                <th>
+                    @localizer.Get("EndDate")
+                </th>
+                <th>
+                    @localizer.Get("Actions")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    
+    <script src="/lib/DataTables/datatables.min.js"></script>
+    <script>
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : '';
+
+        var tableAllEventconfig = {
+            language: {
+                url: localizationUrl,
+            },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminEvent/GetAllEventData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageEventsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Events/Details/' + rowData.eventId + '">' + rowData.title + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.creatorId + '">' + rowData.creatorName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.banned == false){
+                             if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-info">' + "@localizer.Get("OnGoing")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+                            
+                        }
+                        else{
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'startDate' },
+                { data: 'endDate' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.banned){
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/UnbanEvent/' + rowData.eventId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else{
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/BanEvent/' + rowData.eventId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableOpenEventconfig = {
+            language: {
+                url: localizationUrl,
+            },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminEvent/GetOpenEventData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageEventsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.eventId != null && rowData.title != null){
+                            return '<a href="Events/Details/' + rowData.eventId + '">' + rowData.title + '</a>'
+                        }
+                        else{
+                            return ''
+                        }
+                        
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.creatorId != null && rowData.creatorName != null) {
+                            return '<a href="User/Index/' + rowData.creatorId + '">' + rowData.creatorName + '</a>'
+                        }
+                        else{
+                            return ''
+                        }
+                        
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-info">' + "@localizer.Get("OnGoing")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'startDate' },
+                { data: 'endDate' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.banned){
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/UnbanEvent/' + rowData.eventId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else{
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/BanEvent/' + rowData.eventId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableOnGoingEventconfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminEvent/GetOnGoingEventData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageEventsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Events/Details/' + rowData.eventId + '">' + rowData.title + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.creatorId + '">' + rowData.creatorName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-info">' + "@localizer.Get("OnGoing")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'startDate' },
+                { data: 'endDate' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.banned){
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/UnbanEvent/' + rowData.eventId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else{
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/BanEvent/' + rowData.eventId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableFinishedEventconfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminEvent/GetFinishedEventData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageEventsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Events/Details/' + rowData.eventId + '">' + rowData.title + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.creatorId + '">' + rowData.creatorName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-info">' + "@localizer.Get("OnGoing")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'startDate' },
+                { data: 'endDate' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.banned){
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/UnbanEvent/' + rowData.eventId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else{
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/BanEvent/' + rowData.eventId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var tableBannedEventconfig = {
+            language: {
+                    url: localizationUrl,
+                },
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: '/AdminEvent/GetBannedEventData',
+                type: 'GET',
+                data: function (d) {
+                    // Add any required parameters to the request.
+                    d.searchValue = $('#ManageEventsTable_filter input').val();
+                    d.sortColumn = $('#sortColumnSelect').val();
+                    d.sortDirection = $('#sortDirectionSelect').val();
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="Events/Details/' + rowData.eventId + '">' + rowData.title + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        return '<a href="User/Index/' + rowData.creatorId + '">' + rowData.creatorName + '</a>'
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if (rowData.banned == false) {
+                            if (rowData.status == 0) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Open")" + '</span>'
+                            }
+                            if (rowData.status == 1) {
+                                return '<span class="badge rounded-pill badge-info">' + "@localizer.Get("OnGoing")" + '</span>'
+                            }
+                            if (rowData.status == 2) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Finished")" + '</span>'
+                            }
+
+                        }
+                        else {
+                            return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                        }
+                    }
+                },
+                { data: 'startDate' },
+                { data: 'endDate' },
+                {
+                    data: null,
+                    render: function (data, type, rowData, meta) {
+                        if(rowData.banned){
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/UnbanEvent/' + rowData.eventId + '\')">@localizer.Get("Unban")</a>'
+                        }
+                        else{
+                            return '<a href="/AdminEvent/Details/' + rowData.eventId + '">@localizer.Get("Details")</a>  ' + '  <a class="link pointer" onclick="addActionToForm(\'/AdminEvent/BanEvent/' + rowData.eventId + '\')" style="color: red;" >@localizer.Get("Ban")</a>'
+                        }
+                    }
+                }
+            ]
+        };
+
+
+        $(document).ready(function () {
+            var tableElement = $('#ManageEventsTable');
+            var table = $('#ManageEventsTable').DataTable(tableAllEventconfig);
+
+            $('#eventType').change(function () {
+                console.log($(this).val());
+                if ($(this).val() == "all") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableAllEventconfig);
+                }
+                else if ($(this).val() == "open") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableOpenEventconfig);
+                }
+                else if ($(this).val() == "ongoing") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableOnGoingEventconfig);
+                }
+                else if ($(this).val() == "finished") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableFinishedEventconfig);
+                }
+                else if ($(this).val() == "banned") {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableBannedEventconfig);
+                }
+                else {
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable().rows().remove().draw();
+                    tableElement.DataTable().destroy();
+                    tableElement.DataTable(tableAllEventConfig);
+                }
+               
+
+            });
+        });
+
+    </script>
+}

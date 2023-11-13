@@ -1,0 +1,190 @@
+﻿@model IEnumerable<Workio.Models.Events.Event>
+@inject UserManager<User> UserManager
+@inject SignInManager<User> _signInManager;
+@inject Workio.Services.Interfaces.IUserService _userService;
+
+@{
+    ViewData["Title"] = @localizer.Get("Events");
+}
+
+<style>
+    /* Top left text */
+    .banner-feature-icon-big {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      color: #FFFFFF;
+    }
+
+    .event-list-card:hover {
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    }
+</style>
+
+<div class="row">
+    <div class="col-10">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Entity") || User.IsInRole("Admin") || User.IsInRole("Mod")))
+    {
+        <div class="col-2 justify-content-end d-flex">
+            <div class="align-self-end align-bottom">
+                <a asp-action="Create">@localizer.Get("CreateNew")</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mb-3">
+    <partial name="../Search/Components/EventsFilterViewModel" model="@ViewBag.Filters" />
+</div>
+
+<div class="row">
+    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="all-events-tab"
+               data-mdb-toggle="tab"
+               href="#all-events-tab-content"
+               role="tab"
+               aria-controls="all-events-tab-content"
+               aria-selected="true">@localizer.Get("All Events")
+            </a>
+        </li>
+        @if (User.IsInRole("Entity") || User.IsInRole("Admin") || User.IsInRole("Mod"))
+        {
+            <li class="nav-item" role="presentation">
+                <a class="nav-link"
+               id="created-event-tab"
+               data-mdb-toggle="tab"
+               href="#created-events-tab-content"
+               role="tab"
+               aria-controls="created-events-tab-content"
+               aria-selected="false">@localizer.Get("Created")</a>
+            </li>  
+        }
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="joined-events-tab"
+               data-mdb-toggle="tab"
+               href="#joined-events-tab-content"
+               role="tab"
+               aria-controls="joined-events-tab-content"
+               aria-selected="false">@localizer.Get("Joined")
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="recommended-events-tab"
+               data-mdb-toggle="tab"
+               href="#recommended-events-tab-content"
+               role="tab"
+               aria-controls="recommended-events-tab-content"
+               aria-selected="false">@localizer.Get("RecommendedPluralM")</a>
+        </li>
+    </ul>
+    <!-- Tabs navs -->
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <div class="tab-pane fade show active"
+            id="all-events-tab-content"
+            role="tabpanel"
+            aria-labelledby="all-events-tab-content">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @{
+                    foreach (var e in ViewBag.AllEvents)
+                    {
+                        <a class="col" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">
+                            <partial name="Components/EventCardSearchComponent" model="e" />
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        @if (User.IsInRole("Entity") || User.IsInRole("Admin") || User.IsInRole("Mod"))
+        {
+            <div class="tab-pane fade"
+                id="created-events-tab-content"
+                role="tabpanel"
+                aria-labelledby="created-events-tab-content">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @{
+                        foreach (var e in ViewBag.CreatedEvents)
+                        {
+                            <a class="col" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">
+                                <partial name="Components/EventCardMyEventsComponent" model="e" />
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        }
+        <div class="tab-pane fade"
+            id="joined-events-tab-content"
+            role="tabpanel"
+            aria-labelledby="joined-events-tab-content">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @{
+                    foreach (var e in ViewBag.JoinedEvents)
+                    {
+                        <a class="col" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">
+                            <partial name="Components/EventCardSearchComponent" model="e" />
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade"
+            id="recommended-events-tab-content"
+            role="tabpanel"
+            aria-labelledby="recommended-events-tab-content">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @{
+                    foreach (var e in ViewBag.RecommendedEvents)
+                    {
+                        <a class="col" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">
+                            <partial name="Components/EventCardSearchComponent" model="e" />
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                var selectedTab = getCookie("selectedEventsTab");
+                if(selectedTab) {
+                    $('#ex1 a[href="' + selectedTab + '"]').tab('show');
+                }
+            }, 150);
+
+            $(function() {
+                $('input[type="checkbox"]').on('change', function() {
+                    $('#eventFilters').submit();
+                });
+            });
+
+            $('#ex1 a').click(function(e) {
+                e.preventDefault();
+                var selectedTab = $(this).attr("href");
+                document.cookie = "selectedEventsTab=" + selectedTab;
+                $(this).tab('show');
+            });
+        });
+
+        function getCookie(name) {
+            var cookieArr = document.cookie.split(";");
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+                if(name == cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            return null;
+        }
+    </script>
+}

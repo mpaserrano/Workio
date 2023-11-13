@@ -1,0 +1,199 @@
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @localizer.Get("Workio")</title>
+    @RenderSection("metaTags", false)
+    <script src="https://kit.fontawesome.com/c2bc445007.js" crossorigin="anonymous"></script>
+    <!--<link href="~/lib/font-awesome/css/all.css" />-->
+    <link rel="stylesheet" href="~/lib/mdb-ui-kit/mdb.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Workio.styles.css" asp-append-version="true" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+          integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.css" />
+</head>
+<body>
+    @await Component.InvokeAsync("NToastNotify")
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img style="max-height: 32px;" src="~/assets/img/logo.png"/> @localizer.Get("Workio")</a>
+                <form asp-controller="Search" asp-action="Index" method="get">
+                    <div class="form-white input-group" style="width: 250px;">
+                        <input id="global-search-bar" type="search" class="form-control rounded" placeholder="@localizer.Get("Search")"
+                               aria-label="Search" aria-describedby="search-addon" for="Name" name="Name" />
+                    </div>
+                </form>
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@localizer.Get("Home")</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index">@localizer.Get("Teams")</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">@localizer.Get("Events")</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Matchmaking" asp-action="EventsNear">@localizer.Get("FindIt")</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container mb-10">
+        <main role="main" class="pb-3">
+            @RenderBody()
+            <div class="modal fade" id="ShareModal" tabindex="-1" data-mdb-backdrop="static" aria-labelledby="ShareModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ShareModalLabel">@localizer.Get("Share")</h5>
+                            <button type="reset" class="btn-close" id="closeShareModal" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="share-url" value="" />
+                            <div class="col-lg-12">
+                                <div class="form-outline">
+                                    <input type="text" id="share-search-input" class="form-control">
+                                    <label class="form-label" for="share-search-input">@localizer.Get("Search")</label>
+                                </div>
+                                <ul id="share-users-list" class="list-group list-group-light mt-3">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-3">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 col-md-0 col-sm-0"></div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="text-center">
+                        &copy; 2023 - Workio - <a asp-area="" asp-controller="Home" asp-action="Privacy">@localizer.Get("Privacy")</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="d-flex justify-content-center justify-content-sm-end align-items-center mb-1 me-3">
+                        <!-- link to switch to English language -->
+                        <object type="image/svg+xml" data="~/icons/uk.svg" width="24px" height="24px"></object>
+                        <a asp-controller="Home" asp-action="ChangeCulture" asp-route-culture="en" asp-route-returnUrl="@Context.Request.Path">
+
+                            <span class="ms-1"> English</span>
+                        </a>
+                        <span class="me-1 ms-1">|</span>
+                        <object type="image/svg+xml" data="~/icons/portugal.svg" width="24px" height="24px"></object>
+                        <!-- link to switch to Portuguese language -->
+                        <a asp-controller="Home" class="ms-1" asp-action="ChangeCulture" asp-route-culture="pt" asp-route-returnUrl="@Context.Request.Path">
+                            <span class="ms-1">Português</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/mdb-ui-kit/mdb.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+            integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script type="module" src="~/js/notifications.js"></script>
+    <script src="~/js/chat.js"></script>
+    <script src="~/js/components/chat_preview_search.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+        <script>
+            const mymodal = new mdb.Modal(document.getElementById('ShareModal'));
+
+            function shareContent(url) {
+                navigator.share({
+                    title: 'Share',
+                    text: 'Share Text',
+                    url: url
+                })
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing', error));
+            }
+
+            function shareViaChat(url) {
+                document.getElementById("share-url").value = url;
+                mymodal.show();
+            }
+
+            function shareInChat(chatroomId, link){
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    // Handle response
+                    toastr.success("Link shared with success", "Success");
+                    mymodal.hide();
+                };
+                xhttp.onerror = function() {
+                    // Handle error
+                    toastr.success("Error sharing", "Error");
+                };
+
+                const url = '/Chat/SendMessage';
+                const messageRequest = { chatRoomId: chatroomId, text: link };
+                xhttp.open('POST', url, true);
+                xhttp.setRequestHeader('Content-type', 'application/json');
+                xhttp.send(JSON.stringify(messageRequest));
+            }
+
+            $(document).ready(function () {
+                loadNotificationsCount();
+                loadChatCount();
+                // Listen for changes in the search input field
+                $('#share-search-input').on('input', function () {
+                    // Get the search query
+                    var query = $(this).val();
+                    var url = document.getElementById("share-url").value;
+                    console.log(query);
+                    // Make an AJAX call to your backend to fetch the data based on the search query
+                    $.ajax({
+                        url: '/Chat/GetActiveChats',
+                        type: 'GET',
+                        data: { chatroomName: query },
+                        success: function (data) {
+                            document.getElementById("share-users-list").innerHTML = "";
+
+                            const shareList = data.map(contact => createShareHTML({
+                                id: contact.id,
+                                name: contact.name,
+                                image: contact.image,
+                                url: url
+                            }));
+
+                            shareList.forEach(contact => {
+                              document.getElementById("share-users-list").innerHTML += contact;
+                            });
+                        }
+                    });
+                });
+            });
+    </script>
+</body>
+</html>

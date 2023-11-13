@@ -1,0 +1,927 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using Workio.ViewModels;
+@model UserViewModel;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = @localizer.Get("Profile");
+    string currentUserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    string profileUserId = ViewData["id"] != null ? ViewData["id"].ToString() : currentUserId;
+    bool isUserAdm = UserManager.IsInRoleAsync(new Workio.Models.User() { Id = Model.Id }, "Admin").Result;
+    bool isUserMod = UserManager.IsInRoleAsync(new Workio.Models.User() { Id = Model.Id }, "Mod").Result;
+    bool isUserCE = UserManager.IsInRoleAsync(new Workio.Models.User() { Id = Model.Id }, "Entity").Result;
+}
+
+<link rel="stylesheet" href="~/css/profile.css" type="text/css">
+<style>
+    .rate-link:hover img {
+        opacity: 0.8;
+    }
+
+    /* Rating Star Widgets Style */
+    .rating-stars ul {
+        list-style-type: none;
+        padding: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .rating-stars ul > li.star {
+        display: inline-block;
+    }
+
+    /* Idle State of the stars */
+    .rating-stars ul > li.star > i.fa {
+        font-size: 2.5em; /* Change the size of the stars */
+        color: #ccc; /* Color on idle state */
+    }
+
+    /* Hover state of the stars */
+    .rating-stars ul > li.hover > i.fa {
+        color: #feb624;
+    }
+
+    /* Selected state of the stars */
+    .rating-stars ul > li.selected > i.fa {
+        color: #feb624;
+    }
+    
+    .star {
+        margin-right: -3px;
+        margin-left: -3px;
+        cursor: pointer;
+    }
+
+    #stars {
+        font-size: 1.4rem;
+    }
+
+    #stars {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    #stars li {
+      display: inline-block;
+      vertical-align: middle;
+      /*height: 50px;*/
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      text-align: center;
+    }
+
+    #stars li:last-child {
+      display: flex;
+      align-items: center;
+    }
+
+    #stars li:last-child i {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 auto;
+    }
+
+    .hover {
+        color: #feb624;
+    }
+
+    .rated-star {
+        color: #feb624;
+    }
+</style>
+
+@if (!ViewBag.OwnProfile && !ViewBag.IsTeamMember)
+{
+ <style>
+    #stars .star {
+        opacity: 0.4!important;
+        cursor: default!important;
+    }
+</style>   
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-lg-3 col-auto align-profile-items-center">
+        <div class="row mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex flex-row justify-content-center align-items-end dropdown">
+                        <a style="margin-right: -25px;" class="btn btn-floating shadow-none text-reset dropdown-toggle hidden-arrow ms-auto"
+                           href="#"
+                           id="navbarDropdownMenuLink"
+                           role="button"
+                           data-mdb-toggle="dropdown"
+                           aria-expanded="false">
+                            <i style="font-size: 28px;" class="fa-solid fa-ellipsis-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="navbarDropdownMenuLink">
+                            @if (SignInManager.IsSignedIn(User) && !ViewBag.OwnProfile)
+                            {
+                                <!-- Mostra as opções de bloquear -->
+                                if (!ViewBag.AlreadyBlocked)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="BlockedUsers" asp-action="BlockUser" asp-route-id="@ViewData["id"]"><i class="fa-solid fa-ban"></i> <span>@localizer.Get("Block")</span></a>
+                                    </li>
+                                }
+                                else if (ViewBag.AlreadyBlocked)
+                                {
+                                    <a class="dropdown-item" asp-controller="BlockedUsers" asp-action="Unblock" asp-route-id="@ViewData["id"]">@localizer.Get("Unblock")</a>
+                                }
+                                <li>
+                                    <a class="dropdown-item" asp-action="ReportUser" asp-controller="Reports" asp-route-id="@ViewData["id"]"><i class="fa-solid fa-triangle-exclamation"></i> <span>@localizer.Get("Report")</span></a>
+                                </li>
+                            }
+                            else if (SignInManager.IsSignedIn(User) && ViewBag.OwnProfile)
+                            {
+                                <!-- Mostra as opção para pedir CE -->
+                                @if (ViewBag.IsModEntityAdmin == false)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="RequestEntityStatus" asp-action="Create">@localizer.Get("ApplyToBeCertified")</a>
+                                    </li>
+                                }
+                                <li>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i style="font-size: 17px;" class="fa-solid fa-gear"></i> @localizer.Get("Settings")</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="text-center">
+                        @if (Model.ProfilePicture != null)
+                        {
+                            <img src="~/pfp/@Model.ProfilePicture" alt="Profile Picture" class="pfp rounded-circle" />
+                        }
+                        else
+                        {
+                            <img src="~/pfp/default.png" alt="Profile Picture" class="pfp" />
+                        }
+                    </div>
+                    <div style="text-align: center; margin-bottom: 5px;">
+                        <h3 class="text-center profile-name mt-2">@Model.Name</h3>
+                        @if (isUserAdm || isUserMod)
+                        {
+                            <span class="badge rounded-pill badge-warning">MOD</span>
+                        }
+                        else if (isUserCE)
+                        {
+                            <span class="badge rounded-pill badge-success">@localizer.Get("Entity")</span>
+                        }
+                    </div>
+                    <div style="text-align: center;">
+                        <span class="">@ViewBag.AverageRating <i class="fa-solid fa-star" style="color: #feb624;"></i> (@ViewBag.RatingsCount)</span>
+                    </div>
+                    <div id="image-container" class="text-center">
+                        @if (!ViewBag.OwnProfile && ViewBag.IsTeamMember)
+                        {
+                            <!-- Rating Stars Box -->
+                            <div class='rating-stars text-center'>
+                                <ul id='stars'>
+                                    <li class='star @(ViewBag.RatedAmount >= 1 ? "rated-star" : "")' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 2 ? "rated-star" : "")' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 3 ? "rated-star" : "")' data-value='3'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 4 ? "rated-star" : "")' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 5 ? "rated-star" : "")' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li style="font-size: 16px; margin-left: 4px;" title="@localizer.Get("RatingUserHint")" data-mdb-toggle="tooltip">
+                                        <i style="" class="fa-solid fa-circle-question"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else if (!ViewBag.OwnProfile && !ViewBag.IsTeamMember)
+                        {
+                            <!-- Rating Stars Box -->
+                            <div class='rating-stars text-center'>
+                                <ul id='stars'>
+                                    <li class='star @(ViewBag.RatedAmount >= 1 ? "rated-star" : "")' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 2 ? "rated-star" : "")' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 3 ? "rated-star" : "")' data-value='3'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 4 ? "rated-star" : "")' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star @(ViewBag.RatedAmount >= 5 ? "rated-star" : "")' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li style="font-size: 16px; margin-left: 4px;" title="@localizer.Get("RatingUserHint")" data-mdb-toggle="tooltip">
+                                        <i style="" class="fa-solid fa-circle-question"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+
+                    @if (SignInManager.IsSignedIn(User) && !ViewBag.OwnProfile && !ViewBag.AlreadyBlocked)
+                    {
+                        <div class="profile-actions-container-md">
+                            @switch (ViewBag.State)
+                            {
+                                case (ConnectionState.Accepted):
+                                    {
+                                        <div class="profile-action-container">
+                                            <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-button')" style="width: 100%" asp-controller="User" asp-action="RemoveConnection" asp-route-id="@ViewData["id"]" asp-route-returnUrl="@Context.Request.Path" asp-route-profile="true" class="btn btn-primary profile-acton-btn">
+                                                <i class="fa-solid fa-user-xmark profile-action-icon"></i>
+                                                <span style="margin: 0 auto;">@localizer.Get("RemoveConnection")</span>
+                                            </a>
+                                        </div>
+                                        break;
+                                    }
+                                case (ConnectionState.Pending):
+                                    {
+                                        @if (ViewBag.IsRequestMine)
+                                        {
+                                            <div class="profile-action-container">
+                                                <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-button')" style="width: 100%" asp-controller="User" asp-action="CancelConnectionRequest" asp-route-id="@ViewData["id"]" asp-route-profile="true" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary profile-acton-btn">
+                                                    <i class="fa-solid fa-user-clock profile-action-icon"></i>
+                                                    <span style="margin: 0 auto;">@localizer.Get("CancelConnectionRequest")</span>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="profile-action-container">
+                                                <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-button')" style="width: 100%" asp-controller="User" asp-action="AcceptConnection" asp-route-id="@ViewData["id"]" asp-route-profile="true" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary profile-acton-btn">
+                                                    <i class="fa-solid fa-user-check profile-action-icon"></i>
+                                                    <span style="margin: 0 auto;">@localizer.Get("AcceptConnectionRequest")</span>
+                                                </a>
+                                            </div>
+                                            <div class="profile-action-container">
+                                                <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-button')" style="width: 100%" asp-controller="User" asp-action="RejectConnection" asp-route-id="@ViewData["id"]" asp-route-profile="true" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary profile-acton-btn">
+                                                    <i class="fa-solid fa-user-xmark profile-action-icon"></i>
+                                                    <span style="margin: 0 auto;">@localizer.Get("RejectConnectionRequest")</span>
+                                                </a>
+                                            </div>
+                                        }
+
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        <div class="profile-action-container">
+                                            <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-button')" style="width: 100%; height: 100%;" asp-controller="User" asp-action="AddConnection" asp-route-id="@ViewData["id"]" class="btn btn-primary profile-acton-btn">
+                                                <i class="fa-solid fa-user-plus profile-action-icon"></i>
+                                                <span style="margin: 0 auto;">@localizer.Get("Connect")</span>
+                                            </a>
+                                        </div>
+                                        break;
+                                    }
+                            }
+                            @if (Model.OpenDMs || (ViewBag.State != null && ViewBag.State == ConnectionState.Accepted))
+                            {
+                                <div class="profile-action-container">
+                                    <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-button')" style="height: 100%;" asp-controller="User" asp-action="SendMessage" asp-route-otherUserId="@ViewData["id"]" class="btn btn-primary profile-acton-btn">
+                                        <i class="fa-solid fa-message profile-action-icon"></i>
+                                        <span style="margin: 0 auto;">@localizer.Get("SendMessage")</span>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="list-group list-group-light">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                @if (ViewBag.OwnProfile && SignInManager.IsSignedIn(User))
+                                {
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="Connections" asp-controller="User">@ViewBag.ConnectionsNumber @localizer.Get("Connections")</a>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <p>@ViewBag.ConnectionsNumber @localizer.Get("Connections")</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-envelope"></i>
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">@localizer.Get("Email")</p>
+                                    <p class="text-muted mb-0">@Model.Email</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-brands fa-github"></i>
+                                <div class="ms-3">
+
+                                    @if (Model.GitHubAcc != null)
+                                    {
+                                        <p class="fw-bold mb-1">
+                                            <a href=@($"https://github.com/{Model.GitHubAcc}")>@localizer.Get("GitHub")</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="fw-bold mb-1">
+                                            @localizer.Get("GitHub")
+                                        </p>
+                                        <p>@localizer.Get("NoGitHubProfile")</p>
+                                    }
+                                    <p class="text-muted mb-0"></p>
+                                    <p class="text-muted mb-0"></p>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-brands fa-linkedin"></i>
+                                <div class="ms-3">
+
+                                    @if (Model.LinkedInAcc != null)
+                                    {
+                                        <p class="fw-bold mb-1">
+                                            <a href=@($"https://www.linkedin.com/in/{Model.LinkedInAcc}")>@localizer.Get("LinkedIn")</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="fw-bold mb-1">
+                                            @localizer.Get("LinkedIn")
+                                        </p>
+                                        <p>@localizer.Get("NoLinkedInProfile")</p>
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-9 align-profile-items-center">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="card-title">@localizer.Get("AboutMe")</h5>
+                    </div>
+                    @if (ViewBag.OwnProfile)
+                    {
+                        <div class="col-2">
+                            <div class="justify-content-end" style="display: flex;">
+                                <a role="button" href="/Identity/Account/Manage">
+                                    <i class="fa-solid fa-pencil fa-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    @{
+                        if (Model.AboutMe != null)
+                        {
+                            <ul class="list-group list-group-light">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="ms-3">
+                                            <div class="row">
+                                                <p class="mb-1">@Model.AboutMe</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        }
+                    }
+                </div>
+                <ul class="list-group list-group-light">
+                </ul>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-10">
+                            <h5 class="card-title">@localizer.Get("Skills")</h5>
+                        </div>
+                        @if (ViewBag.OwnProfile)
+                        {
+                            <div class="col-2">
+                                <div class="justify-content-end" style="display: flex;">
+                                    <a role="button" data-mdb-toggle="modal" data-mdb-target="#skillsModal">
+                                        <i class="fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
+                                    </a>
+                                    <a role="button" asp-action="EditModeSkill" asp-controller="User">
+                                        <i class="fa-solid fa-pencil fa-xl"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        @{
+                            if (Model.Skills != null)
+                            {
+                                <ul class="list-group list-group-light">
+                                    @foreach (SkillModel skill in Model.Skills)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <partial name="Components/SkillCard" model="skill"></partial>
+                                        </li>
+                                    }
+                                </ul>
+                                if (ViewBag.SkillsShowMore)
+                                {
+                                    <div class="card-footer text-muted text-center"><a class="" asp-area="" asp-controller="User" asp-action="AllSkills" asp-route-id="@ViewData["id"]">@localizer.Get("ShowMore")</a></div>
+                                }
+                            }
+                        }
+                    </div>
+                    <ul class="list-group list-group-light">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="card-title">@localizer.Get("Experiences")</h5>
+                    </div>
+                    @if (ViewBag.OwnProfile)
+                    {
+                        <div class="col-2">
+                            <div class="justify-content-end" style="display: flex;">
+                                <a role="button" data-mdb-toggle="modal" data-mdb-target="#experiencesModal">
+                                    <i class="fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
+                                </a>
+                                <a role="button" asp-action="EditModeExperiences" asp-controller="User">
+                                    <i class="fa-solid fa-pencil fa-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    @{
+                        if (Model.Experiences != null)
+                        {
+                            <ul class="list-group list-group-light">
+                                @foreach (ExperienceModel experience in Model.Experiences)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="ms-3">
+                                                <div class="row">
+                                                    <p class="fw-bold mb-1">@experience.WorkTitle</p>
+                                                </div>
+                                                <div class="row">
+                                                    <h5 class="mb-1">@experience.Company</h5>
+                                                </div>
+                                                <div class="row">
+                                                    <span class="mb-1">
+                                                        @experience.StartDate.Date.ToString("Y")
+                                                        -
+                                                        @if (@experience.EndDate == null)
+                                                        {
+                                                            <span class="mb-1">@localizer.Get("Present")</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="mb-1">@experience.EndDate.Value.Date.ToString("Y")</span>
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div class="row">
+                                                    <p>@experience.Description</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                            if (ViewBag.ExperiencesShowMore)
+                            {
+                                <div class="card-footer text-muted text-center"><a class="" asp-area="" asp-controller="User" asp-action="AllExperiences" asp-route-id="@ViewData["id"]">@localizer.Get("ShowMore")</a></div>
+                            }
+                        }
+                    }
+                </div>
+                <ul class="list-group list-group-light">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 25px;" class="align-profile-items-center">
+        <h3>@localizer.Get("Statistics")</h3>
+        <div id="users-stats" class="row row-cols-3 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="fw-bold" style="font-size:large" id="teams-participated">
+                            <p class="chart-aligment-center">@localizer.Get("TeamsParticipatedIn") </p>
+                            <div class="chart-aligment-center">
+                                <span id="teams-participated-total" class="chart-aligment-center"></span>
+                            </div>
+                        </div>
+                        <div class="chart-aligment-center" id="teamsParticipated-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="fw-bold" style="font-size:large" id="team-involvement">
+                            <p class="chart-aligment-center">@localizer.Get("TeamParticipation")</p>
+                            <div class="chart-aligment-center">
+                                <span id="teams-involved-total" class="chart-aligment-center"></span>
+                            </div>
+                        </div>
+                        <div class="chart-aligment-center" id="teamInvolvement-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="fw-bold" style="font-size:large" id="events-participated">
+                            <p class="chart-aligment-center">@localizer.Get("EventsParticipatedIn")</p>
+                            <div class="chart-aligment-center">
+                                <span id="events-participated-total" class="chart-aligment-center"></span>
+                            </div>
+                        </div>
+                        <div class="chart-aligment-center" id="eventsParticipated-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @if (ViewBag.OwnProfile)
+    {
+        <!-- Modal -->
+        <partial name="Components/SkillModalViewComponent" model="new SkillModel()" />
+        <partial name="Components/ExperienceModalViewComponent" model="new ExperienceModel()" />
+    }
+</div>
+
+
+@section Scripts {
+
+
+    <script type="text/javascript" src="~/lib/GoogleCharts/loader.js"></script>
+    <script type="text/javascript">
+        //-------------------- The language translations from the ASP net goes there! -----------------------
+        //Usage: translation.noGraphDataAvailable
+        var translation = {
+            noGraphDataAvailable: "No data",
+            noGraphTeamsParticipated: "@(profileUserId == currentUserId ? localizer.Get("ProfileGraphEmptyTeamsParticipatedOwner") : localizer.Get("ProfileGraphEmptyTeamsParticipatedVisitor"))",
+            noGraphTeamsInvolvement: "@(profileUserId == currentUserId ? localizer.Get("ProfileGraphEmptyTeamsInvolvedOwner") : localizer.Get("ProfileGraphEmptyTeamsInvolvedVisitor"))",
+            noGraphEventsParticipated: "@(profileUserId == currentUserId ? localizer.Get("ProfileGraphEmptyEventsParticipatedOwner") : localizer.Get("ProfileGraphEmptyEventsParticipatedVisitor"))",
+        };
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawCharts);
+
+        var teamsParticipatedChartData = null;
+        var teamsInvolvedChartData = null;
+        var eventsParticipatedData = null;
+        var teamsParticipatedChartTotalData = null;
+        var teamsInvolvedChartTotalData = null;
+        var eventsParticipatedTotalData = null;
+        var totalTeamsParticipated = null;
+        var totalTeamsInvolved = null;
+        var totalEventsParticipated = null;
+
+        // Team participation graph
+        function drawTeamsParticipatedChart() {
+            var dataTeamsParticipated = new google.visualization.DataTable();
+
+            dataTeamsParticipated.addColumn('string', 'Team Status');
+            dataTeamsParticipated.addColumn('number', 'Number of teams');
+
+            let teamsParticipatedJSON = teamsParticipatedChartData;
+
+            if (teamsParticipatedJSON != undefined) {
+                dataTeamsParticipated.addRows(teamsParticipatedJSON);
+            }
+
+            var optionsTeamsParticipated = {
+                //title: '@localizer.Get("TeamsYouAreAMemberOf")',
+                legend: {
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                pieHole: 0.4,
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var teamParticipationChart = new google.visualization.PieChart(document.getElementById('teamsParticipated-chart'));
+
+            //Verify if exists any data to display on the Pie
+            if (dataTeamsParticipated.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('teamsParticipated-chart').innerHTML = translation.noGraphTeamsParticipated;
+            } else {
+                // Draw the chart with data and options
+                teamParticipationChart.draw(dataTeamsParticipated, optionsTeamsParticipated);
+                teamsParticipatedChartTotalData.innerHTML = totalTeamsParticipated;
+            }
+        }
+
+        // Team involvement graph
+        function drawTeamsInvolvedChart() {
+            var dataTeamInvolvement = new google.visualization.DataTable();
+
+            dataTeamInvolvement.addColumn('string', 'Way of access');
+            dataTeamInvolvement.addColumn('number', 'Number of teams');
+
+            if (teamsInvolvedChartData != undefined) {
+                dataTeamInvolvement.addRows(teamsInvolvedChartData);
+            }
+
+            var optionsTeamInvolvement = {
+                legend: {
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                pieHole: 0.4,
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var teamInvolvementChart = new google.visualization.PieChart(document.getElementById('teamInvolvement-chart'));
+
+            //Verify if exists any data to display on the Pie
+            if (dataTeamInvolvement.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('teamInvolvement-chart').innerHTML = translation.noGraphTeamsInvolvement;
+            } else {
+                // Draw the chart with data and options
+                teamInvolvementChart.draw(dataTeamInvolvement, optionsTeamInvolvement);
+                teamsInvolvedChartTotalData.innerHTML = totalTeamsInvolved;
+            }
+
+            //teamInvolvementChart.draw(dataTeamInvolvement, optionsTeamInvolvement);
+        }
+
+        //Event participation
+        function drawEventsParticipatedChart() {
+            var dataEventParticipated = new google.visualization.DataTable();
+
+            dataEventParticipated.addColumn('string', 'Event Status');
+            dataEventParticipated.addColumn('number', 'Number of Events');
+            console.log("wow");
+            console.log(eventsParticipatedData);
+            if (eventsParticipatedData != undefined) {
+                dataEventParticipated.addRows(eventsParticipatedData);
+            }
+
+            var optionsEventParticipated = {
+                //title: '@localizer.Get("EventsParticipated")',
+                legend: {
+                    position: 'bottom',
+                    textStyle: { fontSize: 12 }
+                },
+                pieHole: 0.4,
+                width: '100%',
+                height: '100%',
+                responsive: true,
+                chartArea: { top: '5%', width: '100%', height: '75%' },
+            };
+
+            var eventParticipationChart = new google.visualization.PieChart(document.getElementById('eventsParticipated-chart'));
+
+            //Verify if exists any data to display on the Pie
+            if (dataEventParticipated.getNumberOfRows() === 0) {
+                // Display custom message when there is no data available
+                document.getElementById('eventsParticipated-chart').innerHTML = translation.noGraphEventsParticipated;
+            } else {
+                // Draw the chart with data and options
+                eventParticipationChart.draw(dataEventParticipated, optionsEventParticipated);
+                eventsParticipatedTotalData.innerHTML = totalEventsParticipated;
+            }
+        }
+
+        function loadChartsData(callback) {
+            console.log("Executing the jsons...");
+            var jsonDataTeamsParticipated = $.ajax({
+                url: '/UserStatistics/TeamsParticipated?id=@ViewData["id"]',
+                dataType: "json",
+                async: true
+            })
+                .done(function (data) {
+
+                    totalTeamsParticipated = data.total;
+                    teamsParticipatedChartData = data.data;
+                    drawTeamsParticipatedChart();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    // Handle AJAX errors here
+                });
+
+            var jsonDataTeamInvolvement = $.ajax({
+                url: '/UserStatistics/HowJoined?id=@ViewData["id"]',
+                dataType: "json",
+                async: true
+            })
+                .done(function (data) {
+                    totalTeamsInvolved = data.total;
+                    teamsInvolvedChartData = data.data;
+                    drawTeamsInvolvedChart();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    // Handle AJAX errors here
+                });
+
+            $.ajax({
+                url: '/UserStatistics/EventsParticipated?id=@ViewData["id"]',
+                dataType: "json",
+                async: true
+            })
+                .done(function (data) {
+                    // Set the value of eventsParticipated and totalEventsParticipated
+                    totalEventsParticipated = data.total;
+                    eventsParticipatedData = data.data;
+                    drawEventsParticipatedChart();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    // Handle AJAX errors here
+                });
+
+            callback();
+        }
+
+        function redrawCharts() {
+            console.log("Redrawing charts...");
+            drawTeamsParticipatedChart();
+            drawTeamsInvolvedChart();
+            drawEventsParticipatedChart();
+            console.log("Charts redrawed!!");
+        }
+
+        function drawCharts() {
+
+            var id = '@ViewData["id"]' ?? ""; // provides a default empty string value if ViewData["id"] is null
+            var cid = '@currentUserId';
+            console.log(id);
+            console.log(cid);
+            console.log("Page loaded");
+            loadChartsData(function () {
+                console.log("Loading charts...");
+                //drawTeamsParticipatedChart();
+                //drawTeamsInvolvedChart();
+                //drawEventsParticipatedChart();
+                console.log("Charts loaded!");
+            });
+        }
+
+        $(window).resize(function () {
+            redrawCharts();
+        });
+
+        $(document).ready(function () {
+            teamsParticipatedChartTotalData = document.getElementById("teams-participated-total");
+            teamsInvolvedChartTotalData = document.getElementById("teams-involved-total");
+            eventsParticipatedTotalData = document.getElementById("events-participated-total");
+
+            $("#StartDate").change(function () {
+                if (new Date($("#EndDate").val()) > new Date($("#StartDate").val())) {
+                    $("#EndDate").attr("min", $(this).val())
+                }
+                else {
+                    $("#EndDate").val($(this).val());
+                    $("#EndDate").attr("min", $(this).val())
+                }
+            });
+        });
+
+    </script>
+
+    @if (!ViewBag.OwnProfile && ViewBag.IsTeamMember)
+    {
+        <script>
+            function submitRating(ratingValue) {
+            $('#stars li').on('mouseover', function () { return false; }).on('mouseout', function () { return false; });
+            $('#stars li').on('click', function () { return false; });
+            $("#stars .star").css('opacity', 0.4);
+            $("#stars .star").css('cursor', 'pointer');
+
+          // create a new form element
+          const form = document.createElement('form');
+
+          // set the action and method attributes
+          form.action = '/RatingModels/RateUser?id=@ViewData["id"]&rating=' + ratingValue;
+          form.method = 'POST';
+
+          // add form fields as child elements
+          const inputComment = document.createElement('input');
+          inputComment.type = 'text';
+          inputComment.name = 'comment';
+          inputComment.value = 'N/A';
+          form.appendChild(inputComment);
+
+          // add an anti-forgery token field
+          const inputAntiForgeryToken = document.createElement('input');
+          inputAntiForgeryToken.type = 'hidden';
+          inputAntiForgeryToken.name = '__RequestVerificationToken';
+          inputAntiForgeryToken.value = document.querySelector('input[name="__RequestVerificationToken"]').value;
+          form.appendChild(inputAntiForgeryToken);
+
+          // add a hidden field for the rating value
+          const inputRating = document.createElement('input');
+          inputRating.type = 'hidden';
+          inputRating.name = 'rating';
+          inputRating.value = ratingValue;
+          form.appendChild(inputRating);
+          form.style.display = 'none';
+                    document.body.appendChild(form);
+          // submit the form
+          form.submit();
+        }
+
+        function ratingStarsSetup() {
+            /* 1. Visualizing things on Hover - See next part for action on click */
+            $('#stars li').on('mouseover', function () {
+                var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+                // Now highlight all the stars that's not after the current hovered star
+                $(this).parent().children('li.star').each(function (e) {
+                    if (e < onStar) {
+                        $(this).addClass('hover');
+                    }
+                    else {
+                        $(this).removeClass('hover');
+                    }
+                });
+
+            }).on('mouseout', function () {
+                $(this).parent().children('li.star').each(function (e) {
+                    $(this).removeClass('hover');
+                });
+            });
+
+
+            /* 2. Action to perform on click */
+            $('#stars li').on('click', function () {
+                var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+                var stars = $(this).parent().children('li.star');
+
+                for (i = 0; i < stars.length; i++) {
+                    $(stars[i]).removeClass('selected');
+                }
+
+                for (i = 0; i < onStar; i++) {
+                    $(stars[i]).addClass('selected');
+                }
+
+                // JUST RESPONSE (Not needed)
+                var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+                submitRating(ratingValue);
+            });
+        }
+
+        $(document).ready(function () {
+            ratingStarsSetup();
+        });
+    </script>   
+    }
+}

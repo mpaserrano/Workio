@@ -1,0 +1,81 @@
+﻿@model Workio.Models.Events.Event
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = @localizer.Get("Enrollments");
+}
+<h1>@ViewData["Title"]</h1>
+@if (!ViewBag.OwnsInterestedTeam & !ViewBag.IsMemberOfInterestedTeam && Model.State != Workio.Models.Events.EventState.Finish)
+{
+    <a asp-action="RandomTeam" asp-controller="EventEnrollments" asp-route-id=@ViewBag.EventId class="btn btn-primary">@localizer.Get("GetRandomTeam")</a>
+}
+<div class="row">
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="user-tab"
+               data-mdb-toggle="tab"
+               href="#user-tab-content"
+               role="tab"
+               aria-controls="user-tab-content"
+               aria-selected="true">@localizer.Get("Users")</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="team-tab"
+               data-mdb-toggle="tab"
+               href="#team-tab-content"
+               role="tab"
+               aria-controls="team-tab-content"
+               aria-selected="false">@localizer.Get("Teams")</a>
+        </li>
+    </ul>
+    <!-- Tabs navs -->
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <div class="tab-pane fade show active"
+             id="user-tab-content"
+             role="tabpanel"
+             aria-labelledby="user-tab">
+            @if (ViewBag.Users == null || ViewBag.Users.Count < 1)
+            {
+                <span>@localizer.Get("NoData")</span>
+            }
+            else
+            {
+                <ul class="list-group list-group-light">
+                    @foreach (User user in ViewBag.Users)
+                    {
+                        <a class="list-group-item d-flex justify-content-between align-items-center" asp-controller="User" asp-action="Index" asp-route-id="@user.Id">
+                            <partial name="../Search/Components/UserCardComponent" model="user" />
+                        </a>
+                    }
+                </ul>
+            }
+        </div>
+        <div class="tab-pane fade"
+             id="team-tab-content"
+             role="tabpanel"
+             aria-labelledby="team-tab-content">
+            @if (ViewBag.Teams == null || ViewBag.Teams.Count < 1)
+            {
+                <span>@localizer.Get("NoData")</span>
+            }
+            else
+            {
+                <ul class="list-group list-group-light">
+                    @foreach (Team team in ViewBag.Teams)
+                    {
+                        <a class="list-group-item d-flex justify-content-between align-items-center" asp-controller="Teams" asp-action="Details" asp-route-id="@team.TeamId">
+                            <partial name="../Teams/Components/TeamCardComponent" model="team" />
+                        </a>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    <!-- Tabs content -->
+</div>

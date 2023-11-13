@@ -1,0 +1,89 @@
+﻿@model Workio.Models.Team
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="d-flex align-items-center">
+    <div class="ms-3">
+        <div class="row">
+            <div class="col-auto">
+                <h2>@Model.TeamName</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <p>@Model.Description</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span class="fw-bold">
+                    @localizer.Get("Status"):
+                    @if(Model.IsBanned){
+                        <span class="badge rounded-pill badge-danger">@localizer.Get("BannedSingularM")</span>
+                    }
+                    else{
+                        @switch (Model.Status)
+                        {
+                            case (TeamStatus.Open):
+                                {
+                                    <span class="badge rounded-pill badge-success">@localizer.Get("Open")</span>
+                                    break;
+                                }
+                            case (TeamStatus.Closed):
+                                {
+                                    <span class="badge rounded-pill badge-danger">@localizer.Get("Closed")</span>
+                                    break;
+                                }
+                            case (TeamStatus.Finish):
+                                {
+                                    <span class="badge rounded-pill badge-danger">@localizer.Get("Finished")</span>
+                                    break;
+                                }
+                        }
+                    }
+                    
+                </span>
+            </div>
+        </div>
+        @if (Model.Skills.Any())
+        {
+            <div class="d-flex justify-content-start mb-1">
+                <span class="fw-bold">
+                    @localizer.Get("Skills")
+                    @foreach (Tag tag in Model.Skills)
+                    {
+                        <span class="badge rounded-pill badge-info">@tag.TagName</span>
+                    }
+                </span>
+            </div>
+        }
+        @if (Model.Positions.Any())
+        {
+            <div class="d-flex justify-content-start">
+                <span class="fw-bold">
+                    @if (Model.Status == TeamStatus.Open)
+                    {
+                        @localizer.Get("OpenPositions")
+                    }
+                    else
+                    {
+                        @localizer.Get("Positions")
+                    }
+                    @foreach (Position pos in Model.Positions)
+                    {
+                        @if (Model.Status == TeamStatus.Open)
+                        {
+                            <span class="badge rounded-pill badge-success">@pos.Name</span>
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill badge-danger">@pos.Name</span>
+                        }
+                    }
+                </span>
+            </div>
+        }
+    </div> 
+</div>

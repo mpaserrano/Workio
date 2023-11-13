@@ -1,0 +1,108 @@
+﻿@page
+@inject CommonLocalizationService localizer
+@model LoginModel
+
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = @localizer.Get("Log_In");
+}
+
+<link rel="stylesheet" href="~/css/authentication.css" type="text/css">
+
+<div>
+    <a style="justify-content: center; font-size: 42px; color: #3890cf;" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+        <img class="logo-img" src="~/assets/img/logo.png" /> @localizer.Get("Workio")
+    </a>
+    <hr class="logo-hr" />
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <section>
+            <form id="account" method="post">
+                <h2 class="text-center">@localizer.Get("Login")</h2>
+                <hr />
+                <!--<div asp-validation-summary="ModelOnly" class="text-danger"></div>-->
+                <div class="row g-3 align-items-center mb-4">
+                    <div class="form-outline col-auto">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                            <label asp-for="Input.Email" class="form-label">@localizer.Get("Email")</label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mb-4">
+                    <div class="form-outline col-auto">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                            <label asp-for="Input.Password" class="form-label">@localizer.Get("Password")</label>
+                    </div>
+                    <div class="col-auto">
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mb-4">
+                    <div class="form-checkbtn-check col-auto">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            @localizer.Get("RememberMe")
+                            
+                        </label>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">@localizer.Get("Log_In")</button>
+                </div>
+            </form>
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) > 0)
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div class="row justify-content-around mb-4">
+                            @foreach (var provider in Model.ExternalLogins)
+                            {
+                                <div class="col-md-auto auth-method-icon">
+                                    <button class="btn-icon" type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                        <i class="@provider.DisplayName"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </form>
+                }
+            }
+            <div>
+                <p class="text-center">
+                    <a id="forgot-password" asp-page="./ForgotPassword">@localizer.Get("ForgotYourPassword")</a>
+                </p>
+                <p class="text-center">
+                    @localizer.Get("NotAMemberYet") <a id="signup" asp-page="./Register">@localizer.Get("SignUpNow")</a>
+                </p>
+            </div>
+            <div class="language-selector-container">
+                <div class="language-container">
+                    <!-- link to switch to English language -->
+                    <object type="image/svg+xml" data="~/icons/uk.svg" width="24px" height="24px"></object>
+                    <a asp-controller="Home" asp-action="ChangeCulture" asp-route-culture="en" asp-route-returnUrl="@HttpContext.Request.Path">
+
+                        <span class="ms-1"> English</span>
+                    </a>
+                </div>
+                <div class="language-divisor">
+                    <span class="me-1 ms-1">|</span>
+                </div>
+                <div class="language-container">
+                    <object type="image/svg+xml" data="~/icons/portugal.svg" width="24px" height="24px"></object>
+                    <!-- link to switch to Portuguese language -->
+                    <a asp-controller="Home" class="ms-1" asp-action="ChangeCulture" asp-route-culture="pt" asp-route-returnUrl="@HttpContext.Request.Path">
+                        <span class="ms-1">Português</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,75 @@
+﻿.chart-aligment-center {
+    text-align: center;
+}
+
+.align-profile-items-center {
+}
+
+@media screen and (max-width: 992px) {
+    .align-profile-items-center {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    #users-stats .col {
+        width: 50%;
+    }
+
+    .profile-actions-container-md {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 716px) {
+    .align-profile-items-center {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    #users-stats .col {
+        width: 100%;
+    }
+}
+
+.user-profile-actions .profile-action {
+    font-size: 14px;
+}
+
+.profile-acton-btn::before {
+    /*content: '\f4fc';
+    font-family: "FontAwesome";*/
+}
+
+.profile-acton-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .profile-acton-btn i {
+        margin-right: 10px; /* adjust the value as needed */
+        margin-left: 0; /* reset the default margin */
+        align-self: flex-start; /* align the icon to the top of the button */
+    }
+
+.profile-action-icon {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.profile-action-container {
+    padding: 5px;
+    flex: 1;
+}
+
+.profile-actions-container-md {
+    margin-top: 10px;
+}
+
+.disabled-button {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

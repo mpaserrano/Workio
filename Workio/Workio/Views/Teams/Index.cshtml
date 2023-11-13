@@ -1,0 +1,190 @@
+﻿@model User
+@inject SignInManager<User> SignInManager
+@{
+    ViewData["Title"] = @localizer.Get("Teams");
+    var pendingTeamRequests = Model.TeamsRequests.Where(x => x.Status == PendingUserTeamStatus.Pending);
+}
+
+
+
+<div class="row">
+    <div class="col-10">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    @if (SignInManager.IsSignedIn(User)){
+        <div class="col-2 justify-content-end d-flex">
+            <div class="align-self-end align-bottom">
+                <a asp-action="Create">@localizer.Get("CreateNew")</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row mb-3">
+    <partial name="../Search/Components/TeamsFilterViewModel" model="@ViewBag.Filters" />
+</div>
+
+<div style="margin-top: 24px;" class="row">
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="allteams-tab"
+               data-mdb-toggle="tab"
+               href="#allteams-tab-content"
+               role="tab"
+               aria-controls="user-tab-content"
+               aria-selected="true">@localizer.Get("AllTeams")</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="myteams-tab"
+               data-mdb-toggle="tab"
+               href="#myteams-tab-content"
+               role="tab"
+               aria-controls="user-tab-content"
+               aria-selected="true">@localizer.Get("MyTeams")</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="invites-tab"
+               data-mdb-toggle="tab"
+               href="#invites-tab-content"
+               role="tab"
+               aria-controls="invites-tab-content"
+               aria-selected="false">@localizer.Get("TeamInvites")
+                @if (pendingTeamRequests.Any())
+                {
+                    <span id="teams-details-join-requests-tab-badge" style="margin-left: 0.1rem; display: initial; margin-top: -7px;" class="badge rounded-pill badge-notification bg-danger">@pendingTeamRequests.Count()</span>   
+                }
+           </a>
+        </li>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item" role="presentation">
+                <a class="nav-link"
+               id="recommended-tab"
+               data-mdb-toggle="tab"
+               href="#recommended-tab-content"
+               role="tab"
+               aria-controls="recommended-tab-content"
+               aria-selected="false">@localizer.Get("RecommendedPluralF")</a>
+        </li>
+        }
+    </ul>
+    <!-- Tabs navs -->
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <div class="tab-pane fade show active"
+             id="allteams-tab-content"
+             role="tabpanel"
+             aria-labelledby="user-tab">
+             <ul class="list-group list-group-light">
+                @foreach (var item in ViewBag.Teams)
+                {
+                    <a class="list-group-item d-flex justify-content-between align-items-center" asp-controller="Teams" asp-action="Details" asp-route-id="@item.TeamId">
+                        <partial name="Components/TeamCardComponent" model="item" />
+                    </a>
+                }
+             </ul>
+        </div>
+        <div class="tab-pane fade"
+             id="myteams-tab-content"
+             role="tabpanel"
+             aria-labelledby="user-tab">
+             <ul class="list-group list-group-light">
+                @foreach (var item in ViewBag.MyTeams)
+                {
+                    <a class="list-group-item d-flex justify-content-between align-items-center" asp-controller="Teams" asp-action="Details" asp-route-id="@item.TeamId">
+                        <partial name="Components/TeamCardComponent" model="item" />
+                    </a>
+                }
+             </ul>
+        </div>
+        <div class="tab-pane fade"
+             id="invites-tab-content"
+             role="tabpanel"
+             aria-labelledby="invites-tab">
+             <ul class="list-group list-group-light">
+                @foreach (var item in pendingTeamRequests)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a asp-controller="Teams" asp-action="Details" asp-route-id="@item.TeamId">
+                            <partial name="Components/TeamInviteCardComponent" model="item.Team" /> 
+                        </a>
+                        <div class="d-flex align-items-right">
+                            <a class="btn btn-link btn-rounded btn-sm" asp-action="AcceptInvite" asp-controller="Teams" asp-route-requestId="@item.Id" role="button">@localizer.Get("AcceptInvite")</a>
+                            <a class="btn btn-link btn-rounded btn-sm" asp-action="RejectInvite" asp-controller="Teams" asp-route-requestId="@item.Id" role="button">@localizer.Get("RejectInvite")</a>
+                        </div>
+                    </li>
+                        
+                }
+             </ul>
+        </div>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="tab-pane fade"
+                 id="recommended-tab-content"
+                 role="tabpanel"
+                 aria-labelledby="user-tab">
+                <ul class="list-group list-group-light">
+                    @{
+                        if (ViewBag.RecommendedTeams != null)
+                        {
+                            foreach (var item in ViewBag.RecommendedTeams)
+                            {
+                                <a class="list-group-item d-flex justify-content-between align-items-center" asp-controller="Teams" asp-action="Details" asp-route-id="@item.TeamId">
+                                    <partial name="Components/TeamCardComponent" model="item" />
+                                </a>
+                            }
+                        }
+                        
+                    }
+                   
+                </ul>
+            </div>
+        }
+    </div>
+    <!-- Tabs content -->
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                var selectedTab = getCookie("selectedTab");
+                if(selectedTab) {
+                    $('#ex1 a[href="' + selectedTab + '"]').tab('show');
+                }
+            }, 150);
+
+            $(function() {
+                $('input[type="checkbox"]').on('change', function() {
+                    $('#teamFilters').submit();
+                });
+
+                $('#team-input-search').on('change', function() {
+                    $('#teamFilters').submit();
+                });
+            });
+
+            $('#ex1 a').click(function(e) {
+                e.preventDefault();
+                var selectedTab = $(this).attr("href");
+                document.cookie = "selectedTab=" + selectedTab;
+                $(this).tab('show');
+            });
+        });
+
+        function getCookie(name) {
+            var cookieArr = document.cookie.split(";");
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+                if(name == cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            return null;
+        }
+    </script>
+}

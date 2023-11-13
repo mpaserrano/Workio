@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>@localizer.Get("BlockedUsers")</h1>
+
+<a asp-action="Connections" asp-controller="User" class="btn btn-primary">@localizer.Get("Connections")</a>
+<a asp-action="PendingConnections" asp-controller="User" class="btn btn-primary">@localizer.Get("PendingConnections")</a>
+<p style=”line-height:1em;”></p>
+
+
+    <div>
+        <ul>
+        @foreach (var person in ViewBag.BlockedList)
+        {
+                    <a>@person.Name</a>
+            <a asp-controller="BlockedUsers" asp-action="Unblock" asp-route-id="@person.Id" class="btn btn-primary">@localizer.Get("Unblock")</a>
+                    <br />
+        }
+        </ul>
+    </div>

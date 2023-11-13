@@ -1,0 +1,128 @@
+﻿@model Workio.Models.User
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<User> SignInManager
+@{
+    ViewData["Title"] = @localizer.Get("Connections");
+}
+
+<h1>@ViewData["Title"]</h1>
+<!-- Tabs navs -->
+<ul class="nav nav-tabs nav-fill mb-3" id="tabs-list" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active"
+           id="connection-tab"
+           data-mdb-toggle="tab"
+           href="#connection-tab-content"
+           role="tab"
+           aria-controls="connection-tab-content"
+           aria-selected="true">@localizer.Get("Connections")</a>
+    </li>
+    @if (ViewBag.OwnProfile)
+    {
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="pending-tab"
+               data-mdb-toggle="tab"
+               href="#pending-tab-content"
+               role="tab"
+               aria-controls="pending-tab-content"
+               aria-selected="false">
+                @localizer.Get("Pending")
+                @if (ViewBag.Pending.Count > 0)
+                {
+                    <span id="teams-details-join-requests-tab-badge" style="margin-left: 0.1rem; display: initial; margin-top: -7px;" class="badge rounded-pill badge-notification bg-danger">@ViewBag.Pending.Count</span>
+                }
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="blocks-tab"
+               data-mdb-toggle="tab"
+               href="#blocks-tab-content"
+               role="tab"
+               aria-controls="blocks-tab-content"
+               aria-selected="false">@localizer.Get("Blocks")</a>
+        </li>
+    }
+</ul>
+<!-- Tabs navs -->
+<!-- Tabs content -->
+<div class="tab-content" id="tabs-content">
+    <div class="tab-pane fade show active"
+         id="connection-tab-content"
+         role="tabpanel"
+         aria-labelledby="connection-tab">
+        <ul class="list-group list-group-light">
+            @foreach (User user in ViewBag.Connections)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="row">
+                        <a asp-controller="User" asp-action="Index" asp-route-id="@user.Id">
+                            <partial name="../Search/Components/UserCardComponent" model="user" />
+                        </a>
+                    </div>
+                    @if (ViewBag.OwnProfile)
+                    {
+                        <div class="row">
+                            <div class="col-auto">
+                                <a asp-controller="User" asp-action="RemoveConnection" asp-route-returnUrl="@Context.Request.Path" asp-route-id="@user.Id" asp-route-profile="false" class="btn btn-primary">@localizer.Get("Remove")</a>
+                            </div>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+    @if (ViewBag.OwnProfile)
+    {
+        <div class="tab-pane fade"
+             id="pending-tab-content"
+             role="tabpanel"
+             aria-labelledby="pending-tab">
+            <ul class="list-group list-group-light">
+                @foreach (User user in ViewBag.Pending)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="row">
+                            <a asp-controller="User" asp-action="Index" asp-route-id="@user.Id">
+                                <partial name="../Search/Components/UserCardComponent" model="user" />
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <a asp-controller="User" asp-action="AcceptConnection" asp-route-returnUrl="@Context.Request.Path" asp-route-id="@user.Id" class="btn btn-primary">@localizer.Get("Accept")</a>
+                            </div>
+                            <div class="col-auto">
+                                <a asp-controller="User" asp-action="RejectConnection" asp-route-returnUrl="@Context.Request.Path" asp-route-id="@user.Id" asp-route-profile="false" class="btn btn-primary">@localizer.Get("Reject")</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="tab-pane fade"
+             id="blocks-tab-content"
+             role="tabpanel"
+             aria-labelledby="blocks-tab">
+            <ul class="list-group list-group-light">
+                @foreach (User user in ViewBag.Blocks)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="row">
+                            <a asp-controller="User" asp-action="Index" asp-route-id="@user.Id">
+                                <partial name="../Search/Components/UserCardComponent" model="user" />
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <a asp-controller="BlockedUsers" asp-action="UnblockFromConnections" asp-route-id="@user.Id" class="btn btn-primary">@localizer.Get("Unblock")</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>    
+    }
+</div>
+<!-- Tabs content -->

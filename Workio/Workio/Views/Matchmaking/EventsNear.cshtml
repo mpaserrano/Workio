@@ -1,0 +1,324 @@
+﻿@{
+    ViewData["Title"] = localizer.Get("FindIt");
+}
+
+<style>
+    #map {
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: calc(35.1290322581vw - 1px);
+    }
+
+    .loading-list-container {
+        text-align: center;
+    }
+
+    .marker-popup-bold-text {
+        font-weight: bold;
+    }
+
+    #near-events-info-message {
+        margin-top: 15px;
+    }
+
+    /* Top left text */
+    .banner-feature-icon-small {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      color: #FFFFFF;
+    }
+
+    .event-list-card:hover {
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    }
+</style>
+
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+<link rel="stylesheet" href="~/css/findit.css" type="text/css">
+
+<h1>@ViewData["Title"]</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+        <div id='map'></div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md">
+         <div class="row">
+            <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active"
+                       id="user-tab"
+                       data-mdb-toggle="tab"
+                       href="#user-tab-content"
+                       role="tab"
+                       aria-controls="user-tab-content"
+                       aria-selected="true">@localizer.Get("EventsNearMe")</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="ex2-content">
+                <div class="tab-pane fade show active"
+                     id="user-tab-content"
+                     role="tabpanel"
+                     aria-labelledby="user-tab">
+                     <div id="near-events-container" class="row row-cols-1 row-cols-md-3 g-4"></div>
+                     <div id="near-events-info-message"><span>@localizer.Get("MapClickForCurrentLocation")</span></div>
+                     <div style="display: none;" id="loading" class="loading-list-container">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">@localizer.Get("Loading...")</span>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+
+    <script>
+        var sourcePositionMarker = null;
+        var nearEventsMarkers = [];
+        var nearEventsInfoMessages = {
+            tutorial: "Click on the map tor use your current location",
+            noEventsFound: '@localizer.Get("NoEventsFound")',
+        };
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoianBvcnRhcyIsImEiOiJjbGV2eDVyNnowOTUyM29rYzMycTc5eml4In0.tt2VI2R27K7LAnvS6Kl8Gg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-8.83896875965655, 38.521685683795], // starting position [lng, lat]
+            zoom: 15 // starting zoom
+        });
+
+        var geocoder = new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl,
+                marker: null,
+            });
+
+        map.addControl(
+            geocoder
+        );
+
+         map.addControl(new mapboxgl.NavigationControl());
+         var geolocate = new mapboxgl.GeolocateControl({
+            positionOptions: {
+            enableHighAccuracy: true
+            },
+            // When active the map will receive updates to the device's location as it changes.
+            //trackUserLocation: true//,
+            // Draw an arrow next to the location dot to indicate which direction the device is heading.
+            //showUserHeading: true
+            showUserLocation: false
+            });
+
+         map.addControl(geolocate);
+
+         function clearNearEventsMarkers() {
+             nearEventsMarkers.forEach(function(marker) {
+                 marker.remove();
+             }); 
+
+             nearEventsMarkers = [];
+         }
+
+         function roundTo(n, digits) {
+                if (digits === undefined) {
+                    digits = 0;
+                }
+
+                var multiplicator = Math.pow(10, digits);
+                n = parseFloat((n * multiplicator).toFixed(11));
+                return Math.round(n) / multiplicator;
+            }
+
+         const nearEventsHTML = ({
+          id,
+          title,
+          authorName,
+          bannerPath,
+          startDate,
+          endDate,
+          distance,
+          state,
+          isFeatured
+        }) => {
+            let eventState = "";
+            let badgeColor = "";
+            switch(state) {
+                case 0:
+                    eventState = '@localizer.Get("Open")';
+                    badgeColor = "success";
+                    break;
+                case 1:
+                    eventState = '@localizer.Get("OnGoing")';
+                    badgeColor = "info";
+                    break;
+                case 2:
+                    eventState = '@localizer.Get("Finished")';
+                    badgeColor = "danger";
+                    break;
+                default:
+                    eventState = '@localizer.Get("Open")';
+                    badgeColor = "success";
+                    break;
+            }
+
+            let eventFeaturedHtml = "";
+            
+            if (isFeatured) {
+                eventFeaturedHtml = '<div data-mdb-toggle="tooltip" title="@localizer.Get("FeaturedEvent")"><i class="fa-solid fa-star banner-feature-icon-small"></i></div>';
+            }
+
+            return `
+        <a class="col" href="/Events/Details/${id}" target="_blank">
+            <div class="card h-100 event-list-card">
+                ${eventFeaturedHtml}
+                <img class="card-img-top"  style="object-fit: cover"  src="/public/uploads/events/banners/${bannerPath}" width="60" height="90" alt="Event Banner">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align:center"><b>${title}</b></h5>
+                    <h6 class="card-text" style="text-align:center">${distance} Km</h6>
+                    <p class="card-text">
+                        <b>@localizer.Get("Creator"):</b>
+                        ${authorName}
+                    </p>
+                    <p class="card-text"><b>@localizer.Get("Date"): </b>${startDate}<b>   —   </b> ${endDate}</p>
+                    <p class="card-text">
+                        <b>@localizer.Get("Status"):</b>
+                        <span class="badge rounded-pill badge-${badgeColor}">${eventState}</span>
+                    </p>
+                </div>
+            </div>
+            </a>
+        `;
+        }
+
+
+        $(document).ready(function () {
+            const nearEventsInfoLabel = document.getElementById("near-events-info-message");
+
+            const currentLocationPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+                '@localizer.Get("YouAreHere")'
+            );
+
+            geolocate.on('geolocate', function(e) {
+              var lon = e.coords.longitude;
+              var lat = e.coords.latitude
+              var position = [lon, lat];
+
+              if (sourcePositionMarker != null)
+                sourcePositionMarker.remove();
+
+                clearNearEventsMarkers();
+
+              sourcePositionMarker = new mapboxgl.Marker({color: "#ff7f50"}).setLngLat([lon, lat]).setPopup(currentLocationPopup).addTo(map);
+              sourcePositionMarker.togglePopup();
+
+              showNearEvents(position);
+            });
+
+            function loadNearEvents(lat, long, callback) {
+             const xhttp = new XMLHttpRequest();
+              xhttp.onload = function() {
+                //document.getElementById("near-events-container").innerHTML = this.responseText;
+                var response = this.responseText;
+                var jsonData = JSON.parse(response).data;
+
+                if (Object.keys(jsonData).length === 0) {
+                    nearEventsInfoLabel.innerHTML = nearEventsInfoMessages.noEventsFound;
+                    nearEventsInfoLabel.style.display = "block";
+                }
+                else {
+                    nearEventsInfoLabel.style.display = "none";
+                }
+
+                jsonData.forEach(function(event) {
+                    let newEventMaker = new mapboxgl.Marker().setLngLat([event.longitude, event.latitude])
+                        .setPopup(new mapboxgl.Popup()
+                        .setHTML('<div><a href="/Events/Details/' + event.id + '" target="_blank">' + event.title + '<a><br><span class="marker-popup-bold-text">' + roundTo(event.distance, 2) + ' Km</span></div>'))
+                        .addTo(map);
+                    nearEventsMarkers.push(newEventMaker);
+
+                    newEventMaker.getElement().addEventListener('click', (e) => {}, false);
+                });
+
+                const eventsNear = jsonData.map(event => nearEventsHTML({id: event.id, title: event.title, authorName: event.userPublisher, bannerPath: event.bannerSrc, startDate: event.startDate, endDate: event.endDate, distance: roundTo(event.distance, 2), state: event.state, isFeatured: event.isFeatured}));
+
+                eventsNear.forEach(event => {
+                  document.getElementById("near-events-container").innerHTML += event;
+                });
+
+                callback();
+              }
+
+              xhttp.open("GET", "/Matchmaking/GetCloseEvents?latitude=" + lat + "&longitude=" + long + "&distance=10", true);
+              xhttp.send();
+            }
+
+            function getLocation() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showNearEvents);
+              } else { 
+                document.getElementById("near-events-container").innerHTML = "Geolocation is not supported by this browser.";
+              }
+            }
+
+            function showNearEvents(position) {
+                document.getElementById("near-events-container").innerHTML = "";
+                document.getElementById("loading").style.display = "block";
+
+                loadNearEvents(position[1], position[0], function() {
+                    document.getElementById("loading").style.display = "none";
+                });
+            }
+
+            const searchPointLocationPopup = new mapboxgl.Popup({ offset: 25 }).setText(
+                '@localizer.Get("SearchFromHere")'
+            );
+
+            map.on('style.load', function () {
+            map.on('click', function (e) {
+                if (e.originalEvent.target.classList.contains('mapboxgl-canvas')) {
+                    var coordinates = e.lngLat;
+                    if (sourcePositionMarker != null)
+                        sourcePositionMarker.remove();
+
+                    clearNearEventsMarkers();
+
+                    sourcePositionMarker = new mapboxgl.Marker({color: "#ff7f50"}).setLngLat(coordinates).setPopup(searchPointLocationPopup).addTo(map);
+                    sourcePositionMarker.togglePopup();
+                    showNearEvents([coordinates.lng, coordinates.lat]);
+                }
+            });
+            });
+
+            // Listen for the `result` event
+            geocoder.on('result', function(e) {
+                var coordinates = e.result.center;
+                    if (sourcePositionMarker != null)
+                        sourcePositionMarker.remove();
+
+                    clearNearEventsMarkers();
+
+                    sourcePositionMarker = new mapboxgl.Marker({color: "#ff7f50"}).setLngLat(coordinates).setPopup(
+                        PointLocationPopup).addTo(map);
+                    sourcePositionMarker.togglePopup();
+                    showNearEvents([coordinates[0], coordinates[1]]);
+                    geocoder.clear();
+            });
+            
+
+            //getLocation();
+        });
+    </script>
+}

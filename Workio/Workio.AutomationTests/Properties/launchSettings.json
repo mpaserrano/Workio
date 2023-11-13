@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Workio.AutomationTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "WebAppUrl": "https://localhost:7212/"
+      }
+    }
+  }
+}

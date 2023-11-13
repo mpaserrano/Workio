@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    string routeName = Context.GetRouteData().Values["controller"].ToString();//ControllerContext..Values["controller"].ToString();
+}
+
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class='nav-link @(routeName == "Admin" ? "active" : "")' id="users" asp-area="" asp-controller="Admin" asp-action="Users"><i class="fa-solid fa-user"></i> @localizer.Get("Users")</a></li>
+    <li class="nav-item"><a class='nav-link @(routeName == "AdminTeam" ? "active" : "")' id="teams" asp-area="" asp-controller="AdminTeam" asp-action="Index"><i class="fa-solid fa-users"></i> @localizer.Get("Teams")</a></li>
+    <li class="nav-item"><a class='nav-link @(routeName == "AdminEvent" ? "active" : "")' id="events" asp-area="" asp-controller="AdminEvent" asp-action="Index"><i class="fa-solid fa-calendar"></i> @localizer.Get("Events")</a></li>
+    <li class="nav-item"><a class='nav-link @(routeName == "AdminReports" ? "active" : "")' id="reports" asp-area="" asp-controller="AdminReports" asp-action="Reports"><i class="fa-solid fa-triangle-exclamation"></i> @localizer.Get("Reports")</a></li>
+    <li class="nav-item"><a class='nav-link @(routeName == "AdminEntities" ? "active" : "")' id="entity-requests" asp-area="" asp-controller="AdminEntities" asp-action="EntityRequestsIndex"><i class="fa-solid fa-user-tie"></i> @localizer.Get("EntityRequests")</a></li>
+    <li class="nav-item"><a class='nav-link @(routeName == "Logs" ? "active" : "")' id="logs" asp-area="" asp-controller="Logs" asp-action="Index"><i class="fa-solid fa-book"></i> @localizer.Get("Logs")</a></li>
+    <li class="nav-item"><a class='nav-link @(routeName == "AdminStatistics" ? "active" : "")' id="statistics" asp-area="" asp-controller="AdminStatistics" asp-action="Statistics"><i class="fa-solid fa-chart-pie"></i> @localizer.Get("Statistics")</a></li>
+</ul>

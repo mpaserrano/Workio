@@ -1,0 +1,166 @@
+﻿@page
+@model RegisterModel
+@inject CommonLocalizationService localizer
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = @localizer.Get("Register");
+}
+
+<link rel="stylesheet" href="~/css/authentication.css" type="text/css">
+
+<div>
+    <a style="justify-content: center; font-size: 42px; color: #3890cf;" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+        <img class="logo-img" src="~/assets/img/logo.png" /> @localizer.Get("Workio")
+    </a>
+    <hr class="logo-hr" />
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+            <h2 class="text-center">@localizer.Get("SignUp")</h2>
+            <hr />
+            <!--<div asp-validation-summary="ModelOnly" class="text-danger"></div>-->
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.Email" class="form-control form-control-lg" autocomplete="username" aria-required="true" />
+                    <label asp-for="Input.Email" class="form-label">@localizer.Get("Email")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.Email" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.Name" class="form-control form-control-lg" />
+                    <label asp-for="Input.Name" class="form-label">@localizer.Get("Name")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.Name" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.Password" class="form-control form-control-lg" autocomplete="new-password" aria-required="true" />
+                    <label asp-for="Input.Password" class="form-label">@localizer.Get("Password")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.Password" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-outline col-auto">
+                    <input asp-for="Input.ConfirmPassword" class="form-control form-control-lg" autocomplete="new-password" aria-required="true" />
+                    <label asp-for="Input.ConfirmPassword" class="form-label">@localizer.Get("ConfirmPassword")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.ConfirmPassword" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-check col-auto">
+                    <input class="form-check-input" asp-for="Input.CheckTerms" aria-required="true" required />
+                    <label class="form-check-label" asp-for="Input.CheckTerms">@localizer.Get("CheckTerms")</label>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Input.CheckTerms" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <button id="registerSubmit" type="submit" class="btn btn-lg btn-primary w-100">@localizer.Get("Register")</button>
+            </div>
+        </form>
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) > 0)
+                {
+                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                <div class="row justify-content-around">
+                                        @foreach (var provider in Model.ExternalLogins)
+                                {
+                            <div class="col-md-auto auth-method-icon">
+                                                <button class="btn-icon" type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                                    <i class="@provider.DisplayName"></i>
+                                                </button>
+                                            </div>
+                                }
+                                </div>
+                            </form>
+                }
+            }
+            <p class="text-center">
+                    @localizer.Get("AlreadyAMember")? <a id="signin" asp-page="./Login">@localizer.Get("Login")</a>
+                </p>
+        <div style="margin-top: 32px;" class="language-selector-container">
+            <div class="language-container">
+                <!-- link to switch to English language -->
+                <object type="image/svg+xml" data="~/icons/uk.svg" width="24px" height="24px"></object>
+                <a asp-controller="Home" asp-action="ChangeCulture" asp-route-culture="en" asp-route-returnUrl="@HttpContext.Request.Path">
+
+                    <span class="ms-1"> English</span>
+                </a>
+            </div>
+            <div class="language-divisor">
+                <span class="me-1 ms-1">|</span>
+            </div>
+            <div class="language-container">
+                <object type="image/svg+xml" data="~/icons/portugal.svg" width="24px" height="24px"></object>
+                <!-- link to switch to Portuguese language -->
+                <a asp-controller="Home" class="ms-1" asp-action="ChangeCulture" asp-route-culture="pt" asp-route-returnUrl="@HttpContext.Request.Path">
+                    <span class="ms-1">Português</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function clearFile() {
+            document.getElementById('Input_ProfilePicture').value = "";
+            document.getElementById('profilePicture').src = "/pfp/default.png"
+        }
+
+        function changeImage(input) {
+            if (input.files[0] == null) {
+                document.getElementById('profilePicture').src = "/pfp/default.png"
+            }
+            else {
+                console.log(input.files[0])
+                if(isFileExtensionAllowed(input.files[0].name)){
+                    document.getElementById('profilePicture').src = window.URL.createObjectURL(input.files[0])
+                    document.getElementById('ProfilePictureInvalid').textContent = ""
+                }
+                else {
+                    clearFile();
+                    document.getElementById('ProfilePictureInvalid').textContent = '@localizer.Get("Invalid image file. Only .png, .jpg, .jpeg, .gif, and .tif files are allowed.")'
+                }
+            }
+        }
+
+        function isFileExtensionAllowed(filename) {
+            var allowedExtensions = [".png", ".jpg", ".jpeg", ".gif", ".tif"];
+            var fileExtension = "." + filename.split(".").pop().toLowerCase();
+
+            return allowedExtensions.includes(fileExtension);
+        }
+    </script>
+    <script>
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

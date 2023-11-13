@@ -1,0 +1,44 @@
+﻿@using System.Globalization;
+@model Workio.Models.Events.Event;
+
+<style>
+    .vertical-line {
+        border-left: 2px solid #3b71ca;;
+        height: 65px;
+        margin-right: 10px;
+    }
+
+    .date-day {
+        font-size: 22px;
+    }
+
+    .event-title {
+        font-size: 22px;
+        font-weight: 500!important;
+    }
+</style>
+
+<div class="d-flex align-items-center">
+    <div class="vertical-line"></div>
+    <div class="d-flex flex-row ms-3">
+
+        <div class="d-flex flex-column me-2 text-center">
+            <span class="fw-bold mb-1 date-day">@Model.StartDate.Day</span>
+            <span class="fw-bold">@CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.StartDate.ToString("MMM", CultureInfo.InvariantCulture))</span>
+        </div>
+       
+
+        <div class="d-flex flex-column ms-2">
+            <span class="mb-1 event-title">@Model.Title</span>
+            @if (Model.IsInPerson)
+            {
+                <span class="fw-light">@Model.Address</span>
+            }
+            else
+            {
+                <span class="fw-light">@localizer.Get("Remote")</span>
+            }
+        </div>
+    </div>
+</div>
+<a class="btn btn-link btn-rounded btn-sm" asp-action="Details" asp-controller="Events" asp-route-id="@Model.EventId" role="button">@localizer.Get("SeeMore")</a>

@@ -1,0 +1,33 @@
+﻿@model Workio.Models.Team
+
+@{
+    ViewData["Title"] = @localizer.Get("Delete");
+}
+
+<h1>@localizer.Get("Delete")</h1>
+
+<h3>@localizer.Get("DeleteConfirmation")</h3>
+<div>
+    <h4>Team</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TeamName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TeamName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="TeamId" />
+        <input type="submit" value="@localizer.Get("Delete")" class="btn btn-danger" /> |
+        <a asp-action="Index">@localizer.Get("Back")</a>
+    </form>
+</div>

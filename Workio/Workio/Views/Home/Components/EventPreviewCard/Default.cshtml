@@ -1,0 +1,183 @@
+﻿@model Workio.Models.Events.Event;
+
+@{
+    var link = "Events/Details/" + Model.EventId;
+}
+
+<div class="card" style="margin: 15px;">
+    <div class="card-body">
+        <div class="d-flex">
+            @if (Model.UserPublisher != null)
+            {
+                <a href="/User/Index/@Model.UserId" class="profile-preview mb-3 me-auto">
+                    <partial name="../Search/Components/UserCardComponent" model="@Model.UserPublisher" />
+                </a>
+            }
+            <div class="dropdown">
+                <button type="button" id="dropdownShare" data-mdb-toggle="dropdown" aria-expanded="false" class="btn btn-primary btn-floating dropdown-toggle">
+                    <i class="fas fa-share"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><button class="dropdown-item" onclick="shareContent('@Url.Action("Details", "Events", new { id = Model.EventId })')">@localizer.Get("Share via...")</button></li>
+                    <li><button class="dropdown-item" onclick="shareViaChat('@Url.Action("Details", "Events", new { id = Model.EventId }, protocol: Context.Request.Scheme, host: Context.Request.Host.Value)')">@localizer.Get("Send Message")</button></li>
+                </ul>
+            </div>
+
+        </div>
+        <h5 class="card-title cut-overflow-text-l1">@Model.Title</h5>
+        <p class="card-text cut-overflow-text-l1">
+            @Model.Description
+        </p>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div style="margin-bottom: 8px;" class="votes-container">
+                @if (ViewBag.isCreator != true)
+                {
+                    <div class="vote-button">
+                        @if (!ViewBag.hasUpvote)
+                        {
+                            <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" class="mb-3" role="button" asp-controller="Events" asp-action="Upvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-regular fa-thumbs-up"></i></a>
+                        }
+                        else
+                        {
+                            <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" role="button" asp-controller="Events" asp-action="RemoveUpvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-solid fa-thumbs-up"></i></a>
+                        }
+                    </div>
+                    <div class="vote-button updown-votes-overwall-counter"><span>@(Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.UpVote).Count() - Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.DownVote).Count())</span></div>
+                    <div class="vote-button">
+                        @if (ViewBag.hasDownvote)
+                        {
+                            <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" role="button" asp-controller="Events" asp-action="RemoveDownvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-solid fa-thumbs-down"></i></a>
+                        }
+                        else
+                        {
+                            <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" role="button" asp-controller="Events" asp-action="Downvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-regular fa-thumbs-down"></i></a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="vote-button fa-disabled" data-mdb-toggle="tooltip" title="Can't vote because you're the creator">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </div>
+                    <div class="vote-button updown-votes-overwall-counter"><span>@(Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.UpVote).Count() - Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.DownVote).Count())</span></div>
+                    <div class="vote-button fa-disabled" data-mdb-toggle="tooltip" title="Can't vote because you're the creator">
+                        <i class="fa-regular fa-thumbs-down"></i>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div style="margin-bottom: 8px;" class="votes-container">
+                <a href="/Identity/Account/Login" class="vote-button">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </a>
+                    <div class="vote-button updown-votes-overwall-counter"><span>@(Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.UpVote).Count() - Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.DownVote).Count())</span></div>
+                    <a href="/Identity/Account/Login" class="vote-button">
+                        <i class="fa-regular fa-thumbs-down"></i>
+                    </a>
+            </div>
+        }
+        <div class="row">
+            <div class="col-1 d-flex align-items-center">
+                <i class="fa-regular fa-calendar"></i>
+            </div>
+            <div class="col-auto">
+                @Model.StartDate.Date.ToString("d") - @Model.EndDate.Date.ToString("d")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1 d-flex align-items-center">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="col-auto">
+                @Model.InterestedTeams.Count @localizer.Get("TeamsAreLookingForPeople")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1 d-flex align-items-center">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="col-auto">
+                @Model.InterestedUsers.Count @localizer.Get("UsersAreLookingForATeam")
+            </div>
+        </div>
+        @if (Model.IsInPerson)
+        {
+            <div class="row event-location-card-display">
+                <div class="col-1 d-flex align-items-center">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <div class="col-auto cut-overflow-text-l1">
+                    @Model.Address
+                </div>
+            </div>
+            <style>
+            </style>
+            <div style="height: 500px; margin-top: 5px;" class="map-location-section">
+                <div id="map-@Model.EventId" style='width: 100%; height: 100%;' data-latitude="@Model.LatitudeText" data-longitude="@Model.LongitudeText"></div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-1 d-flex align-items-center">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="col-auto">
+                    @localizer.Get("Remote")
+                </div>
+            </div>
+            <div style="height: 500px; margin-top: 5px;" class="text-center no-map-remote-section">
+                <img class="img-container" style="max-width: 70%; height: auto; display: initial;" src="~/public/images/remote.jpg" alt="People participating in a remote event" title="People participating in a remote event - Image provided by Freepik.com" />
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <div class=" d-flex align-items-center">
+            <span class="align-self-center me-auto">@Model.CreatedAt.Humanize()</span>
+            <a asp-action="Details" asp-controller="Events" asp-route-id="@Model.EventId">@localizer.Get("SeeMore")</a>
+        </div>
+    </div>
+    @if (Model.IsInPerson)
+    {
+        <script type="text/javascript" on-content-loaded="true">
+            function setMap() {
+                let mapId = 'map-@Model.EventId';
+                let loadLng;
+                let loadLat;
+
+                if ('@Model.IsInPerson' == 'false') {
+                    loadLng = -8.83896875965655;
+                    loadLat = 38.521685683795;
+                }
+                else {
+                    loadLng = document.getElementById(mapId).getAttribute('data-longitude');
+                    loadLat = document.getElementById(mapId).getAttribute('data-latitude');
+                }
+                mapboxgl.accessToken = 'pk.eyJ1IjoianBvcnRhcyIsImEiOiJjbGV2eDVyNnowOTUyM29rYzMycTc5eml4In0.tt2VI2R27K7LAnvS6Kl8Gg';
+
+                let map = new mapboxgl.Map({
+                    container: mapId,
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [loadLng, loadLat], // starting position [lng, lat]
+                    zoom: 15, // starting zoom
+                    dragPan: false
+                });
+
+                let marker = new mapboxgl.Marker()
+                    .setLngLat([loadLng, loadLat])
+                    .addTo(map);
+
+                map.addControl(new mapboxgl.NavigationControl());
+
+                map.on('idle', function () {
+                    map.resize()
+                })
+            }
+            setMap();
+        </script>
+    }
+</div>
+

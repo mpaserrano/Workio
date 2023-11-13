@@ -1,0 +1,104 @@
+﻿.scrollbar-container {
+    position: relative;
+}
+
+.full-width {
+    width: 99vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -1rem;
+    margin-bottom: -75px;
+}
+
+.contacts-list {
+    position: relative;
+    height: calc(100vh - 18.5rem); /* subtract the height of navbar and footer */
+}
+
+.conversation-container {
+    position: relative;
+    height: calc(100vh - 20.2rem); /* subtract the height of navbar, input field, and footer */
+}
+
+.chat-topbar {
+    border-bottom: 1px solid #80808040;
+}
+
+.bubble-name {
+    display: block;
+}
+
+.placeholder-image {
+    max-height: 600px;
+}
+
+.last-message {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+.show-open-list{
+    display: none;
+}
+
+.bubble-text {
+    max-width: 500px;
+}
+
+@media screen and (max-width: 991px) {
+    .show-open-list {
+        display: block;
+    }
+
+    .conversation-container {
+        height: calc(calc(100vh - 150px) - 20.8rem);
+    }
+
+    .contacts-list {
+        height: 100%;
+    }
+
+    .bubble-text {
+        max-width: 200px;
+    }
+
+}
+
+@media screen and (max-width: 720px) {
+    .full-width {
+        margin-bottom: -55px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .conversation-container {
+        height: calc(calc(100vh - 200px) - 20.8rem);
+    }
+
+    .contacts-list {
+        height: 100%;
+    }
+
+    .full-width {
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .conversation-container {
+        height: calc(calc(100vh - 250px) - 20.8rem);
+    }
+
+    .contacts-list {
+        height: 100%;
+    }
+
+    .bubble-text {
+        max-width: 100px;
+    }
+}

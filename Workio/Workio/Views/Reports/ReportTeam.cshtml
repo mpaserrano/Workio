@@ -1,0 +1,78 @@
+﻿@model Workio.Models.ReportTeam
+
+@{
+    ViewData["Title"] = @localizer.Get("ReportTeam");
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-8">
+
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="ReportTeam" asp-route-id="@ViewBag.ReportedId" class="needs-validation" novalidate>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input name="TeamName" type="text" class="form-control" value="@ViewBag.TeamName" id="TeamName" readonly />
+                                <label class="form-label" for="TeamName">@localizer.Get("TeamName")</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <label asp-for="ReportReasonId" class="form-label">@localizer.Get("ReportReason")</label>
+                            <select asp-for="ReportReasonId" asp-items="ViewBag.ReportReasons" class="form-select" aria-label="Report Reason" required></select>
+                            <span asp-validation-for="ReportReasonId" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input asp-for="Description" name="Description" type="textarea" class="form-control" id="Description" required />
+                                <label asp-for="Description" class="form-label">@localizer.Get("Description")</label>
+                                <span asp-validation-for="Description" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <a class="btn btn-secondary mb-1" asp-action="Details" asp-controller="Teams" asp-route-id="@ViewBag.ReportedId">@localizer.Get("Cancel")</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <button type="submit" value="Submit" class="btn btn-primary">@localizer.Get("Submit")</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+    <script>
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>

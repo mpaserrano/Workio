@@ -1,0 +1,70 @@
+﻿@using Workio.Models.Events;
+@model ICollection<Event>
+
+<!-- Carousel wrapper -->
+<div id="carouselFeaturedBanners" class="carousel slide carousel-fade" data-mdb-ride="carousel">
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+        @for(int j=0; j<Model.Count; j++)
+        {
+            @if (j == 0)
+            {
+                <button
+                  type="button"
+                  data-mdb-target="#carouselFeaturedBanners"
+                  data-mdb-slide-to="@j"
+                  class="active"
+                  aria-current="true"
+                  aria-label="Slide @j"
+                ></button>
+            }
+            else
+            {
+                <button
+                  type="button"
+                  data-mdb-target="#carouselFeaturedBanners"
+                  data-mdb-slide-to="@j"
+                  aria-label="Slide @j"
+                ></button>
+            }
+
+        }
+    </div>
+
+    <!-- Inner -->
+    <div class="carousel-inner">
+        @foreach(Event item in Model)
+        {
+            @if (!string.IsNullOrEmpty(item.BannerPicturePath))
+            {
+                <!-- Single item -->
+                <div class="carousel-item @if (item == Model.First()) { <text>active</text> }">
+                    <a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId">
+                        <div class="image-container">
+                            <img src="~/public/uploads/events/banners/@item.BannerPicturePath" class="d-block w-100 feature-banners-show-img" alt="@item.Title"/>
+                        </div>
+                    </a>
+                    
+                    <div class="carousel-caption d-none d-md-block feature-banners-show-img-text">
+                        <h5>@item.Title</h5>
+                        <p>@item.StartDate.Date.ToString("d") - @item.EndDate.Date.ToString("d")</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <!-- Inner -->
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-mdb-target="#carouselFeaturedBanners" data-mdb-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-mdb-target="#carouselFeaturedBanners" data-mdb-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<!-- Carousel wrapper -->
+
+

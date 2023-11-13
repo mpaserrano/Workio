@@ -1,0 +1,216 @@
+@using Workio.Models.Events;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = @localizer.Get("Search");
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="user-tab"
+               data-mdb-toggle="tab"
+               href="#user-tab-content"
+               role="tab"
+               aria-controls="user-tab-content"
+               aria-selected="true">@localizer.Get("Users")</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="team-tab"
+               data-mdb-toggle="tab"
+               href="#team-tab-content"
+               role="tab"
+               aria-controls="team-tab-content"
+               aria-selected="false">@localizer.Get("Teams")</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="event-tab"
+               data-mdb-toggle="tab"
+               href="#event-tab-content"
+               role="tab"
+               aria-controls="event-tab-content"
+               aria-selected="false">@localizer.Get("Events")</a>
+        </li>
+        <!--<li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="ex2-tab-3"
+               data-mdb-toggle="tab"
+               href="#ex2-tabs-3"
+               role="tab"
+               aria-controls="ex2-tabs-3"
+               aria-selected="false">Another link</a>
+        </li>-->
+    </ul>
+    <!-- Tabs navs -->
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <div class="tab-pane fade show active"
+             id="user-tab-content"
+             role="tabpanel"
+             aria-labelledby="user-tab">
+            @if (ViewBag.Users == null)
+            {
+                <span>@localizer.Get("NoData")</span>
+            }
+            else
+            {
+                <ul class="list-group list-group-light">
+                    @foreach (User user in ViewBag.Users)
+                    {
+                        <a class="list-group-item d-flex justify-content-between align-items-center" asp-controller="User" asp-action="Index" asp-route-id="@user.Id">
+                            <partial name="Components/UserCardComponent" model="user" />
+                        </a>
+                    }
+                </ul>
+            }
+        </div>
+        <div class="tab-pane fade"
+             id="team-tab-content"
+             role="tabpanel"
+             aria-labelledby="team-tab-content">
+            @if (ViewBag.Teams == null)
+            {
+                <span>@localizer.Get("NoData")</span>
+            }
+            else
+            {
+                <div class="mb-3">
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="status-open" name="filterStatus" value="Open" onclick="filterTeamsByStatus()">
+                            <label class="badge rounded-pill badge-success" for="status-open">@localizer.Get("Open")</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="status-closed" name="filterStatus" value="Closed" onclick="filterTeamsByStatus()">
+                            <label class="badge rounded-pill badge-danger" for="status-closed">@localizer.Get("Closed")</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="status-finish" name="filterStatus" value="Finish" onclick="filterTeamsByStatus()">
+                            <label class="badge rounded-pill badge-danger" for="status-finish">@localizer.Get("Finished")</label>
+                        </div>
+                    </div>
+                </div>
+                <ul id="team-cards" class="list-group list-group-light">
+                    @foreach (Team team in ViewBag.Teams)
+                    {
+                        <a data-status="@team.Status.ToString()" class="list-group-item d-flex justify-content-between align-items-center" asp-controller="Teams" asp-action="Details" asp-route-id="@team.TeamId">
+                            <partial name="../Teams/Components/TeamCardComponent" model="team" />
+                        </a>
+                    }
+                </ul>
+            }
+        </div>
+        <div class="tab-pane fade"
+             id="event-tab-content"
+             role="tabpanel"
+             aria-labelledby="event-tab-content">
+            @if (ViewBag.Events == null)
+            {
+                <span>@localizer.Get("NoData")</span>
+            }
+            else
+            {
+                <div class="mb-3">
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="state-open" name="filterState" value="Open" onclick="filterEventsByState()">
+                            <label class="badge rounded-pill badge-success" for="state-open">@localizer.Get("Open")</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="state-ongoing" name="filterState" value="OnGoing" onclick="filterEventsByState()">
+                            <label class="badge rounded-pill badge-info" for="state-ongoing">@localizer.Get("OnGoing")</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="state-finish" name="filterState" value="Finish" onclick="filterEventsByState()">
+                            <label class="badge rounded-pill badge-danger" for="state-finish">@localizer.Get("Finished")</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="event-cards" class="row row-cols-1 row-cols-md-3 g-4">
+                    @foreach (Event e in ViewBag.Events)
+                    {
+
+                        <div class="col" data-state="@e.State">
+                            <partial name="Components/EventCardComponent" model="e" />
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <!--<div class="tab-pane fade"
+             id="ex2-tabs-3"
+             role="tabpanel"
+             aria-labelledby="ex2-tab-3">
+            Tab 3 content
+        </div>-->
+    </div>
+    <!-- Tabs content -->
+</div>
+
+
+<script>
+    function filterEventsByState() {
+        var filters = [];
+        var checkboxes = document.getElementsByName("filterState");
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                filters.push(checkboxes[i].value);
+            }
+        }
+
+        var eventCards = document.getElementById("event-cards").children;
+        for (var i = 0; i < eventCards.length; i++) {
+            var eventState = eventCards[i].dataset.state;
+            if (filters.length === 0 || filters.includes(eventState)) {
+                eventCards[i].classList.remove("d-none");
+            } else {
+                eventCards[i].classList.add("d-none");
+            }
+        }
+
+        // loop through the hidden cards and show the ones that match the selected state(s)
+        for (var i = 0; i < eventCards.length; i++) {
+            if (eventCards[i].classList.contains("d-none")) {
+                var eventState = eventCards[i].dataset.state;
+                if (filters.includes(eventState)) {
+                    eventCards[i].classList.remove("d-none");
+                }
+            }
+        }
+    }
+
+
+
+    function filterTeamsByStatus() {
+        var filters = [];
+        var checkboxes = document.getElementsByName("filterStatus");
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                filters.push(checkboxes[i].value);
+            }
+        }
+
+        var teamCards = document.getElementById("team-cards").children;
+        for (var i = 0; i < teamCards.length; i++) {
+            var cardStatus = teamCards[i].dataset.status;
+            if (filters.length === 0 || filters.includes(cardStatus)) {
+                teamCards[i].classList.remove("d-none");
+            } else {
+                teamCards[i].classList.add("d-none");
+            }
+        }
+    }
+
+    //Keep the search content
+    const oldSearch = '@Html.Raw(ViewBag.OldSearch)';
+
+    if (oldSearch !== '' && oldSearch !== null && oldSearch !== undefined) {
+        document.getElementById('global-search-bar').value = oldSearch;
+    }
+</script>

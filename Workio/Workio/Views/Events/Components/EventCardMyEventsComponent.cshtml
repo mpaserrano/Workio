@@ -1,0 +1,65 @@
+﻿@model Workio.Models.Events.Event
+@inject Workio.Services.Interfaces.IUserService _userService
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="card h-100 event-list-card">
+    <img class="card-img-top"  style="object-fit: cover" src="/public/uploads/events/banners/@Model.BannerPicturePath" width="60" height="90" alt="Event Banner">
+    @if (Model.IsFeatured)
+    {
+        <div data-mdb-toggle="tooltip" title="@localizer.Get("FeaturedEvent")"><i class="fa-solid fa-star banner-feature-icon-big"></i></div>
+    }
+    <div class="card-body">
+        <h5 class="card-title" style="text-align:center"><b>@Model.Title</b></h5>
+        <p class="card-text">
+            <b>@localizer.Get("Creator"):</b>
+            @{
+                var owner = await _userService.GetUser(new Guid(Model.UserId));
+            }
+            @owner.Name
+        </p>
+        <p class="card-text"><b>@localizer.Get("Date"): </b>@Model.StartDate.ToString("dd/MM/yyyy") <b>   —   </b> @Model.EndDate.ToString("dd/MM/yyyy")</p>
+        <p class="card-text">
+            <b>@localizer.Get("Status"):</b>
+            @if (Model.IsBanned)
+            {
+                <span class="badge rounded-pill badge-danger">@localizer.Get("BannedSingularM")</span>
+            }
+            else
+            {
+                @switch (Model.State)
+                {
+                    case (Workio.Models.Events.EventState.Open):
+                        {
+                            <span class="badge rounded-pill badge-success">@localizer.Get("Open")</span>
+                            break;
+                        }
+                    case (Workio.Models.Events.EventState.OnGoing):
+                        {
+                            <span class="badge rounded-pill badge-info">@localizer.Get("OnGoing")</span>
+                            break;
+                        }
+                    case (Workio.Models.Events.EventState.Finish):
+                        {
+                            <span class="badge rounded-pill badge-danger">@localizer.Get("Finished")</span>
+                            break;
+                        }
+                }
+            }
+        </p>@{
+            if (Model.State != Workio.Models.Events.EventState.Finish && !Model.IsBanned)
+            {
+                <p></p>
+                <div class="card-footer" style="text-align:center">
+                    <form asp-controller="Events" asp-action="FinishMyEvent" asp-route-id="@Model.EventId">
+                        <input type="submit" value="@localizer.Get("Finish")" class="btn btn-danger" />
+                    </form>
+                </div>
+            }
+
+        }
+    </div>
+</div>
+

@@ -1,0 +1,776 @@
+@using System.Net
+@model Workio.Models.Team
+
+@{
+    ViewData["Title"] = @localizer.Get("Team");
+    var MembersCount = Model.Members.Count + 1;
+    //PendingUserTeam request in Model.PendingList.Where(x => x.Status == PendingUserTeamStatus.Pending)
+    var pendingRequests = Model.PendingList.Where(x => x.Status == PendingUserTeamStatus.Pending);
+    var urlTeam = $"{Context.Request.Scheme}://{Context.Request.Host}{Url.Action("Details", "Teams", new { id = Model.TeamId})}";
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+@section metaTags {
+    <title>@Model.TeamName</title>
+    <meta property="og:title" content="@Model.TeamName" />
+    <meta property="og:description" content="@Model.Description" />
+    <meta property="og:url" content="@urlTeam" />
+    <meta property="og:type" content="website" />
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">@localizer.Get("Teams")</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.TeamName</li>
+    </ol>
+</nav>
+<!--<h1>@ViewData["Title"]</h1>-->
+<div class="row">
+    <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <ul class="list-group list-group-light">
+                    @if (ViewBag.Owner == true)
+                    {
+                        @if (Model.Status != TeamStatus.Finish)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="Edit" asp-route-id="@Model?.TeamId"><i class="fa-solid fa-pen-to-square"></i> @localizer.Get("Edit")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="FinishProject" asp-route-id="@Model.TeamId"><i class="fa-solid fa-flag-checkered"></i> @localizer.Get("FinishProject")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (Model.Status != TeamStatus.Open)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="OpenInscriptions" asp-route-id="@Model.TeamId"><i class="fa-solid fa-door-open"></i> @localizer.Get("OpenRegistrations")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (Model.Status != TeamStatus.Closed && Model.Status != TeamStatus.Finish)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="CloseInscriptions" asp-route-id="@Model.TeamId"><i class="fa-solid fa-door-closed"></i> @localizer.Get("CloseRegistrations")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="SendMessage" asp-route-teamId="@Model.TeamId"><i class="fa-solid fa-comments"></i> @localizer.Get("Open Chat")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else if (ViewBag.IsMember != true && SignInManager.IsSignedIn(User) && ViewBag.InPendingList != true && ViewBag.AlreadyInvited != true && Model.Status == TeamStatus.Open)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="AskAccess" asp-route-id="@Model.TeamId">@localizer.Get("RequestAccess")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else if (ViewBag.IsMember == true)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="SendMessage" asp-route-teamId="@Model.TeamId"><i class="fa-solid fa-comments"></i> @localizer.Get("Open Chat")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="Leave" asp-route-id="@Model.TeamId"><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i> @localizer.Get("LeaveTeam")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else if (ViewBag.AlreadyInvited == true)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="AcceptInviteByTeam" asp-route-teamId="@Model.TeamId">@localizer.Get("AcceptInvite")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="RejectInviteByTeam" asp-route-teamId="@Model.TeamId">@localizer.Get("RejectInvite")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (SignInManager.IsSignedIn(User) && ViewBag.Owner != true)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-action="ReportTeam" asp-controller="Reports" asp-route-id="@Model.TeamId"><i class="fa-solid fa-triangle-exclamation"></i> @localizer.Get("ReportTeam")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-8 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex">
+                    <h3 class="me-auto">@Model.TeamName</h3>
+                    <div class="dropdown">
+                        <button type="button" id="dropdownShare" data-mdb-toggle="dropdown" aria-expanded="false" class="btn btn-primary btn-floating dropdown-toggle">
+                            <i class="fas fa-share"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><button class="dropdown-item" onclick="shareContent('@Url.Action("Details", "Teams", new { id = Model.TeamId })')">@localizer.Get("Share via...")</button></li>
+                            <li><button class="dropdown-item" onclick="shareViaChat('@Url.Action("Details", "Teams", new { id = Model.TeamId }, protocol: Context.Request.Scheme, host: Context.Request.Host.Value)')">@localizer.Get("Send Message")</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <p>@Model.Description</p>
+                <div class="d-flex justify-content-start mb-1">
+                    <span class="fw-bold">
+                        @localizer.Get("Status"):
+                        @switch (Model.Status)
+                        {
+                            case (TeamStatus.Open):
+                                {
+                                    <span class="badge rounded-pill badge-success">@localizer.Get("Open")</span>
+                                    break;
+                                }
+                            case (TeamStatus.Closed):
+                                {
+                                    <span class="badge rounded-pill badge-danger">@localizer.Get("Closed")</span>
+                                    break;
+                                }
+                            case (TeamStatus.Finish):
+                                {
+                                    <span class="badge rounded-pill badge-danger">@localizer.Get("Finished")</span>
+                                    break;
+                                }
+                        }
+                    </span>
+                    <span class="fw-bold ms-4">@localizer.Get("Members"): @MembersCount</span>
+                    <span class="fw-bold ms-4 me-2">@localizer.Get("Language"): </span>
+                    <object type="image/svg+xml" data="~/icons/@($"{Model.Language.IconName}").svg" width="24px" height="24px"></object>
+                    <span class="ms-1">@Model.Language.Language</span>
+                </div>
+                @if (Model.Skills.Any())
+                {
+                    <div class="d-flex justify-content-start mb-1">
+                        <span class="fw-bold">
+                            @localizer.Get("Skills")
+                            @foreach (Tag tag in Model.Skills)
+                            {
+                                <span class="badge rounded-pill badge-info">@tag.TagName</span>
+                            }
+                        </span>
+                    </div>
+                }
+                @if (Model.Positions.Any())
+                {
+                    <div class="d-flex justify-content-start">
+                        <span class="fw-bold">
+                            @localizer.Get("Positions")
+                            @foreach (Position pos in Model.Positions)
+                            {
+                                @if (Model.Status == TeamStatus.Open)
+                                {
+                                    <span class="badge rounded-pill badge-success">@pos.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill badge-danger">@pos.Name</span>
+                                }
+                            }
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title">@localizer.Get("Members")</h5>
+                    </div>
+                    @if (ViewBag.Owner)
+                    {
+                        <div style="display: contents;" class="col">
+                            <a id="btn_inviteUser" class="btn btn-primary">@localizer.Get("InviteUser")</a>
+                        </div>
+                    }
+                </div>
+
+                <div class="row">
+                    <!-- Tabs navs -->
+                    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active"
+                               id="member-tab"
+                               data-mdb-toggle="tab"
+                               href="#member-tab-content"
+                               role="tab"
+                               aria-controls="member-tab-content"
+                               aria-selected="true">@localizer.Get("Members")</a>
+                        </li>
+                        @if (ViewBag.Owner == true || ViewBag.Member == true)
+                        {
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link"
+                                   id="pending-tab"
+                                   data-mdb-toggle="tab"
+                                   href="#pending-tab-content"
+                                   role="tab"
+                                   aria-controls="pending-tab-content"
+                                   aria-selected="false">
+                                    @localizer.Get("ParticipationRequests")
+                                    @if (!pendingRequests.Any())
+                                    {
+                                        <span id="teams-details-join-requests-tab-badge" style="margin-left: 0.1rem; display: none; margin-top: -7px;" class="badge rounded-pill badge-notification bg-danger">@pendingRequests.Count()</span>
+                                    }
+                                    else
+                                    {
+                                        <span id="teams-details-join-requests-tab-badge" style="margin-left: 0.1rem; display: initial; margin-top: -7px;" class="badge rounded-pill badge-notification bg-danger">@pendingRequests.Count()</span>
+                                    }
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link"
+                                   id="invites-tab"
+                                   data-mdb-toggle="tab"
+                                   href="#invites-tab-content"
+                                   role="tab"
+                                   aria-controls="invites-tab-content"
+                                   aria-selected="false">@localizer.Get("InvitesSent")</a>
+                            </li>
+                        }
+                    </ul>
+                    <!-- Tabs navs -->
+                    <!-- Tabs content -->
+                    <div class="tab-content" id="ex2-content">
+                        <div class="tab-pane fade show active"
+                             id="member-tab-content"
+                             role="tabpanel"
+                             aria-labelledby="member-tab">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>@localizer.Get("Name")</th>
+                                        @if (ViewBag.Owner)
+                                        {
+                                            <th>@localizer.Get("Actions")</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <i class="fa-solid fa-crown" style="color: #f5db38; font-size: 20px; margin-left: 15px;"></i>
+                                            <partial name="Components/TeamUserComponent" model="@ViewBag.OwnerUser" />
+                                        </td>
+                                    </tr>
+                                    @foreach (User user in Model.Members)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <partial name="Components/TeamUserComponent" model="@user" />
+                                            </td>
+                                            @if (ViewBag.Owner)
+                                            {
+                                                <td>
+                                                    <a asp-action="RemoveUser" asp-route-userId="@user.Id" asp-route-id="@Model.TeamId" type="button" class="btn btn-link btn-sm btn-rounded">
+                                                        @localizer.Get("Remove")
+                                                    </a>
+                                                    <button onclick="openModal('@user.Id')" type="button" class="btn btn-link btn-sm btn-rounded">
+                                                        @localizer.Get("GiveOwnership")
+                                                    </button>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (ViewBag.Owner == true || ViewBag.Member == true)
+                        {
+                            <div class="tab-pane fade"
+                                 id="pending-tab-content"
+                                 role="tabpanel"
+                                 aria-labelledby="pending-tab-content">
+                                <table class="table align-middle mb-0 bg-white">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            @if (ViewBag.Owner)
+                                            {
+                                                <th>@localizer.Get("Actions")</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody id="teams-details-pending-request-table-content">
+                                        @await Component.InvokeAsync("TeamPendingList", new { teamId = Model.TeamId })
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade"
+                                 id="invites-tab-content"
+                                 role="tabpanel"
+                                 aria-labelledby="invites-tab-content">
+                                <table class="table align-middle mb-0 bg-white">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            @if (ViewBag.Owner)
+                                            {
+                                                <th>@localizer.Get("Actions")</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (TeamInviteUser request in Model.InvitedUsers.Where(x => x.Status == PendingUserTeamStatus.Pending))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <partial name="Components/TeamUserComponent" model="@request.User" />
+                                                </td>
+                                                @if (ViewBag.Owner)
+                                                {
+                                                    <td>
+                                                        <a asp-action="CancelInvite" asp-route-requestId="@request.Id" asp-route-teamId="@Model.TeamId" type="button" class="btn btn-link btn-sm btn-rounded">
+                                                            @localizer.Get("Cancel")
+                                                        </a>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    </div>
+                    <!-- Tabs content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title">@localizer.Get("Milestones")</h5>
+                    </div>
+                    @if (ViewBag.Owner)
+                    {
+                        <div style="display: contents;" class="col">
+                            <a id="btn_AddMilestone" class="btn btn-primary" role="button" data-mdb-toggle="modal" data-mdb-target="#milestoneModal">@localizer.Get("AddMilestone")</a>
+                        </div>
+                    }
+                </div>
+
+                <div class="row mt-3">
+                    <div id='calendar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Owner == true)
+{
+    <!-- Confirmation pop up modal -->
+    <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="confirmation-modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmation-modal-label">@localizer.Get("AreYouSure?")</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @localizer.Get("ConfirmAction?")
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">@localizer.Get("No")</button>
+                    <button onclick="this.disabled=true;setNewOwnerShip();" class="btn btn-primary">@localizer.Get("Yes")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="TeamInviteModal" tabindex="-1" data-mdb-backdrop="static" aria-labelledby="TeamInviteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TeamInviteModalLabel">@localizer.Get("Teams")</h5>
+                    <button type="reset" class="btn-close" id="closeTeamInviteModal" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <div class="form-outline">
+                            <input type="text" id="search-input" class="form-control" placeholder="@localizer.Get("SearchForUsers")">
+                            <label class="form-label" for="form1">@localizer.Get("Search")</label>
+                        </div>
+
+                        <ul id="users-list" class="list-group list-group-light mt-3">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="Components/MilestoneModalViewComponent" model="null" view-data='@new ViewDataDictionary(ViewData) { { "id", Model.TeamId } }' />
+
+
+    @section Scripts {
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css' rel='stylesheet' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css' rel='stylesheet' media='print' />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/locale/pt.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/locale/en.js'></script>
+    <script>
+        let newOwnerShipId = "";
+
+        function decodeHtmlCharCodes(str) { 
+            console.log(str);
+            return str.replace(/(&#(\d+);)/g, function(match, capture, charCode) {
+                return String.fromCharCode(charCode);
+            });
+        }
+        
+        function openModal(userId) {
+            newOwnerShipId = userId;
+            console.log(newOwnerShipId);
+            $("#confirmation-modal").modal("show");
+        }
+
+        function setNewOwnerShip() {
+            location.href = "/Teams/GiveOwnership/@Model.TeamId?userId=" + newOwnerShipId + "";
+        }
+
+        /*$(function () {
+            $("#give-ownership-btn").click(function () {
+                $("#confirmation-modal").modal("show");
+            });
+        });*/
+        $(document).ready(function () {
+            $("#btn_inviteUser").on('click', function () {
+                // Make an AJAX call to your backend to fetch the data based on the search query
+                $.ajax({
+                    url: '/Teams/OpenModal',
+                    type: 'GET',
+                    data: { teamId: '@Model.TeamId' },
+                    success: function (data) {
+                        console.log("pk");
+                        // Clear the search results container
+                        $('#users-list').empty();
+
+                        $('#users-list').html(data);
+                        const mymodal = new mdb.Modal(document.getElementById('TeamInviteModal'));
+                        mymodal.show();
+                    }
+                });
+            });
+            // Listen for changes in the search input field
+            $('#search-input').on('input', function () {
+                // Get the search query
+                var query = $(this).val();
+
+                // Make an AJAX call to your backend to fetch the data based on the search query
+                $.ajax({
+                    url: '/Teams/InviteSearch',
+                    type: 'GET',
+                    data: { query: query, teamId: '@Model.TeamId' },
+                    success: function (data) {
+                        // Clear the search results container
+                        $('#users-list').empty();
+
+                        $('#users-list').html(data);
+                    }
+                });
+            });
+
+            $("#StartDate").change(function () {
+                if (new Date($("#EndDate").val()) > new Date($("#StartDate").val())) {
+                    $("#EndDate").attr("min", $(this).val())
+                }
+                else {
+                    $("#EndDate").val($(this).val());
+                    $("#EndDate").attr("min", $(this).val())
+                }
+            });
+
+            $('#calendar').fullCalendar({
+                locale: '@currentCulture',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: [
+                    @foreach (Milestone milestone in Model.Milestones)
+                    {  
+                            <text>
+                            {
+                                title: decodeHtmlCharCodes(@Html.Raw(Json.Serialize(milestone.Name))),
+                                start: '@milestone.StartDate.ToString("s")',
+                                end: '@milestone.EndDate.ToString("s")',
+                                description: decodeHtmlCharCodes(@Html.Raw(Json.Serialize(milestone.Description))),
+                                allDay: true,
+                                color: '@milestone.State' === "@MilestoneState.Active" ? "#3A87AD" : "#28A745",
+                                state: '@milestone.State',
+                                id: '@milestone.MilestoneId' // Add the milestone id as an event id
+                            },
+                        </text>
+                    }
+                ],
+                    eventClick: function (calEvent, jsEvent, view) {
+                        const editMilestoneModal = document.getElementById('milestoneModal')
+                        const modalTitle = editMilestoneModal.querySelector('.modal-title')
+                        const StartDate = document.getElementById('StartDate');
+                        const EndDate = document.getElementById('EndDate');
+
+                        modalTitle.TextContent = '@localizer.Get("EditMilestone")'
+
+                        $('#Name').val(calEvent.title);
+                        $('#Description').val(calEvent.description);
+                        $('#State').val(calEvent.state);
+                        changeDate(StartDate, moment(calEvent.start).format('LL'));
+                        if (calEvent.end == null) {
+                            changeDate(EndDate, moment(calEvent.start).format('LL'));
+                        }
+                        else {
+                            changeDate(EndDate, moment(calEvent.end).format('LL'));
+                        }
+
+
+                        editMilestoneModal.querySelector('#milestoneForm').action = "/Teams/EditMilestone?milestoneId=" + calEvent.id + "&teamId=" + '@Model.TeamId'
+
+                        let deleteButton = document.createElement("a")
+                        deleteButton.classList.add("btn")
+                        deleteButton.classList.add("btn-danger")
+                        deleteButton.name = "deleteMilestone"
+                        deleteButton.id = "deleteMilestone"
+                        deleteButton.title = "@localizer.Get("Delete")"
+                        deleteButton.innerHTML = "@localizer.Get("Delete")"
+                        editMilestoneModal.querySelector('.modal-footer').insertBefore(deleteButton, editMilestoneModal.querySelector("#submit-milestone"))
+
+                        // Add a click event listener to the delete button
+                        deleteButton.addEventListener('click', function () {
+                            // Find the form element
+                            const form = document.querySelector('form#milestoneForm');
+                            if (form) {
+                                // Set the form action URL with the milestone and team IDs
+                                form.action = "/Teams/DeleteMilestone?milestoneId=" + encodeURIComponent(calEvent.id) + "&teamId=" + encodeURIComponent('@Model.TeamId');
+                                // Submit the form
+                                form.submit();
+                            }
+                        });
+
+                        var state = calEvent.state;
+                        console.log(state);
+
+                        $('#submit-milestone').text('@localizer.Get("Edit")')
+
+                        if (state == '@MilestoneState.Active') {
+                            //Change status btn
+                            let changeStatusButton = document.createElement("a")
+                            changeStatusButton.classList.add("btn")
+                            changeStatusButton.classList.add("btn-success")
+                            changeStatusButton.name = "changeStatusMilestone"
+                            changeStatusButton.id = "changeStatusMilestone"
+                            changeStatusButton.title = "@localizer.Get("Complete")"
+                            changeStatusButton.innerHTML = "@localizer.Get("Complete")"
+                            editMilestoneModal.querySelector('.modal-footer').insertBefore(changeStatusButton, deleteButton);
+
+                            // Add a click event listener to the delete button
+                            changeStatusButton.addEventListener('click', function () {
+                                // Find the form element
+                                const form = document.querySelector('form#milestoneForm');
+                                if (form) {
+                                    // Set the form action URL with the milestone and team IDs
+                                    form.action = "/Teams/CompleteMilestone?milestoneId=" + encodeURIComponent(calEvent.id) + "&teamId=" + encodeURIComponent('@Model.TeamId');
+                                    // Submit the form
+                                    form.submit();
+                                }
+                            });
+                        }
+
+                        var footer = editMilestoneModal.querySelector('.modal-footer')
+
+                        const myModal = new mdb.Modal(editMilestoneModal)
+                        myModal.show();
+                    }
+                });
+
+                function changeDate(element, date) {
+                    console.log(element.value)
+                    element.classList.add('active')
+                    element.style.opacity = 1
+                    element.valueAsDate = new Date(date)
+                }
+            });
+        </script>
+    }
+}
+else
+{
+    <div class="modal fade" id="milestoneModalDetails" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@localizer.Get("MilestoneDetails")</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input name="MilestoneName" id="MilestoneName" type="text" class="form-control" disabled />
+                                <label for="MilestoneName" class="form-label">@localizer.Get("MilestoneTitle")</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <input name="MilestoneDescription" id="MilestoneDescription" type="text" class="form-control" disabled />
+                                <label for="MilestoneDescription" rows="4" class="form-label">@localizer.Get("Description")</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="MilestoneStartDate" class="control-label">@localizer.Get("StartDate")</label>
+                                <input for="MilestoneStartDate" name="MilestoneStartDate" class="form-control" id="MilestoneStartDate" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="MilestoneEndDate" class="control-label">@localizer.Get("EndDate")</label>
+                                <input for="MilestoneEndDate" name="EndDate" class="form-control" id="MilestoneEndDate" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <p id="milestoneName"></p>
+                    <p id="milestoneDescription"></p>
+                    <p id="milestoneStartDate"></p>
+                    <p id="milestoneEndDate"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css' rel='stylesheet' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css' rel='stylesheet' media='print' />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/locale/pt.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/locale/en.js'></script>
+    <script>
+        function decodeHtmlCharCodes(str) { 
+            console.log(str);
+            return str.replace(/(&#(\d+);)/g, function(match, capture, charCode) {
+                return String.fromCharCode(charCode);
+            });
+        }
+
+        $(document).ready(function () {
+            $('#calendar').fullCalendar({
+                locale: '@currentCulture',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: [
+        @foreach (Milestone milestone in Model.Milestones)
+            {
+                <text>
+                            {
+                                title: decodeHtmlCharCodes(@Html.Raw(Json.Serialize(milestone.Name))),
+                                start: '@milestone.StartDate.ToString("s")',
+                                end: '@milestone.EndDate.ToString("s")',
+                                description: decodeHtmlCharCodes(@Html.Raw(Json.Serialize(milestone.Description))),
+                                allDay: true,
+                                color: '@milestone.State' === "@MilestoneState.Active" ? "#3A87AD" : "#28A745",
+                                state: '@milestone.State',
+                                id: '@milestone.MilestoneId' // Add the milestone id as an event id
+                            },
+                </text>
+            }
+                                        ],
+                    eventClick: function (calEvent, jsEvent, view) {
+                        console.log(calEvent);
+                        $('#MilestoneName').val(calEvent.title);
+                        $('#MilestoneDescription').val(calEvent.description);
+                        $('#MilestoneStartDate').val(moment(calEvent.start).format('LL'));
+                        $('#MilestoneEndDate').val(moment(calEvent.end).format('LL'));
+                        $('#milestoneModalDetails').modal('show');
+                    }
+                });
+            });
+        </script>
+    }
+}

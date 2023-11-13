@@ -1,0 +1,30 @@
+﻿@using Workio.ViewModels
+@model List<Workio.ViewModels.ChatViewModel>
+
+@foreach(ChatViewModel chat in Model){
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            @if(chat.ProfilePicture != null){
+                <a asp-action="Index" asp-controller="User" asp-route-id="@chat.Id">
+                    <img src="~/pfp/@chat.ProfilePicture" alt="Profile Picture" class="pfp rounded-circle" />
+                </a>
+                <div class="ms-3">
+                    <a asp-action="Index" asp-controller="User" asp-route-id="@chat.Id"><p class="fw-bold mb-1">@chat.Name</p></a>
+                    <p class="text-muted mb-0">@chat.Email</p>
+                </div>
+            }
+            else{
+                <div class="ms-3">
+                    <a asp-action="Details" asp-controller="Teams" asp-route-id="@chat.Id"><p class="fw-bold mb-1">@chat.Name</p></a>
+                </div>
+            }
+        </div>
+        @if(chat.Type == ChatViewModelType.User){
+            <a class="btn btn-link btn-rounded btn-sm" asp-action="SendMessage" asp-controller="User" asp-route-otherUserId="@chat.Id" asp-route-returnUrl="@Context.Request.Path" role="button">Send Message</a>
+        }
+        else{
+            <a class="btn btn-link btn-rounded btn-sm" asp-action="SendMessage" asp-controller="Teams" asp-route-teamId="@chat.Id" asp-route-returnUrl="@Context.Request.Path" role="button">Send Message</a>
+        }
+        
+    </li>
+}

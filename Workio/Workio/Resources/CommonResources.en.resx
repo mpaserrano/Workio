@@ -1,0 +1,1789 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="Endorsements" xml:space="preserve">
+    <value>Endorsements</value>
+  </data>
+  <data name="Experiences" xml:space="preserve">
+    <value>Experiences</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Your password has been changed.</value>
+  </data>
+  <data name="PasswordChangedInvalidOldPassword" xml:space="preserve">
+    <value>Incorrect old password.</value>
+  </data>
+  <data name="OpenPositions" xml:space="preserve">
+    <value>Open Positions</value>
+  </data>
+  <data name="Present" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Please fill this field!</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Sign Up</value>
+  </data>
+  <data name="SkillName" xml:space="preserve">
+    <value>Skill</value>
+  </data>
+  <data name="Skills" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="TeamName" xml:space="preserve">
+    <value>Team Name</value>
+  </data>
+  <data name="TotalOfEndorsements" xml:space="preserve">
+    <value>Total of Endorsements</value>
+  </data>
+  <data name="WorkTitle" xml:space="preserve">
+    <value>Experience Title</value>
+  </data>
+  <data name="YouAreBlocked" xml:space="preserve">
+    <value>Seems like you are blocked :(</value>
+  </data>
+  <data name="Positions" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="AcceptConnectionRequest" xml:space="preserve">
+    <value>Accept Connection</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="AdminDashboard" xml:space="preserve">
+    <value>Admin Dashboard</value>
+  </data>
+  <data name="AlreadyRated" xml:space="preserve">
+    <value>You have already rated this user</value>
+  </data>
+  <data name="ApplyToBeCertified" xml:space="preserve">
+    <value>Apply to be a certified entity</value>
+  </data>
+  <data name="AttachPDF" xml:space="preserve">
+    <value>Attach a PDF file</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Back to List</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="BlockedUsers" xml:space="preserve">
+    <value>Blocked Users</value>
+  </data>
+  <data name="Blocks" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ChooseReportReason" xml:space="preserve">
+    <value>Please choose a reason</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>Connections</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create New</value>
+  </data>
+  <data name="CreateTeam" xml:space="preserve">
+    <value>Create Team</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete this?</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditSkill" xml:space="preserve">
+    <value>Edit Skill</value>
+  </data>
+  <data name="Endorse" xml:space="preserve">
+    <value>Endorse</value>
+  </data>
+  <data name="EntityNeeds" xml:space="preserve">
+    <value>To apply to be a certified entity you need to</value>
+  </data>
+  <data name="EntityStatusRequest" xml:space="preserve">
+    <value>Entity Status Request</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorOcurred" xml:space="preserve">
+    <value>An error occurred while processing your request</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="FieldCheck" xml:space="preserve">
+    <value>After both those fields are completed press the button to submit the request</value>
+  </data>
+  <data name="FileSubmitted" xml:space="preserve">
+    <value>File Submitted</value>
+  </data>
+  <data name="FinishProject" xml:space="preserve">
+    <value>Finish Project</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="GiveOwnership" xml:space="preserve">
+    <value>Give Ownership</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="LeaveTeam" xml:space="preserve">
+    <value>Leave Team</value>
+  </data>
+  <data name="LinkedIn" xml:space="preserve">
+    <value>LinkedIn</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="MyTeams" xml:space="preserve">
+    <value>My teams</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>No Data</value>
+  </data>
+  <data name="NoGitHubProfile" xml:space="preserve">
+    <value>This user does not have a GitHub profile linked</value>
+  </data>
+  <data name="NoLinkedInProfile" xml:space="preserve">
+    <value>This user does not have a LinkedIn profile linked</value>
+  </data>
+  <data name="OpenRegistrations" xml:space="preserve">
+    <value>Open Registrations</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="PendingRequests" xml:space="preserve">
+    <value>Pending Requests</value>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="RatingHelp" xml:space="preserve">
+    <value>Here you can rate a user, from a range of 0-5 and you can also leave a comment.</value>
+  </data>
+  <data name="RatingModel" xml:space="preserve">
+    <value>Rating Model</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="RejectConnectionRequest" xml:space="preserve">
+    <value>Reject Connection</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveConnection" xml:space="preserve">
+    <value>Remove Connection</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="ReportReason" xml:space="preserve">
+    <value>Report Reason</value>
+  </data>
+  <data name="ReportTeam" xml:space="preserve">
+    <value>Report Team</value>
+  </data>
+  <data name="ReportThankYou" xml:space="preserve">
+    <value>Thank you for reporting</value>
+  </data>
+  <data name="ReportUser" xml:space="preserve">
+    <value>Report User</value>
+  </data>
+  <data name="RequestAccess" xml:space="preserve">
+    <value>Request Access</value>
+  </data>
+  <data name="RequestDetails" xml:space="preserve">
+    <value>Request Details</value>
+  </data>
+  <data name="RequestToBeEntity" xml:space="preserve">
+    <value>Request to be a certified entity</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>SaveChanges</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ShowMore" xml:space="preserve">
+    <value>Show More</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="Unblock" xml:space="preserve">
+    <value>Unblock</value>
+  </data>
+  <data name="Unendorse" xml:space="preserve">
+    <value>Unendorse</value>
+  </data>
+  <data name="User404" xml:space="preserve">
+    <value>User Not Found</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="WhyBeCertifiedEntity" xml:space="preserve">
+    <value>Why do you want to be a certified entity?</value>
+  </data>
+  <data name="Workio" xml:space="preserve">
+    <value>Workio</value>
+  </data>
+  <data name="YouAreRating" xml:space="preserve">
+    <value>You are rating</value>
+  </data>
+  <data name="2FA" xml:space="preserve">
+    <value>Two-factor authentication</value>
+  </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>About Me</value>
+  </data>
+  <data name="AcceptInvite" xml:space="preserve">
+    <value>Accept Invite</value>
+  </data>
+  <data name="AddLogin" xml:space="preserve">
+    <value>Add another service to log in.</value>
+  </data>
+  <data name="BannerPreview" xml:space="preserve">
+    <value>Banner Preview</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Change email</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="CheckTerms" xml:space="preserve">
+    <value>I agree with the Terms and Conditions.</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClickToLogOut" xml:space="preserve">
+    <value>Click here to Logout</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="CloseRegistrations" xml:space="preserve">
+    <value>Close Registrations</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="ConfirmEmail" xml:space="preserve">
+    <value>Confirm email</value>
+  </data>
+  <data name="ConfirmEmailChange" xml:space="preserve">
+    <value>Confirm email change</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="CreateEvent" xml:space="preserve">
+    <value>Create Event</value>
+  </data>
+  <data name="Creator" xml:space="preserve">
+    <value>Creator</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EnterYourEmail" xml:space="preserve">
+    <value>Enter your email.</value>
+  </data>
+  <data name="EventTags" xml:space="preserve">
+    <value>Event Tags</value>
+  </data>
+  <data name="EventTagsHelp" xml:space="preserve">
+    <value>Write here the event identifiers separated by ,. e.g. gamejam,games,something else,</value>
+  </data>
+  <data name="EventURLHelp" xml:space="preserve">
+    <value>Official host site. Ex: https://itch.io</value>
+  </data>
+  <data name="ExternalLoginAccPt1" xml:space="preserve">
+    <value>Associate your</value>
+  </data>
+  <data name="ExternalLoginAccPt2" xml:space="preserve">
+    <value>account.</value>
+  </data>
+  <data name="ExternalLoginRegSucc1" xml:space="preserve">
+    <value>You've successfully authenticated with</value>
+  </data>
+  <data name="ExternalLoginRegSucc2" xml:space="preserve">
+    <value>Please enter your name for this site below and click the Register button to finish
+    logging in.</value>
+  </data>
+  <data name="ExternalLogins" xml:space="preserve">
+    <value>External Logins</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>File Path</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Go Back</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="InvitesSent" xml:space="preserve">
+    <value>Invites Sent</value>
+  </data>
+  <data name="InviteUser" xml:space="preserve">
+    <value>Invite User</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LearnAbout" xml:space="preserve">
+    <value>Learn About</value>
+  </data>
+  <data name="LoginWAccPt1" xml:space="preserve">
+    <value>Log in using your</value>
+  </data>
+  <data name="LoginWAccPt2" xml:space="preserve">
+    <value>account</value>
+  </data>
+  <data name="LogOutSuccess" xml:space="preserve">
+    <value>You have successfully logged out of the application.</value>
+  </data>
+  <data name="Log_In" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="Log_Out" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="ManageAppearance" xml:space="preserve">
+    <value>Manage the appearance of the website</value>
+  </data>
+  <data name="ManageEmail" xml:space="preserve">
+    <value>Manage Email</value>
+  </data>
+  <data name="ManageYourExternalLogins" xml:space="preserve">
+    <value>Manage your external logins</value>
+  </data>
+  <data name="NewEmail" xml:space="preserve">
+    <value>New email</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="NotAMemberYet" xml:space="preserve">
+    <value>Not a member yet?</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="OnGoing" xml:space="preserve">
+    <value>On Going</value>
+  </data>
+  <data name="ParticipationRequests" xml:space="preserve">
+    <value>Participation Requests</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PendingConnections" xml:space="preserve">
+    <value>Pending Connections</value>
+  </data>
+  <data name="PersonalData" xml:space="preserve">
+    <value>Personal Data</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="ProfilePicture" xml:space="preserve">
+    <value>Profile picture</value>
+  </data>
+  <data name="RaterID" xml:space="preserve">
+    <value>Rater ID</value>
+  </data>
+  <data name="RateUser" xml:space="preserve">
+    <value>Rate User</value>
+  </data>
+  <data name="ReceiverID" xml:space="preserve">
+    <value>Receiver ID</value>
+  </data>
+  <data name="RegisteredLogins" xml:space="preserve">
+    <value>Registered Logins</value>
+  </data>
+  <data name="RejectInvite" xml:space="preserve">
+    <value>Reject Invite</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember Me?</value>
+  </data>
+  <data name="RemoveInterest" xml:space="preserve">
+    <value>Remove Interest</value>
+  </data>
+  <data name="ReportEvent" xml:space="preserve">
+    <value>Report Event</value>
+  </data>
+  <data name="RequestPendingApproval" xml:space="preserve">
+    <value>Request pending approval</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetYourPassword" xml:space="preserve">
+    <value>Reset your password.</value>
+  </data>
+  <data name="SearchForUsers" xml:space="preserve">
+    <value>Search for users...</value>
+  </data>
+  <data name="SendVerificationEmail" xml:space="preserve">
+    <value>Send verification email</value>
+  </data>
+  <data name="ShowInterestMember" xml:space="preserve">
+    <value>Show interest as a member</value>
+  </data>
+  <data name="SignUpNow" xml:space="preserve">
+    <value>Sign up now</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Submit Request</value>
+  </data>
+  <data name="TeamInvites" xml:space="preserve">
+    <value>Team Invites</value>
+  </data>
+  <data name="TeamLanguage" xml:space="preserve">
+    <value>Team Language</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="UpdatePassword" xml:space="preserve">
+    <value>Update Password</value>
+  </data>
+  <data name="UploadBanner" xml:space="preserve">
+    <value>Upload banner picture</value>
+  </data>
+  <data name="URL" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="AddMilestone" xml:space="preserve">
+    <value>Add Milestone</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="ChooseMapLocation" xml:space="preserve">
+    <value>Please choose a location from the map</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="DontHaveATeam" xml:space="preserve">
+    <value>Dont have a team? Create one</value>
+  </data>
+  <data name="Enrollments" xml:space="preserve">
+    <value>Enrollments</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>here</value>
+  </data>
+  <data name="IsRemote" xml:space="preserve">
+    <value>Is remote</value>
+  </data>
+  <data name="Joined" xml:space="preserve">
+    <value>Interested</value>
+  </data>
+  <data name="MapLocationHelp" xml:space="preserve">
+    <value>Click on the map to choose the event location or search and click</value>
+  </data>
+  <data name="Milestone" xml:space="preserve">
+    <value>Milestone</value>
+  </data>
+  <data name="Milestones" xml:space="preserve">
+    <value>Milestones</value>
+  </data>
+  <data name="MilestoneTitle" xml:space="preserve">
+    <value>Milestone title</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="UpdateFilter" xml:space="preserve">
+    <value>Update Filter</value>
+  </data>
+  <data name="EventEnrollments" xml:space="preserve">
+    <value>Event Enrollments</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="RemoveInterestTeam" xml:space="preserve">
+    <value>Remove team as interested</value>
+  </data>
+  <data name="ShowInterestTeam" xml:space="preserve">
+    <value>Show interest as a team</value>
+  </data>
+  <data name="ActionReason" xml:space="preserve">
+    <value>Action reason</value>
+  </data>
+  <data name="ActionType" xml:space="preserve">
+    <value>Action Type</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddNewReportReason" xml:space="preserve">
+    <value>Add new report reason</value>
+  </data>
+  <data name="AllF" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="AllM" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="ArchivedPluralF" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="ArchivedPluralM" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="AreYouSure?" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="Ban" xml:space="preserve">
+    <value>Ban</value>
+  </data>
+  <data name="BanEnds" xml:space="preserve">
+    <value>Ban Ends</value>
+  </data>
+  <data name="Banned" xml:space="preserve">
+    <value>Banned</value>
+  </data>
+  <data name="BannedPluralF" xml:space="preserve">
+    <value>Banned</value>
+  </data>
+  <data name="BannedPluralM" xml:space="preserve">
+    <value>Banned</value>
+  </data>
+  <data name="BannedSingularF" xml:space="preserve">
+    <value>Banned</value>
+  </data>
+  <data name="BannedSingularM" xml:space="preserve">
+    <value>Banned</value>
+  </data>
+  <data name="ChangedEvent" xml:space="preserve">
+    <value>Changed Event</value>
+  </data>
+  <data name="ChangedTeam" xml:space="preserve">
+    <value>Changed Team</value>
+  </data>
+  <data name="ChangedUser" xml:space="preserve">
+    <value>Changed User</value>
+  </data>
+  <data name="Changes" xml:space="preserve">
+    <value>Changes</value>
+  </data>
+  <data name="ChangesModerationLog" xml:space="preserve">
+    <value>Changes Moderation Log</value>
+  </data>
+  <data name="ClosedPluralF" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>CreationDate</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="DateOfSubmission" xml:space="preserve">
+    <value>Date of submission</value>
+  </data>
+  <data name="EntityRequests" xml:space="preserve">
+    <value>Entity Requests</value>
+  </data>
+  <data name="EventInformation" xml:space="preserve">
+    <value>Event Information</value>
+  </data>
+  <data name="EventModerationLog" xml:space="preserve">
+    <value>Event Moderation Log</value>
+  </data>
+  <data name="EventReport" xml:space="preserve">
+    <value>Event report</value>
+  </data>
+  <data name="EventsModeration" xml:space="preserve">
+    <value>Events Moderation</value>
+  </data>
+  <data name="EventsSoon" xml:space="preserve">
+    <value>Events Soon</value>
+  </data>
+  <data name="EventTitle" xml:space="preserve">
+    <value>Event Title</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="FinishedPluralF" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="Logs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="ManageEvents" xml:space="preserve">
+    <value>ManageEvents</value>
+  </data>
+  <data name="ManageTeams" xml:space="preserve">
+    <value>Manage Teams</value>
+  </data>
+  <data name="NotBanned" xml:space="preserve">
+    <value>Not Banned</value>
+  </data>
+  <data name="NumberOfReports" xml:space="preserve">
+    <value>Number of reports</value>
+  </data>
+  <data name="OpenPluralF" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OtherReports" xml:space="preserve">
+    <value>Other Reports</value>
+  </data>
+  <data name="PersonalInformation" xml:space="preserve">
+    <value>Personal Information</value>
+  </data>
+  <data name="PreviousReports" xml:space="preserve">
+    <value>Previous Reports</value>
+  </data>
+  <data name="RecommendedPluralF" xml:space="preserve">
+    <value>Recommended</value>
+  </data>
+  <data name="RecommendedPluralM" xml:space="preserve">
+    <value>Recommended</value>
+  </data>
+  <data name="RegularUsersOnly" xml:space="preserve">
+    <value>This page is only available to regular users only.</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="Remote" xml:space="preserve">
+    <value>Remote</value>
+  </data>
+  <data name="Reported" xml:space="preserve">
+    <value>Reported</value>
+  </data>
+  <data name="Reporter" xml:space="preserve">
+    <value>Reporter</value>
+  </data>
+  <data name="ReportName" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="ReportType" xml:space="preserve">
+    <value>Report type</value>
+  </data>
+  <data name="RequestPending" xml:space="preserve">
+    <value>Request pending</value>
+  </data>
+  <data name="RequestRejected" xml:space="preserve">
+    <value>Request rejected</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>See More</value>
+  </data>
+  <data name="ShowingLogsFor" xml:space="preserve">
+    <value>Showing logs for</value>
+  </data>
+  <data name="ShowInterest" xml:space="preserve">
+    <value>Show Interest</value>
+  </data>
+  <data name="Suspended" xml:space="preserve">
+    <value>Suspended</value>
+  </data>
+  <data name="TeamInformation" xml:space="preserve">
+    <value>Team Information</value>
+  </data>
+  <data name="TeamModerationLog" xml:space="preserve">
+    <value>Team Moderation Log</value>
+  </data>
+  <data name="TeamReport" xml:space="preserve">
+    <value>Team report</value>
+  </data>
+  <data name="TeamsAreLookingForPeople" xml:space="preserve">
+    <value>Teams are looking for people</value>
+  </data>
+  <data name="TeamsModeration" xml:space="preserve">
+    <value>Teams Moderation</value>
+  </data>
+  <data name="TopEvents" xml:space="preserve">
+    <value>Top Events</value>
+  </data>
+  <data name="Unban" xml:space="preserve">
+    <value>Unban</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="UserModerationLog" xml:space="preserve">
+    <value>User Moderation Log</value>
+  </data>
+  <data name="UserReport" xml:space="preserve">
+    <value>User report</value>
+  </data>
+  <data name="UsersAreLookingForATeam" xml:space="preserve">
+    <value>Users are looking for teams</value>
+  </data>
+  <data name="UsersModeration" xml:space="preserve">
+    <value>Users Moderation</value>
+  </data>
+  <data name="HomeEventsCalendarHeader" xml:space="preserve">
+    <value>Events Calendar</value>
+  </data>
+  <data name="AcceptedRequestTeam" xml:space="preserve">
+    <value>Accepted Team Request</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>All Teams</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="EventsCreatedPerMonth" xml:space="preserve">
+    <value>Events created per month</value>
+  </data>
+  <data name="EventsCreatedThisYear" xml:space="preserve">
+    <value>Events created this year</value>
+  </data>
+  <data name="EventsNearMe" xml:space="preserve">
+    <value>Events near me</value>
+  </data>
+  <data name="EventsParticipated" xml:space="preserve">
+    <value>Events Participated</value>
+  </data>
+  <data name="EventsParticipatedIn" xml:space="preserve">
+    <value>Events Participated in</value>
+  </data>
+  <data name="EventsSuspended" xml:space="preserve">
+    <value>Events suspended</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="FindIt" xml:space="preserve">
+    <value>Find It</value>
+  </data>
+  <data name="FoundTeam" xml:space="preserve">
+    <value>Found Team</value>
+  </data>
+  <data name="GotInvited" xml:space="preserve">
+    <value>Got Invited</value>
+  </data>
+  <data name="Interested" xml:space="preserve">
+    <value>Interested</value>
+  </data>
+  <data name="InterestedInEvents" xml:space="preserve">
+    <value>Interested in events</value>
+  </data>
+  <data name="InterestedTeams" xml:space="preserve">
+    <value>Interested Teams</value>
+  </data>
+  <data name="InterestedUsers" xml:space="preserve">
+    <value>Interested Users</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Loading..." xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MapClickForCurrentLocation" xml:space="preserve">
+    <value>Click on the map tor use your current location</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="MarkAsRead" xml:space="preserve">
+    <value>Mark as read</value>
+  </data>
+  <data name="MarkAsUnread" xml:space="preserve">
+    <value>Mark as unread</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="NewF" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="NewRequestTeam" xml:space="preserve">
+    <value>New Team Request</value>
+  </data>
+  <data name="NoEventsFound" xml:space="preserve">
+    <value>No events found</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>No Team</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="NotInterested" xml:space="preserve">
+    <value>Not Interested</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Owned" xml:space="preserve">
+    <value>Owned</value>
+  </data>
+  <data name="RemoveTeamInterest" xml:space="preserve">
+    <value>Remove Team Interest</value>
+  </data>
+  <data name="RequestedAccess" xml:space="preserve">
+    <value>Requested Access</value>
+  </data>
+  <data name="SearchFromHere" xml:space="preserve">
+    <value>Search from here</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="ShowAllF" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="ShowReadF" xml:space="preserve">
+    <value>Show Read</value>
+  </data>
+  <data name="ShowUnreadF" xml:space="preserve">
+    <value>Show Unread</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="SuspendedEvent" xml:space="preserve">
+    <value>This event has been suspended</value>
+  </data>
+  <data name="SuspendedTeam" xml:space="preserve">
+    <value>This team has been suspended</value>
+  </data>
+  <data name="TeamInvolvement" xml:space="preserve">
+    <value>How joined the teams</value>
+  </data>
+  <data name="TeamNewOwner" xml:space="preserve">
+    <value>Team {0} has new owner</value>
+  </data>
+  <data name="TeamParticipation" xml:space="preserve">
+    <value>How joined the teams</value>
+  </data>
+  <data name="TeamsCompleted" xml:space="preserve">
+    <value>Teams completed</value>
+  </data>
+  <data name="TeamsCreatedPerMonth" xml:space="preserve">
+    <value>Teams created per month</value>
+  </data>
+  <data name="TeamsCreatedthisYear" xml:space="preserve">
+    <value>Teams created this year</value>
+  </data>
+  <data name="TeamsParticipatedIn" xml:space="preserve">
+    <value>Teams participated in states</value>
+  </data>
+  <data name="TeamsStatus" xml:space="preserve">
+    <value>Teams Status</value>
+  </data>
+  <data name="TeamsSuspended" xml:space="preserve">
+    <value>Teams suspended</value>
+  </data>
+  <data name="TeamStatusUpdatedTo" xml:space="preserve">
+    <value>Team {0} status updated to</value>
+  </data>
+  <data name="TeamsYouAreAMemberOf" xml:space="preserve">
+    <value>Teams you are a member of</value>
+  </data>
+  <data name="TotalEventsCreated" xml:space="preserve">
+    <value>Total events created</value>
+  </data>
+  <data name="TotalTeamsCreated" xml:space="preserve">
+    <value>Total teams created</value>
+  </data>
+  <data name="TotalUsersRegistered" xml:space="preserve">
+    <value>Total users registered</value>
+  </data>
+  <data name="UsersBanned" xml:space="preserve">
+    <value>Users banned</value>
+  </data>
+  <data name="UsersInterestedinEvents" xml:space="preserve">
+    <value>Users interested in events</value>
+  </data>
+  <data name="UsersRegisteredPerMonth" xml:space="preserve">
+    <value>Users registered per month</value>
+  </data>
+  <data name="UsersRegisteredthisYear" xml:space="preserve">
+    <value>Users registered this year</value>
+  </data>
+  <data name="UsersVSTeamsInterest" xml:space="preserve">
+    <value>User VS Team in interest</value>
+  </data>
+  <data name="UsersVSTeamsInterestinEvents" xml:space="preserve">
+    <value>Users interest VS Teams interest in events</value>
+  </data>
+  <data name="UsersWhoFoundTeam" xml:space="preserve">
+    <value>Users who found team</value>
+  </data>
+  <data name="UsersWithTeam" xml:space="preserve">
+    <value>Users with team</value>
+  </data>
+  <data name="YouAreHere" xml:space="preserve">
+    <value>You are here</value>
+  </data>
+  <data name="YouAreTeamNewOwner" xml:space="preserve">
+    <value>You are the new owner of {0}</value>
+  </data>
+  <data name="YouWereInvitedToTeam" xml:space="preserve">
+    <value>You were invited to {0}</value>
+  </data>
+  <data name="Click" xml:space="preserve">
+    <value>Click</value>
+  </data>
+  <data name="NewConnectionNotification" xml:space="preserve">
+    <value>New connection</value>
+  </data>
+  <data name="toSeeMore" xml:space="preserve">
+    <value>to see more</value>
+  </data>
+  <data name="New Notification" xml:space="preserve">
+    <value>New Notification</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="RequestToConnectSent" xml:space="preserve">
+    <value>Request to connect sent</value>
+  </data>
+  <data name="Account Suspended" xml:space="preserve">
+    <value>Account suspended</value>
+  </data>
+  <data name="Remove Ban Account" xml:space="preserve">
+    <value>Removed ban account</value>
+  </data>
+  <data name="UserUnsuspendedSuccess" xml:space="preserve">
+    <value>User unsuspended</value>
+  </data>
+  <data name="ProfileGraphEmptyEventsParticipatedOwner" xml:space="preserve">
+    <value>You haven't join any event yet!</value>
+  </data>
+  <data name="ProfileGraphEmptyEventsParticipatedVisitor" xml:space="preserve">
+    <value>This user haven't join any event yet!</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsInvolvedOwner" xml:space="preserve">
+    <value>You haven't join any team yet!</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsInvolvedVisitor" xml:space="preserve">
+    <value>This user haven't join any team yet!</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsParticipatedOwner" xml:space="preserve">
+    <value>You haven't join any team yet!</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsParticipatedVisitor" xml:space="preserve">
+    <value>This user haven't join any team yet!</value>
+  </data>
+  <data name="AdminStatsOtherData" xml:space="preserve">
+    <value>Other data</value>
+  </data>
+  <data name="StatsAllValueOutOfValue" xml:space="preserve">
+    <value>out of</value>
+  </data>
+  <data name="StatsEventsCreations" xml:space="preserve">
+    <value>Events creations</value>
+  </data>
+  <data name="StatsEventsInteressesOrigins" xml:space="preserve">
+    <value>Origin of interests</value>
+  </data>
+  <data name="StatsEventsNoGraphDataEventInteressesOrigin" xml:space="preserve">
+    <value>No data to display.</value>
+  </data>
+  <data name="StatsEventsNoGraphDataEventsPerMonth" xml:space="preserve">
+    <value>No events created this year yet.</value>
+  </data>
+  <data name="StatsEventsNoGraphDataEventsUsersInteressed" xml:space="preserve">
+    <value>No data to display.</value>
+  </data>
+  <data name="StatsEventsPerMonthEventsLegend" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="StatsTeamsCreations" xml:space="preserve">
+    <value>Teams creations</value>
+  </data>
+  <data name="StatsTeamsNoGraphDataTeamsPerMonth" xml:space="preserve">
+    <value>No teams created this year yet.</value>
+  </data>
+  <data name="StatsTeamsNoGraphDataTeamsStates" xml:space="preserve">
+    <value>No teams created yet.</value>
+  </data>
+  <data name="StatsTeamsPerMonthTeamsLegend" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="StatsUsersNoGraphDataUsersPerMonth" xml:space="preserve">
+    <value>No new users this year yet.</value>
+  </data>
+  <data name="StatsUsersNoGraphDataUsersWithTeam" xml:space="preserve">
+    <value>No data to display.</value>
+  </data>
+  <data name="StatsUsersPerMonthUsersLegend" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="StatsUsersRegistations" xml:space="preserve">
+    <value>Users registration</value>
+  </data>
+  <data name="FeaturedEvent" xml:space="preserve">
+    <value>Featured event</value>
+  </data>
+  <data name="AdminOptionRemoveEventBan" xml:space="preserve">
+    <value>Unban event</value>
+  </data>
+  <data name="AdminOptionRemoveEventFeatured" xml:space="preserve">
+    <value>Remove event as featured</value>
+  </data>
+  <data name="AdminOptionSetEventBan" xml:space="preserve">
+    <value>Ban event</value>
+  </data>
+  <data name="AdminOptionSetEventFeatured" xml:space="preserve">
+    <value>Set event as featured</value>
+  </data>
+  <data name="OpenDMs" xml:space="preserve">
+    <value>Receive messages from other users</value>
+  </data>
+  <data name="ReceiveIRLNotifications" xml:space="preserve">
+    <value>Receive real time notifications</value>
+  </data>
+  <data name="SendEmailNotifications" xml:space="preserve">
+    <value>Receive notifications via email</value>
+  </data>
+  <data name="YourPrivacySettingsHaveBeenUpdated" xml:space="preserve">
+    <value>Your privacy settings have been updated</value>
+  </data>
+  <data name="ConfirmAction?" xml:space="preserve">
+    <value>Do you want to confirm this action?</value>
+  </data>
+  <data name="Leave Chat" xml:space="preserve">
+    <value>Leave Chat</value>
+  </data>
+  <data name="Leaving this chat also means leaving your team. Do you still want to leave?" xml:space="preserve">
+    <value>Leaving this chat also means leaving your team. Do you still want to leave?</value>
+  </data>
+  <data name="ChangeFeatured" xml:space="preserve">
+    <value>Change featured event status</value>
+  </data>
+  <data name="MarkAsFeatured" xml:space="preserve">
+    <value>Marked as featured event</value>
+  </data>
+  <data name="RemoveFeatured" xml:space="preserve">
+    <value>Remove event from featured Events</value>
+  </data>
+  <data name="SuccessChangingFeaturedStatus" xml:space="preserve">
+    <value>Success changind featured event status</value>
+  </data>
+  <data name="CancelConnectionRequest" xml:space="preserve">
+    <value>Cancel Request</value>
+  </data>
+  <data name="Connection Removed" xml:space="preserve">
+    <value>Connection Removed</value>
+  </data>
+  <data name="Error accepting request. Request may be invalid" xml:space="preserve">
+    <value>Error accepting request. Request may be invalid</value>
+  </data>
+  <data name="Error while cancelling request. Request may be invalid." xml:space="preserve">
+    <value>Error while cancelling request. Request may be invalid.</value>
+  </data>
+  <data name="Error while rejecting request. Request may be invalid." xml:space="preserve">
+    <value>Error while rejecting request. Request may be invalid.</value>
+  </data>
+  <data name="Error while removing connection. Connection may be invalid." xml:space="preserve">
+    <value>Error while removing connection. Connection may be invalid.</value>
+  </data>
+  <data name="FailedSendingRequest" xml:space="preserve">
+    <value>Failed sending request</value>
+  </data>
+  <data name="Rejected request" xml:space="preserve">
+    <value>Rejected request</value>
+  </data>
+  <data name="Request Accepted" xml:space="preserve">
+    <value>Request Accepted</value>
+  </data>
+  <data name="Request cancelled" xml:space="preserve">
+    <value>Request cancelled</value>
+  </data>
+  <data name="SendMessage" xml:space="preserve">
+    <value>Send message</value>
+  </data>
+  <data name="EventTagsQuestionMarkHelper" xml:space="preserve">
+    <value>Tags to identify the event context</value>
+  </data>
+  <data name="TeamPositionsHelper" xml:space="preserve">
+    <value>Write the positions separeted by ,. e.g. programmer, graphic designer,...</value>
+  </data>
+  <data name="TeamPositionsQuestionMarkHelper" xml:space="preserve">
+    <value>Responsibilities needed in the team</value>
+  </data>
+  <data name="TeamTagsHelper" xml:space="preserve">
+    <value>Write the tags separeted by ,. e.g. website, recipes, food,...</value>
+  </data>
+  <data name="TeamTagsQuestionMarkHelper" xml:space="preserve">
+    <value>Tags to identify the team context</value>
+  </data>
+  <data name="RatingSubmitted" xml:space="preserve">
+    <value>Rating has been submitted</value>
+  </data>
+  <data name="RatingUpdated" xml:space="preserve">
+    <value>Rating has been updated</value>
+  </data>
+  <data name="RatingUpdateFail" xml:space="preserve">
+    <value>Failed to update rating</value>
+  </data>
+  <data name="RatingValid" xml:space="preserve">
+    <value>Rating must be between 0 and 5</value>
+  </data>
+  <data name="Can't delete Admin" xml:space="preserve">
+    <value>You can't delete an Admin account</value>
+  </data>
+  <data name="Change your account settings" xml:space="preserve">
+    <value>Change your account settings</value>
+  </data>
+  <data name="Delete data and close my account" xml:space="preserve">
+    <value>Delete data and close my account</value>
+  </data>
+  <data name="Delete Personal Data" xml:space="preserve">
+    <value>Delete Personal Data</value>
+  </data>
+  <data name="Deleting this data will permanently remove your account, and this cannot be recovered." xml:space="preserve">
+    <value>Deleting this data will permanently remove your account, and this cannot be recovered.</value>
+  </data>
+  <data name="Error deleting user" xml:space="preserve">
+    <value>Error deleting user</value>
+  </data>
+  <data name="Error: Give ownership of your teams first!" xml:space="preserve">
+    <value>Error: Give ownership of your teams first!</value>
+  </data>
+  <data name="GetRandomTeam" xml:space="preserve">
+    <value>Get Random Team</value>
+  </data>
+  <data name="Incorrect password" xml:space="preserve">
+    <value>Incorrect password</value>
+  </data>
+  <data name="Manage your account" xml:space="preserve">
+    <value>Manage your account</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="RatingUserHint" xml:space="preserve">
+    <value>You only can rate users you was in the same team!</value>
+  </data>
+  <data name="ApproveRequest" xml:space="preserve">
+    <value>Request approved</value>
+  </data>
+  <data name="CanAddRolesToAdmin" xml:space="preserve">
+    <value>Can't add roles to admin</value>
+  </data>
+  <data name="CanChangeAdminRoles" xml:space="preserve">
+    <value>Failed to change the admin role</value>
+  </data>
+  <data name="CantGiveAdminRole" xml:space="preserve">
+    <value>Can't give the admin role</value>
+  </data>
+  <data name="EventBanned" xml:space="preserve">
+    <value>Event was banned</value>
+  </data>
+  <data name="EventBannedFail" xml:space="preserve">
+    <value>Failed to ban the event</value>
+  </data>
+  <data name="EventUnbanned" xml:space="preserve">
+    <value>The event was unbanned</value>
+  </data>
+  <data name="EventUnbannedFail" xml:space="preserve">
+    <value>Couldn't remove the ban from the event</value>
+  </data>
+  <data name="FailedAcceptReport" xml:space="preserve">
+    <value>Failed to accept the report</value>
+  </data>
+  <data name="FailedApproveRequest" xml:space="preserve">
+    <value>Couldn't approve the request</value>
+  </data>
+  <data name="FailedReasonAdded" xml:space="preserve">
+    <value>Failed to add the report reason</value>
+  </data>
+  <data name="FailedReasonRemoved" xml:space="preserve">
+    <value>Failed to remove the report reason</value>
+  </data>
+  <data name="FailedRejectRequest" xml:space="preserve">
+    <value>Couldn't reject the request</value>
+  </data>
+  <data name="FailedReportRejected" xml:space="preserve">
+    <value>Couldn't reject the report</value>
+  </data>
+  <data name="FailedToChangeFeaturedStatus" xml:space="preserve">
+    <value>Failed to add featured status to event</value>
+  </data>
+  <data name="ReasonAdded" xml:space="preserve">
+    <value>The report reason was added</value>
+  </data>
+  <data name="ReasonRemoved" xml:space="preserve">
+    <value>The report reason was removed</value>
+  </data>
+  <data name="RejectRequest" xml:space="preserve">
+    <value>Request rejected</value>
+  </data>
+  <data name="ReportRejected" xml:space="preserve">
+    <value>Report rejected</value>
+  </data>
+  <data name="RoleAddedToUser" xml:space="preserve">
+    <value>Role added successfully</value>
+  </data>
+  <data name="RoleChanged" xml:space="preserve">
+    <value>Role changed successfully</value>
+  </data>
+  <data name="RoleChangedError" xml:space="preserve">
+    <value>Failed to change role</value>
+  </data>
+  <data name="RoleRemovedFromUser" xml:space="preserve">
+    <value>Role removed successfully</value>
+  </data>
+  <data name="TeamBanned" xml:space="preserve">
+    <value>Team was banned</value>
+  </data>
+  <data name="TeamBannedFail" xml:space="preserve">
+    <value>Failed to ban the team</value>
+  </data>
+  <data name="TeamUnbannedFail" xml:space="preserve">
+    <value>Failed to unban the team</value>
+  </data>
+  <data name="UserAlreadyHasRole" xml:space="preserve">
+    <value>User already has the role</value>
+  </data>
+  <data name="UserBanned" xml:space="preserve">
+    <value>User was banned</value>
+  </data>
+  <data name="UserDoesntHaveRole" xml:space="preserve">
+    <value>User doesn't have that role</value>
+  </data>
+  <data name="UserSuspendedSuccess" xml:space="preserve">
+    <value>User was suspended successfully</value>
+  </data>
+  <data name="UserSuspendsError" xml:space="preserve">
+    <value>Failed to suspend user</value>
+  </data>
+  <data name="UserUnsuspendsError" xml:space="preserve">
+    <value>Failed to remove suspension</value>
+  </data>
+  <data name="AddedPendingListFail" xml:space="preserve">
+    <value>Failed to add you to the pending participation list</value>
+  </data>
+  <data name="AddedPendingListSuccess" xml:space="preserve">
+    <value>You have been added to pending participation list</value>
+  </data>
+  <data name="AddMilestoneFail" xml:space="preserve">
+    <value>Failed to add a milestone</value>
+  </data>
+  <data name="AddMilestoneSuccess" xml:space="preserve">
+    <value>Added a milestone</value>
+  </data>
+  <data name="AlreadyEnrollAsUser" xml:space="preserve">
+    <value>You already been enrolled as a user in this event</value>
+  </data>
+  <data name="AlreadyPendingRequest" xml:space="preserve">
+    <value>You have a pending request</value>
+  </data>
+  <data name="Can't leave chats where you are the owner" xml:space="preserve">
+    <value>Can't leave chats where you are the owner</value>
+  </data>
+  <data name="CancelEnroll" xml:space="preserve">
+    <value>You have cancelled your enrollment in this event</value>
+  </data>
+  <data name="CancelEnrollFail" xml:space="preserve">
+    <value>Failed to cancel your enrollment</value>
+  </data>
+  <data name="CancelTeamEnroll" xml:space="preserve">
+    <value>Failed to cancel your team's enrollment</value>
+  </data>
+  <data name="CantEnrollAsUserIfTeam" xml:space="preserve">
+    <value>Can't enroll as user if you already have enrolled as member of a team</value>
+  </data>
+  <data name="Couldn't create a chat at the moment" xml:space="preserve">
+    <value>Couldn't create a chat at the moment</value>
+  </data>
+  <data name="Couldn't create experience" xml:space="preserve">
+    <value>Couldn't create experience</value>
+  </data>
+  <data name="CreateTeamFail" xml:space="preserve">
+    <value>Failed to create a the team</value>
+  </data>
+  <data name="CreateTeamSuccess" xml:space="preserve">
+    <value>Team created</value>
+  </data>
+  <data name="DeleteMilestoneFail" xml:space="preserve">
+    <value>Failed to delete this milestone</value>
+  </data>
+  <data name="DeleteMilestoneSuccess" xml:space="preserve">
+    <value>Deleted this milestone</value>
+  </data>
+  <data name="Downvoted" xml:space="preserve">
+    <value>You have downvoted this event</value>
+  </data>
+  <data name="DownvoteFail" xml:space="preserve">
+    <value>Failed to downvote this event</value>
+  </data>
+  <data name="Enrolled" xml:space="preserve">
+    <value>You are enrolled in the event</value>
+  </data>
+  <data name="EnrollFail" xml:space="preserve">
+    <value>Failed to enroll in the event</value>
+  </data>
+  <data name="EnrollMemberWithTeam" xml:space="preserve">
+    <value>Can't enroll as member if you already have enrolled as member of a team</value>
+  </data>
+  <data name="Error getting chatroom" xml:space="preserve">
+    <value>Error getting chatroom</value>
+  </data>
+  <data name="Error Sending Message. This user has closed DMs." xml:space="preserve">
+    <value>Error Sending Message. This user has closed DMs.</value>
+  </data>
+  <data name="EventCreated" xml:space="preserve">
+    <value>Event created</value>
+  </data>
+  <data name="EventCreateFail" xml:space="preserve">
+    <value>Failed to create the event</value>
+  </data>
+  <data name="EventEnded" xml:space="preserve">
+    <value>You have finished this event</value>
+  </data>
+  <data name="EventUpdate" xml:space="preserve">
+    <value>The event was updated</value>
+  </data>
+  <data name="EventUpdateFail" xml:space="preserve">
+    <value>Failed to update the event</value>
+  </data>
+  <data name="EventUpdateStatusFail" xml:space="preserve">
+    <value>Failed to change the event status</value>
+  </data>
+  <data name="FileMustBePdf" xml:space="preserve">
+    <value>File uploaded must be pdf</value>
+  </data>
+  <data name="FillAllFields" xml:space="preserve">
+    <value>You need to fill ald fields</value>
+  </data>
+  <data name="GiveOwnershipFail" xml:space="preserve">
+    <value>Failed to change the ownership of the team</value>
+  </data>
+  <data name="GiveOwnershipSuccess" xml:space="preserve">
+    <value>Changed ownership of the team</value>
+  </data>
+  <data name="Invalid Operation" xml:space="preserve">
+    <value>Invalid Operation</value>
+  </data>
+  <data name="InviteAcceptedFail" xml:space="preserve">
+    <value>Failed to accept this invite</value>
+  </data>
+  <data name="InviteAcceptedSuccess" xml:space="preserve">
+    <value>You have accepted this invite</value>
+  </data>
+  <data name="InviteCanceledFail" xml:space="preserve">
+    <value>Failed to cancel your invite</value>
+  </data>
+  <data name="InviteCanceledSuccess" xml:space="preserve">
+    <value>You have canceled your invite</value>
+  </data>
+  <data name="InviteRejectedFail" xml:space="preserve">
+    <value>Failed to reject this invite</value>
+  </data>
+  <data name="InviteRejectedSuccess" xml:space="preserve">
+    <value>You have rejected this invite</value>
+  </data>
+  <data name="InviteUserError" xml:space="preserve">
+    <value>Failed to invite this user to the team</value>
+  </data>
+  <data name="InviteUserSuccess" xml:space="preserve">
+    <value>You have invited this user to the team</value>
+  </data>
+  <data name="LeftTeamFail" xml:space="preserve">
+    <value>Couldn't leave the team</value>
+  </data>
+  <data name="LeftTeamSuccess" xml:space="preserve">
+    <value>You have left the team</value>
+  </data>
+  <data name="NoInterestedTeams" xml:space="preserve">
+    <value>There are no interested teams at the moment</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>You have to be authenticated</value>
+  </data>
+  <data name="OwnATeamInterested" xml:space="preserve">
+    <value>You're the owner of a team that's already interested in this event</value>
+  </data>
+  <data name="RemoveDownvote" xml:space="preserve">
+    <value>You have removed the downvoted from this event</value>
+  </data>
+  <data name="RemoveDownvoteFail" xml:space="preserve">
+    <value>Failed to remove the downvote from this event</value>
+  </data>
+  <data name="RemoveUpvote" xml:space="preserve">
+    <value>You have removed the upvote from this event</value>
+  </data>
+  <data name="RemoveUpvoteFail" xml:space="preserve">
+    <value>Failed to remove the upvote from this event</value>
+  </data>
+  <data name="ReportSendFail" xml:space="preserve">
+    <value>Failed to send in the report</value>
+  </data>
+  <data name="RequestFail" xml:space="preserve">
+    <value>Failed to sent the request</value>
+  </data>
+  <data name="RequestSent" xml:space="preserve">
+    <value>You have sent your request</value>
+  </data>
+  <data name="RequestUpdate" xml:space="preserve">
+    <value>Your request has been updated</value>
+  </data>
+  <data name="RequestUpdateFail" xml:space="preserve">
+    <value>Failed to update your request</value>
+  </data>
+  <data name="TeamEnroll" xml:space="preserve">
+    <value>Your team has been enrolled in the event</value>
+  </data>
+  <data name="This user has closed DMs" xml:space="preserve">
+    <value>This user has closed DMs</value>
+  </data>
+  <data name="UpdateMilestoneFail" xml:space="preserve">
+    <value>Failed to update this milestone</value>
+  </data>
+  <data name="UpdateMilestoneSuccess" xml:space="preserve">
+    <value>Updated this milestone</value>
+  </data>
+  <data name="UpdateTeamFail" xml:space="preserve">
+    <value>Failed to update the team</value>
+  </data>
+  <data name="UpdateTeamSuccess" xml:space="preserve">
+    <value>The team was updated</value>
+  </data>
+  <data name="Upvoted" xml:space="preserve">
+    <value>You have upvoted this event</value>
+  </data>
+  <data name="UpvoteFail" xml:space="preserve">
+    <value>Failed to upvote this event</value>
+  </data>
+  <data name="UserAddedSuccess" xml:space="preserve">
+    <value>The user was added to your team</value>
+  </data>
+  <data name="UserAddError" xml:space="preserve">
+    <value>Failed to add this user</value>
+  </data>
+  <data name="UserRejectedFail" xml:space="preserve">
+    <value>Failed to reject this user</value>
+  </data>
+  <data name="UserRejectedSuccess" xml:space="preserve">
+    <value>You have rejected this user</value>
+  </data>
+  <data name="UserRemovedSuccess" xml:space="preserve">
+    <value>The user was removed from your team</value>
+  </data>
+  <data name="UserRemoveFail" xml:space="preserve">
+    <value>Failed to remove the user from your team</value>
+  </data>
+  <data name="WhileInviteUserError" xml:space="preserve">
+    <value>An error ocurred while inviting this user, please try again</value>
+  </data>
+  <data name="You can't add someone that is blocked" xml:space="preserve">
+    <value>You can't add someone that is blocked</value>
+  </data>
+  <data name="You're Blocked" xml:space="preserve">
+    <value>You're blocked by this user</value>
+  </data>
+  <data name="Entity" xml:space="preserve">
+    <value>Entity</value>
+  </data>
+  <data name="ReportReasons" xml:space="preserve">
+    <value>Report Reasons</value>
+  </data>
+  <data name="ReportReasonEnglish" xml:space="preserve">
+    <value>Report Reason - English</value>
+  </data>
+  <data name="ReportReasonPortuguese" xml:space="preserve">
+    <value>Report Reason - Portuguese</value>
+  </data>
+  <data name="AlreadyAMember" xml:space="preserve">
+    <value>Already a member?</value>
+  </data>
+  <data name="ShowingRequestsFor" xml:space="preserve">
+    <value>Showing requests for</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Team Members</value>
+  </data>
+</root>

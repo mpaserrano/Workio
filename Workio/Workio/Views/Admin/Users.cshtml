@@ -1,0 +1,113 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+<link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+    .table-user-profile-picture {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    #AllUsers td {
+        vertical-align: middle;
+    }
+
+    #AllUsers td .table-user-profile-picture {
+        margin-right: 10px;
+    }
+</style>
+
+<table id="AllUsers" class="table">
+    <thead>
+        <tr>
+            <th>
+                @localizer.Get("Name")
+            </th>
+            <th>
+                @localizer.Get("Email")
+            </th>
+            <th>
+                @localizer.Get("BanEnds")
+            </th>
+            <th>
+                @localizer.Get("Actions")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script>
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+        $(document).ready(function () {
+            $('#AllUsers').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/Admin/GetUsers',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#AllUsers_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: null,
+                        render: function (data, type, rowData, meta) {
+                            if (rowData.profilePicture == null || rowData.profilePicture == "") {
+                                return '<a href="/User/Index/' + rowData.id + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.name + '</a>'
+                            }
+                            else {
+                                return '<a href="/User/Index/' + rowData.id + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.profilePicture + '"/>' + rowData.name + '</a>'
+                            }
+                            
+                        }
+                    },
+                    { data: null,
+                        render: function (data, type, rowData, meta) {
+                            return '<a href="/User/Index/' + rowData.id + '">' + rowData.email + '</a>'
+                        }
+                            
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, rowData, meta) {
+                            if(rowData.lockoutend == null || rowData.lockoutend == "" || rowData.lockoutend == "NotSuspended")
+                                return '@localizer.Get("NotBanned")';
+                            else
+                                return rowData.lockoutend;
+                        }
+                    },
+                    { 
+                        data: null,
+                        render: function (data, type, rowData, meta) 
+                        {
+                            if(!rowData.banned)
+                                return '<a href="/Admin/User/' + rowData.id + '">@localizer.Get("Details")</a> <a href="#" class="link pe-auto" onclick="addActionToForm(\'/Admin/BanUser/' + rowData.id + '\')">@localizer.Get("Ban")</a>';  
+                            else
+                                return '<a href="/Admin/User/' + rowData.id + '">@localizer.Get("Details")</a> <a href="#" class="link pe-auto" onclick="addActionToForm(\'/Admin/UnbanUser/' + rowData.id + '\')">@localizer.Get("Unban")</a>'  
+                        }
+                    }
+                ]
+            });
+        });
+
+
+    </script>
+}

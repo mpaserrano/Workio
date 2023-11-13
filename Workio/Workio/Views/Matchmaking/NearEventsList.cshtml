@@ -1,0 +1,19 @@
+﻿@using Workio.Models.Events;
+@{
+    Layout = "";
+}
+@if (ViewBag.Events == null)
+            {
+                <span>@localizer.Get("NoData")</span>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                   @foreach (Event e in ViewBag.Events)
+                   {
+                       <a class="col" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">
+                                <partial name="../Events/Components/EventCardSearchComponent" model="e" />
+                       </a>
+                   }
+               </div>
+            }

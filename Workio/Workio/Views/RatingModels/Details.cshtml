@@ -1,0 +1,42 @@
+﻿@model Workio.Models.RatingModel
+
+@{
+    ViewData["Title"] = @localizer.Get("Details");
+}
+
+<h1>@localizer.Get("Details")</h1>
+
+<div>
+    <h4>@localizer.Get("RatingModel")</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ReceiverId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ReceiverId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RaterId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RaterId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.RatingId">@localizer.Get("Edit")</a> |
+    <a asp-action="Index">@localizer.Get("BackToList")</a>
+</div>

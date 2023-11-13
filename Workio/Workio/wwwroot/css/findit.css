@@ -1,0 +1,5 @@
+﻿@media screen and (max-width: 992px) {
+    #map {
+        height: 370px!important;
+    }
+}

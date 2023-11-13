@@ -1,0 +1,23 @@
+﻿@model ICollection<User>
+
+@foreach(User user in Model){
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <a asp-action="Index" asp-controller="User" asp-route-id="@user.Id">
+                @if (user.ProfilePicture != null)
+                {
+                    <img src="~/pfp/@user.ProfilePicture" alt="Profile Picture" class="pfp rounded-circle" />
+                }
+                else
+                {
+                    <img src="~/pfp/default.png" alt="Profile Picture" class="rounded-circle pfp" />
+                }
+            </a>
+            <div class="ms-3">
+                <a asp-action="Index" asp-controller="User" asp-route-id="@user.Id"><p class="fw-bold mb-1">@user.Name</p></a>
+                <p class="text-muted mb-0">@user.Email</p>
+            </div>
+        </div>
+        <a class="btn btn-link btn-rounded btn-sm" asp-action="InviteToTeam" asp-controller="Teams" asp-route-teamId="@ViewBag.TeamId" asp-route-userId="@user.Id" role="button">Invite</a>
+    </li>
+}

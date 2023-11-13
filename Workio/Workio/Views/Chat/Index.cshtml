@@ -1,0 +1,560 @@
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = localizer.Get("Chat");
+}
+<link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/lib/perfect-scrollbar/css/perfect-scrollbar.css">
+<style>
+    #chat3 .form-control {
+        border-color: transparent;
+    }
+
+        #chat3 .form-control:focus {
+            border-color: transparent;
+            box-shadow: inset 0px 0px 0px 1px transparent;
+        }
+
+    .badge-dot {
+        border-radius: 50%;
+        height: 10px;
+        width: 10px;
+        margin-left: 2.9rem;
+        margin-top: -.75rem;
+    }
+</style>
+<input type="hidden" id="userId" value="" />
+<section class="full-width h-100">
+    <div class="card h-100" id="chat3" style="border-radius: 15px;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 col-lg-5 col-xl-4 mb-4 mb-md-0">
+                    <button class="w-100 btn btn-primary show-open-list collapsed"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#collapse-list"
+                            aria-expanded="false"
+                            aria-controls="collapseChatList">
+                        @localizer.Get("Open List")
+                    </button>
+                    <div class="p-3" id="collapse-list">
+                        <div>
+                            <div class="input-group rounded mb-3">
+                                <input type="search" class="form-control rounded" placeholder="@localizer.Get("Search")" id="chatroom_name" onchange="showContacts()" aria-label="Search"
+                                       aria-describedby="search-addon" />
+                                <span class="input-group-text border-0" id="search-addon">
+                                    <a id="new-chat-btn" class="pointer" data-mdb-toggle="tooltip" title="@localizer.Get("Click create a new chat")"><i class="fa-solid fa-comment-medical"></i></a>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="scrollbar-container contacts-list" id="contacts-scroll" data-workio-chat-scrollbar="true">
+                            <div style="display: none;" id="loading-contacts" class="loading-list-container">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled mb-0" id="contacts-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-7 col-xl-8">
+                    <div id="topbar-info">
+                    </div>
+                    <div class="pt-3 pe-3 scrollbar-container conversation-container" id="conversation-scroll" data-workio-chat-scrollbar="true">
+                        <div style="display: none;" id="loading-conversation" class="loading-list-container">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div id="conversation-container">
+                            <div id="conversation-placeholder" class="text-center">
+                                <p class="text-center fw-bold">@localizer.Get("Click in one conversation to send messages!")</p>
+                                <img src="~/public/images/sent-message.svg" class="placeholder-image" alt="People illustrations by Storyset" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="send-message-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Confirmation pop up modal -->
+<div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="confirmation-modal-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmation-modal-label">@localizer.Get("AreYouSure?")</h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @localizer.Get("Leaving this chat also means leaving your team. Do you still want to leave?")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">@localizer.Get("No")</button>
+                <button onclick="this.disabled=true;leaveChat();" class="btn btn-primary">@localizer.Get("Yes")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="NewChatModal" tabindex="-1" data-mdb-backdrop="static" aria-labelledby="NewChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="NewChatModalLabel">@localizer.Get("New Chat")</h5>
+                <button type="reset" class="btn-close" id="closeNewChatModal" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="form-outline">
+                        <input type="text" id="search-input" class="form-control" placeholder="@localizer.Get("Search for your connections or teams")">
+                        <label class="form-label" for="form1">@localizer.Get("Search")</label>
+                    </div>
+                    <ul id="new-chats-list" class="list-group list-group-light mt-3">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/lib/perfect-scrollbar/dist/perfect-scrollbar.js"></script>
+    <script src="~/js/components/send-message-bar.js"></script>
+    <script src="~/js/components/chats_list_item.js"></script>
+    <script src="~/js/components/chat_bubble.js"></script>
+    <script src="~/js/components/chat_topbar.js"></script>
+    <script>
+        var currentRoomId;
+        var currentProfilePicture;
+        const myCollapse = document.getElementById('collapse-list')
+        const bsCollapse = new mdb.Collapse(myCollapse)
+
+        var translation = {
+            leaveChat: '@localizer.Get("Leave Chat")',
+            new: '@localizer.Get("New")'
+        }
+
+        const contacts_scroll = new PerfectScrollbar("#contacts-scroll", {
+            wheelSpeed: 2,
+            wheelPropagation: true,
+            minScrollbarLength: 20
+        });
+
+        const conversation_scroll = new PerfectScrollbar("#conversation-scroll", {
+            wheelSpeed: 2,
+            wheelPropagation: true,
+            minScrollbarLength: 20
+        });
+
+        const container = document.querySelector('#conversation-scroll');
+        container.scrollTop = container.scrollHeight;
+
+        function setupChatsSize() {
+            if (window.innerWidth <= 991) {
+                bsCollapse.hide()
+            }
+            else {
+                bsCollapse.show()
+            }
+        }
+
+        function leaveChatConfirmation() {
+            $("#confirmation-modal").modal("show");
+        }
+
+        function leaveChat() {
+            location.href = "/Chat/LeaveChat?chatRoomId=" + currentRoomId + "";
+        }
+
+        function updateContacts(message) {
+            let conversationList = document.getElementById('contacts-list');
+
+            if (conversationList == null) {
+                showContacts();
+            }
+            else {
+                let conversationItem = conversationList.querySelector('li [data-id="' + message.chatRoomId + '"]');
+                if (conversationItem == null) {
+                    showContacts();
+                }
+                else {
+                    let conversationItemText = conversationItem.querySelector('.last-message');
+                    let conversationItemTime = conversationItem.querySelector('.message-time');
+
+                    conversationItemText.innerText = message.text;
+                    conversationItemTime.innerText = message.messageTime;
+                    conversationItem.parentElement.remove();
+                    conversationList.prepend(conversationItem.parentElement);
+                }
+            }
+        }
+
+        function updateRead(chatroomId){
+            let conversationList = document.getElementById('contacts-list');
+            let conversationItem = conversationList.querySelector('li [data-id="' + chatroomId + '"]');
+            let conversationItemText = conversationItem.querySelector('.last-message');
+            let conversationItemBadge = conversationItem.querySelector('.badge');
+            conversationItemText.classList.remove("text-muted");
+            conversationItemText.classList.add("fw-bold");
+
+            conversationItemBadge.parentNode.style.display = "flex";
+        }
+
+        async function appendMessage(message) {
+            if (message.chatRoomId == currentRoomId) {
+                let conversation_container = document.getElementById("conversation-container");
+
+                let messageObject = await createBubbleHTML({
+                    id: message.id,
+                    name: message.name,
+                    profilePicture: message.profilePicture,
+                    messageTime: message.messageTime,
+                    text: message.text,
+                    isMine: message.isMine
+                });
+
+                conversation_container.innerHTML += messageObject;
+                container.scrollTop = container.scrollHeight;
+                conversation_scroll.update();
+
+                readMessage(message.id);
+            }
+            else{
+                updateRead(message.chatRoomId);
+            }
+
+            updateContacts(message);
+        }
+
+        function updateTopBar(info) {
+            let newTopbarInfo;
+
+            if (info.isTeam == true) {
+                newTopBarInfo = createTeamTopbarHTML({
+                    id: currentRoomId,
+                    teamId: info.targetId,
+                    name: info.name,
+                    image: info.image,
+                    translation
+                });
+            }
+            else {
+                newTopBarInfo = createUserTopbarHTML({
+                    id: currentRoomId,
+                    userId: info.targetId,
+                    name: info.name,
+                    image: info.image,
+                    translation
+                });
+            }
+
+            let topbar = document.getElementById("topbar-info");
+
+            topbar.innerHTML = "";
+
+            topbar.innerHTML = newTopBarInfo;
+        }
+
+        function sendMessage() {
+            let btn = document.getElementById("send-message-btn-icon");
+            btn.style.display = "none";
+            var message = document.getElementById("message_to_send");
+
+            if (currentRoomId == "" || message.value == null || message.value == "") return null;
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        // Handle success response
+                        const response = JSON.parse(this.responseText);
+                        response.profilePicture = currentProfilePicture;
+                        appendMessage(response);
+                        message.value = "";
+                    } else if (this.status === 401) {
+                        // Handle unauthorized error
+                        // Redirect the user to the login page or display an error message
+                        toastr.error("This user has closed DMs", "Error");
+                    } else {
+                        // Handle other errors
+                        toastr.error("Error sending message", "Error");
+                    }
+                    btn.style.display = "block";
+                }
+
+                
+            };
+            xhttp.open('POST', '/Chat/SendMessage', true);
+            xhttp.setRequestHeader('Content-type', 'application/json');
+            xhttp.send(JSON.stringify({ chatRoomId: currentRoomId, text: message.value }));
+        }
+
+        function loadContactsList(chatroom_name, callback) {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                var response = this.responseText;
+                var jsonData = JSON.parse(response);
+
+                document.getElementById("contacts-list").innerHTML = "";
+
+                //Executar codigo com o json
+                const contactsList = jsonData.map(contact => createContactHTML({
+                    id: contact.id,
+                    name: contact.name,
+                    image: contact.image,
+                    lastMessageText: contact.lastMessageText,
+                    lastMessageTime: contact.lastMessageTime,
+                    isRead: contact.isRead,
+                    translations: translation
+                }));
+
+                contactsList.forEach(contact => {
+                    document.getElementById("contacts-list").innerHTML += contact;
+                });
+
+                callback();
+            }
+
+            if (chatroom_name != '')
+                xhttp.open("GET", "/Chat/GetActiveChats?chatroomName=" + chatroom_name, true);
+            else {
+                xhttp.open("GET", "/Chat/GetActiveChats", true);
+            }
+
+
+            xhttp.send();
+        }
+
+        async function loadConversation(chatRoomId, callback) {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = async function () {
+                const response = this.responseText;
+                const JSONResponse = JSON.parse(response);
+
+                const messages = JSONResponse.messages;
+
+                const chatInfo = JSONResponse.info;
+
+                updateTopBar(chatInfo);
+
+                document.getElementById("conversation-container").innerHTML = "";
+
+                //Executar codigo com o json
+                const conversationList = [];
+
+                for (const message of messages) {
+                    const bubbleHTML = await createBubbleHTML({
+                        id: message.id,
+                        name: message.name,
+                        sender_id: message.sender_id,
+                        profilePicture: message.profilePicture,
+                        messageTime: message.messageTime,
+                        text: message.text,
+                        isMine: message.isMine
+                    });
+                    conversationList.push(bubbleHTML);
+                }
+
+                document.getElementById("conversation-container").innerHTML = conversationList.join("");
+
+                callback();
+            };
+
+            xhttp.open("GET", "/Chat/GetConversation/" + chatRoomId, true);
+            xhttp.send();
+        }
+
+        function readMessage(messageId) {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        // Handle success response
+                        let conversationList = document.getElementById('contacts-list');
+                        let conversationItem = conversationList.querySelector('li [data-id="' + currentRoomId + '"]');
+                        let conversationItemText = conversationItem.querySelector('.last-message');
+                        let conversationItemBadge = conversationItem.querySelector('.badge');
+
+                        conversationItemText.classList.remove("fw-bold");
+                        conversationItemText.classList.add("text-muted");
+
+                        conversationItemBadge.style.display = "none";
+
+                        loadChatCount();
+                    } else if (this.status === 401) {
+                        // Handle unauthorized error
+                        
+                        
+                    } else {
+                        // Handle other errors
+                        
+                    }
+                }
+            };
+            xhttp.open('POST', '/Chat/ReadMessage?messageId=' + messageId, true);
+            xhttp.send();
+        }
+
+        function readAllMessages(chatroomId) {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        // Handle success response
+                        let conversationList = document.getElementById('contacts-list');
+                        let conversationItem = conversationList.querySelector('li [data-id="' + chatroomId + '"]');
+                        let conversationItemText = conversationItem.querySelector('.last-message');
+                        let conversationItemBadge = conversationItem.querySelector('.badge');
+
+                        conversationItemText.classList.remove("fw-bold");
+                        conversationItemText.classList.add("text-muted");
+
+                        conversationItemBadge.style.display = "none";
+
+                        loadChatCount();
+                        
+                    } else if (this.status === 401) {
+                        // Handle unauthorized error
+                        
+                        
+                    } else {
+                        // Handle other errors
+                        
+                    }
+                }
+            };
+            xhttp.open('POST', '/Chat/ReadMessages?chatroomId=' + chatroomId, true);
+            xhttp.send();
+        }
+
+        function initialLoad(callback) {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                let response = this.responseText;
+                let JSONResponse = JSON.parse(response);
+
+                let profilePicture = JSONResponse.profilePicture;
+                let userId = JSONResponse.userId;
+
+                let userIdInput = document.getElementById("userId");
+
+                currentProfilePicture = profilePicture;
+                //Executar codigo com o json
+                userIdInput.value = userId;
+
+                callback();
+
+            }
+
+            xhttp.open("GET", "/Chat/InitialLoad/", true);
+
+            xhttp.send();
+        }
+
+        function showContacts() {
+            //Mostrar o load animation
+            document.getElementById("loading-contacts").style.display = "block";
+
+            let chatroom_name = document.getElementById("chatroom_name");
+
+            loadContactsList(chatroom_name.value, function () {
+                //Quando acabar o ajax e o carregar os dados tira o load
+                document.getElementById("loading-contacts").style.display = "none";
+            });
+        }
+
+        function showConversation(chatRoomId) {
+            currentRoomId = chatRoomId;
+
+            loadConversationUtils();
+
+            //Mostrar o load animation
+            document.getElementById("loading-conversation").style.display = "block";
+
+            loadConversation(chatRoomId, function () {
+                //Quando acabar o ajax e o carregar os dados tira o load
+                container.scrollTop = container.scrollHeight;
+                conversation_scroll.update();
+                document.getElementById("loading-conversation").style.display = "none";
+                setupChatsSize();
+                readAllMessages(chatRoomId);
+            });
+        }
+
+        function loadConversationUtils() {
+            let sendMessageBar = document.getElementById('send-message-bar');
+            console.log(!sendMessageBar.hasChildNodes());
+            if (!sendMessageBar.hasChildNodes()) {
+                let conversationPlaceholder = document.getElementById('conversation-placeholder');
+                conversationPlaceholder.style.display = "none";
+
+                sendMessageBar.innerHTML = CreateSendMessageBar();
+                let pfpImage = document.getElementById("input-avatar-message");
+                pfpImage.src = "/pfp/" + currentProfilePicture;
+            }
+        }
+
+        $(document).ready(function () {
+            let conversationId = '@ViewBag.InitialConversationId';
+
+            // your page initialization code here
+            // the DOM will be available here
+            $(window).resize(function () {
+                setupChatsSize();
+            });
+
+            initialLoad(function () {
+                showContacts();
+
+                if (conversationId) {
+                    loadConversationUtils();
+                    showConversation(conversationId);
+                }
+                setupChatsSize();
+            });
+
+            $("#new-chat-btn").on('click', function () {
+                // Make an AJAX call to your backend to fetch the data based on the search query
+                $.ajax({
+                    url: '/Chat/NewChatModal',
+                    type: 'GET',
+                    success: function (data) {
+                        // Clear the search results container
+                        $('#new-chats-list').empty();
+
+                        $('#new-chats-list').html(data);
+                        const mymodal = new mdb.Modal(document.getElementById('NewChatModal'));
+                        mymodal.show();
+                    }
+                });
+            });
+            // Listen for changes in the search input field
+            $('#search-input').on('input', function () {
+                // Get the search query
+                var query = $(this).val();
+
+                // Make an AJAX call to your backend to fetch the data based on the search query
+                $.ajax({
+                    url: '/Chat/NewChatSearch',
+                    type: 'GET',
+                    data: { query: query },
+                    success: function (data) {
+                        // Clear the search results container
+                        $('#new-chats-list').empty();
+
+                        $('#new-chats-list').html(data);
+                    }
+                });
+            });
+        });
+    </script>
+}

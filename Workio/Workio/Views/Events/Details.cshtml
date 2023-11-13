@@ -1,0 +1,516 @@
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Workio.Models.Events;
+@model Workio.Models.Events.Event
+@inject Workio.Services.Events.IEventsService _eventService
+@inject Workio.Services.Interfaces.IUserService _userService
+@inject SignInManager<User> SignInManager
+
+
+@{
+    ViewData["Title"] = @localizer.Get("Details");
+    var imageAbsoluteUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Url.Content("~/public/uploads/events/banners/" + Model.BannerPicturePath)}";
+    var urlEvent = $"{Context.Request.Scheme}://{Context.Request.Host}{Url.Action("Details", "Events", new { id = Model.EventId })}";
+    var creator = await _userService.GetUser(Guid.Parse(Model.UserId));
+
+    creator = new User()
+            {
+                Id = creator.Id,
+                ProfilePicture = creator.ProfilePicture,
+                Email = creator.Email,
+                Name = creator.Name
+            };
+}
+
+<style>
+    .event-banner-image {
+        background-color: white;
+        height: calc(20.1290322581vw - 1px);
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        border: 1px #00000021 solid;
+        border-right: none;
+        border-left: none;
+        background-position: center center;
+        background-size: cover;
+        background-image: url('/public/uploads/events/banners/@Model.BannerPicturePath');
+    }
+
+    .preview-banner-text-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    .preview-banner-text {
+        margin: auto;
+    }
+
+    .override-form-helper {
+        width: 100%;
+        font-size: .875em;
+        color: #757575;
+        margin-top: 3px;
+    }
+
+    .form-helper {
+        margin-top: 3px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    #map {
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: calc(35.1290322581vw - 1px);
+    }
+
+    .readonly-style {
+        background-color: #e9ecef !important;
+    }
+
+    .banner-feature-icon-big {
+        font-size: 32px;
+        top: 10px;
+        left: 10px;
+        position: relative;
+        color: #FFFFFF;
+    }
+
+    .votes-container {
+        display: flex;
+    }
+
+    .updown-votes-overwall-counter {
+        width: 48px !important;
+        text-align: center;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .disabled-vote {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+</style>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+@section metaTags {
+    <title>@Model.Title</title>
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:description" content="@Model.Description" />
+    <meta property="og:image" content="@imageAbsoluteUrl" />
+    <meta property="og:image:width" content="1640" />
+    <meta property="og:image:height" content="330" />
+    <meta property="og:url" content="@urlEvent" />
+    <meta property="og:type" content="website" />
+}
+
+@if (User.IsInRole("Admin") || User.IsInRole("Mod"))
+{
+    @await Component.InvokeAsync("LogModal")
+}
+
+<div id="event-image-banner" class="event-banner-image">
+    @if (Model.IsFeatured)
+    {
+        <a data-mdb-toggle="tooltip" title="@localizer.Get("FeaturedEvent")"><i class="fa-solid fa-star banner-feature-icon-big"></i></a>
+    }
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <ul class="list-group list-group-light">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var IsOwner = await _eventService.isCreator(Model.EventId);
+                        var isFinished = await _eventService.isFinished(Model.EventId);
+                        var isInterested = await _eventService.IsUserInterested(Model.EventId);
+                        var isTeamInterested = await _eventService.IsTeamInterested(Model.EventId);
+                        @if (IsOwner == true)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="Edit" asp-route-id="@Model?.EventId"><i class="fa-solid fa-pen-to-square"></i> @localizer.Get("Edit")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        }
+                        @if (isInterested != true && isTeamInterested != true && !isFinished)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="EnrollUser" asp-controller="EventEnrollments" asp-route-id="@ViewData["id"]"><i class="fa-regular fa-hand"></i> @localizer.Get("ShowInterest")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="TeamEnrollment" asp-controller="EventEnrollments" asp-route-id="@ViewData["id"]"><i class="fa-solid fa-users"></i> @localizer.Get("ShowInterestTeam")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        else if (isInterested == true)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="CancellEnrollmentUser" asp-controller="EventEnrollments" asp-route-id="@ViewData["id"]"><i class="fa-solid fa-hand"></i> @localizer.Get("RemoveInterest")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        else if (isTeamInterested == true)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="CancelTeamEnrollment" asp-controller="EventEnrollments" asp-route-id="@ViewData["id"]"><i class="fa-solid fa-users"></i> @localizer.Get("RemoveTeamInterest")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (IsOwner != true)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="ReportEvent" asp-controller="Reports" asp-route-id="@Model.EventId"><i class="fa-solid fa-triangle-exclamation"></i> @localizer.Get("ReportEvent")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (!ViewBag.OwnsInterestedTeam && !ViewBag.IsMemberOfInterestedTeam && !isInterested && !isTeamInterested && Model.State != EventState.Finish)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <a asp-action="RandomTeam" asp-controller="EventEnrollments" asp-route-id="@Model.EventId"><i class="fa-solid fa-shuffle"></i> @localizer.Get("GetRandomTeam")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        else {
+                            //Printar opcao para ir para equipa
+                        }
+                    }
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <a asp-action="EventEnrollments" asp-controller="EventEnrollments" asp-route-id="@Model.EventId"><i class="fa-solid fa-bullseye"></i> @localizer.Get("EventEnrollments")</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-8 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex">
+                    @if(creator != null){
+                        <a href="/User/Index/@creator.Id" class="profile-preview mb-3 me-auto">
+                            <partial name="../Search/Components/UserCardComponent" model="@creator" />
+                        </a>
+                    }
+                    <div class="dropdown">
+                        <button type="button" id="dropdownShare" data-mdb-toggle="dropdown" aria-expanded="false" class="btn btn-primary btn-floating dropdown-toggle">
+                            <i class="fas fa-share"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><button class="dropdown-item" onclick="shareContent('@Url.Action("Details", "Events", new { id = Model.EventId })')">@localizer.Get("Share via...")</button></li>
+                            <li><button class="dropdown-item" onclick="shareViaChat('@Url.Action("Details", "Events", new { id = Model.EventId }, protocol: Context.Request.Scheme, host: Context.Request.Host.Value)')">@localizer.Get("Send Message")</button></li>
+                        </ul>
+                    </div>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Mod"))
+                    {
+                        <div style="margin-left: 10px;" class="dropdown">
+                            <a class="btn btn-floating shadow-none text-reset dropdown-toggle hidden-arrow"
+                               href="#"
+                               id="navbarDropdownMenuLink"
+                               role="button"
+                               data-mdb-toggle="dropdown"
+                               aria-expanded="false">
+                                <i style="font-size: 34px;" class="fa-solid fa-ellipsis-vertical"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end"
+                                aria-labelledby="navbarDropdownMenuLink">
+                                @if (Model.IsBanned != true)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="changeEventStatus()">
+                                            @if (Model.IsFeatured)
+                                            {
+                                                <i class="fa-solid fa-star"></i> <span>@localizer.Get("AdminOptionRemoveEventFeatured")</span>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa-regular fa-star"></i> <span>@localizer.Get("AdminOptionSetEventFeatured")</span>
+                                            }
+                                        </a>
+                                    </li>
+                                }
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="changeEventBan()">
+                                        @if (Model.IsBanned)
+                                        {
+                                            <i class="fa-solid fa-circle"></i> <span>@localizer.Get("AdminOptionRemoveEventBan")</span>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa-solid fa-ban"></i> <span>@localizer.Get("AdminOptionSetEventBan")</span>
+                                        }
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+                <h3 class="me-auto">@Model.Title</h3>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div style="margin-bottom: 8px;" class="votes-container">
+                        @if (ViewBag.isCreator != true)
+                        {
+                            <div class="vote-button">
+                                @if (!ViewBag.hasUpvote)
+                                {
+                                    <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" class="mb-3" role="button" asp-controller="Events" asp-action="Upvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-regular fa-thumbs-up"></i></a>
+                                }
+                                else
+                                {
+                                    <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" role="button" asp-controller="Events" asp-action="RemoveUpvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-solid fa-thumbs-up"></i></a>
+                                }
+                            </div>
+                            <div class="vote-button updown-votes-overwall-counter"><span>@(Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.UpVote).Count() - Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.DownVote).Count())</span></div>
+                            <div class="vote-button">
+                                @if (ViewBag.hasDownvote)
+                                {
+                                    <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" role="button" asp-controller="Events" asp-action="RemoveDownvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-solid fa-thumbs-down"></i></a>
+                                }
+                                else
+                                {
+                                    <a onclick="if(this.clicked) return false; this.clicked = true; this.classList.add('disabled-vote')" role="button" asp-controller="Events" asp-action="Downvote" asp-route-id="@Model.EventId" asp-route-returnUrl="@Context.Request.Path"><i class="fa-regular fa-thumbs-down"></i></a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="vote-button fa-disabled" data-mdb-toggle="tooltip" title="Can't vote because you're the creator">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                            </div>
+                            <div class="vote-button updown-votes-overwall-counter"><span>@(Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.UpVote).Count() - Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.DownVote).Count())</span></div>
+                            <div class="vote-button fa-disabled" data-mdb-toggle="tooltip" title="Can't vote because you're the creator">
+                                <i class="fa-regular fa-thumbs-down"></i>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div style="margin-bottom: 8px;" class="votes-container">
+                        <a href="/Identity/Account/Login" class="vote-button">
+                            <i class="fa-regular fa-thumbs-up"></i>
+                        </a>
+                        <div class="vote-button updown-votes-overwall-counter"><span>@(Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.UpVote).Count() - Model.EventReactions.Where(e => e.ReactionType == Workio.Models.Events.EventReactionType.DownVote).Count())</span></div>
+                        <a href="/Identity/Account/Login" class="vote-button">
+                            <i class="fa-regular fa-thumbs-down"></i>
+                        </a>
+                    </div>
+                }
+                <p>@Model.Description</p>
+                <div class="d-flex justify-content-start mb-1">
+                    <span class="fw-bold">
+                        @localizer.Get("Status"):
+                        @if (Model.IsBanned != true)
+                        {
+                            @switch (Model.State)
+                            {
+                                case (EventState.Open):
+                                    {
+                                        <span class="badge rounded-pill badge-success">@localizer.Get("Open")</span>
+                                        break;
+                                    }
+                                case (EventState.OnGoing):
+                                    {
+                                        <span class="badge rounded-pill badge-info">@localizer.Get("OnGoing")</span>
+                                        break;
+                                    }
+                                case (EventState.Finish):
+                                    {
+                                        <span class="badge rounded-pill badge-danger">@localizer.Get("Finished")</span>
+                                        break;
+                                    }
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill badge-danger">@localizer.Get("BannedSingularM")</span>
+                        }
+                    </span>
+                </div>
+                <div class="d-flex justify-content-start mb-1">
+                    <span class="fw-bold">
+                        @localizer.Get("Date"):
+                    </span>
+                    @Model.StartDate.ToString("dd/MM/yyyy") - @Model.EndDate.ToString("dd/MM/yyyy")
+                </div>
+                <div class="d-flex justify-content-start mb-1">
+                    <span class="fw-bold">
+                        @localizer.Get("Location"):
+                    </span>
+                    @if (Model.IsInPerson)
+                    {
+                        <span>@Model.Address</span>
+                    }
+                    else
+                    {
+                        <span>@localizer.Get("Remote")</span>
+                    }
+                </div>
+                <div class="d-flex justify-content-start mb-1">
+                    <span class="fw-bold">
+                        @localizer.Get("URL"):
+                    </span>
+                    <a href="@Model.Url">@Model.Url</a>
+                </div>
+                @if (Model.EventTags.Any())
+                {
+                    <div class="d-flex justify-content-start mb-1">
+                        <span class="fw-bold">
+                            @localizer.Get("Skills")
+                            @foreach (EventTag tag in Model.EventTags)
+                            {
+                                <span class="badge rounded-pill badge-info">@tag.EventTagName</span>
+                            }
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.IsInPerson != false)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div id='map'></div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <script>
+        if ('@Model.IsInPerson' != 'False') {
+            $(document).ready(function () {
+                var loadLng;
+                var loadLat;
+
+                if ('@Model.IsInPerson' == 'false') {
+                    loadLng = -8.83896875965655;
+                    loadLat = 38.521685683795;
+                }
+                else {
+                    loadLng = '@Model.LongitudeText';
+                    loadLat = '@Model.LatitudeText';
+                }
+
+                mapboxgl.accessToken = 'pk.eyJ1IjoianBvcnRhcyIsImEiOiJjbGV2eDVyNnowOTUyM29rYzMycTc5eml4In0.tt2VI2R27K7LAnvS6Kl8Gg';
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [loadLng, loadLat], // starting position [lng, lat]
+                    zoom: 15 // starting zoom
+                });
+
+                const marker = new mapboxgl.Marker()
+                    .setLngLat([loadLng, loadLat])
+                    .addTo(map);
+                lngField.value = loadLng;
+                latField.value = loadLat;
+                addressField.classList.add("active");
+
+                var placedMarker = marker;
+
+                map.addControl(
+                    new MapboxGeocoder({
+                        accessToken: mapboxgl.accessToken,
+                        mapboxgl: mapboxgl
+                    })
+                );
+
+                map.addControl(new mapboxgl.NavigationControl());
+            });
+        }
+
+    </script>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Mod"))
+    {
+        <script>
+            function changeEventStatus() {
+                //Parse to javascript boolean
+                let isFeatured = ('@Model.IsFeatured' == 'True');
+                let returnUrl = encodeURIComponent('/Events/Details/@Model.EventId');
+                let url = '/AdminEvent/ChangeFeaturedStatus/@Model.EventId?newStatus=' + !isFeatured + '&returnUrl=' + returnUrl;
+                console.log(url);
+                addActionToForm(url);
+            }
+
+            function changeEventBan() {
+                //Parse to javascript boolean
+                let isBanned = ('@Model.IsBanned' == 'True');
+                let returnUrl = encodeURIComponent('/Events/Details/@Model.EventId');
+                let url = "";
+
+                if (isBanned) {
+                    url = '/AdminEvent/UnbanEvent/@Model.EventId?newStatus=' + !isBanned + '&returnUrl=' + returnUrl;
+                }
+                else {
+                    url = '/AdminEvent/BanEvent/@Model.EventId?newStatus=' + !isBanned + '&returnUrl=' + returnUrl;
+                }
+
+                console.log(url);
+                addActionToForm(url);
+            }
+
+            function addActionToForm(link) {
+                document.getElementById("logForm").action = link;
+                const myModal = new mdb.Modal(document.getElementById('logModal'));
+                myModal.show();
+            }
+        </script>
+    }
+}

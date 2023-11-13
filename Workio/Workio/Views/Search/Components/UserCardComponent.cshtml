@@ -1,0 +1,27 @@
+﻿@model Workio.Models.User
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<style>
+    .profile-picture-preview {
+        max-width: 64px;
+    }
+</style>
+
+<div class="d-flex align-items-center">
+    @if (Model.ProfilePicture != null)
+    {
+        <img class="rounded-circle profile-picture-preview" src="~/pfp/@Model.ProfilePicture" alt="Profile Picture" class="pfp profile-picture-preview" />
+    }
+    else
+    {
+        <img class="rounded-circle profile-picture-preview" src="~/pfp/default.png" alt="Profile Picture" class="rounded-circle pfp profile-picture-preview" />
+    }
+    <div class="ms-3">
+        <div><p class="fw-bold mb-1">@Model.Name</p></div>
+        <p class="text-muted mb-0">@Model.Email</p>
+    </div>
+</div>

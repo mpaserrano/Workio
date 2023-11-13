@@ -1,0 +1,114 @@
+﻿@model Workio.Models.RequestEntityStatus
+@inject Workio.Services.Interfaces.IUserService _userService
+
+@{
+    ViewData["Title"] = @localizer.Get("Details");
+    Guid userId = Model.UserId.Value;
+    var requester = await _userService.GetUser(userId);
+}
+
+<!--<h3>@localizer.Get("RequestDetails")</h3>-->
+<style>
+    .box{
+        display: flex;
+        justify-content: space-between;
+
+    }
+
+    .button {
+        border: 2px solid black;
+        color: black;
+        padding: 14px 28px;
+    }
+
+    .approve {
+        border-color: green;
+        color: green;
+    }
+
+    .reject{
+        border-color: red;
+        color: red
+    }
+
+
+</style>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="EntityRequestsIndex" asp-controller="AdminEntities">@localizer.Get("EntityRequests")</a></li>
+        <li class="breadcrumb-item">@requester.Name</li>
+    </ol>
+</nav>
+<div class="row">
+@if (Model.RequestState == RequestState.Pending)
+{
+    <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <ul class="list-group list-group-light">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="button approve text-center ms-auto me-auto">
+                            <a class="text-success" asp-action="ApproveRequest" asp-controller="AdminEntities" asp-route-id="@Model.Id">@localizer.Get("Approve")</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="button reject text-center ms-auto me-auto">
+                            <a class="text-danger" asp-action="RejectRequest" asp-controller="AdminEntities" asp-route-id="@Model.Id">@localizer.Get("Reject")</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+<div class="col-lg-9 col-md-8 mb-4">
+    <div class="card h-100">
+        <div class="card-body">
+            <table style="">
+                <tr>
+                    <th span class="fw-bold ms-4">@localizer.Get("Name"):</th>
+                    <td style="padding: 5px"> @Html.ActionLink(@requester.Name, "Index", "User", new {id = @userId})</td>
+                </tr>
+                <tr>
+                    <th span class="fw-bold ms-4">@localizer.Get("Email"):</th>
+                    <td style="padding: 5px"> @Html.ActionLink(@requester.Email, "Index", "User", new {id = @userId})</td>
+                </tr>
+                <tr>
+                    <th span class="fw-bold ms-4">@localizer.Get("Reason"):</th>
+                    <td style="padding: 5px">@Model.Motivation</td>
+                </tr>
+                <tr>
+                    <th span class="fw-bold ms-4">@localizer.Get("DateOfSubmission"):</th>
+                    <td style="padding: 5px">@Model.RequestDate</td>
+                </tr>
+                <tr>
+                    <th span class="fw-bold ms-4">@localizer.Get("FileSubmitted"):</th>
+                    <td style="padding: 5px">@Html.ActionLink("Download", "DownloadFile", new {fileName = @Model.AlteredFileName} )</td>
+                </tr>
+                <tr>
+                    <th span class="fw-bold ms-4">@localizer.Get("State"):</th>
+                    @switch (Model.RequestState)
+                    {
+                        case (RequestState.Approved):
+                            {
+                                <th span class="badge rounded-pill badge-success">@localizer.Get("Approved")</th>
+                                break;
+                            }
+                        case (RequestState.Rejected):
+                            {
+                                <th span class="badge rounded-pill badge-danger">@localizer.Get("Rejected")</th>
+                                break;
+                            }
+                        case (RequestState.Pending):
+                            {
+                                <th span class="badge rounded-pill badge-warning">@localizer.Get("Pending")</th>
+                                break;
+                            }
+                    }
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+

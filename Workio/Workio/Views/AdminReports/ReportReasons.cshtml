@@ -1,0 +1,90 @@
+﻿
+@{
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+<link href="/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+
+    #reportReasonsTable td {
+        vertical-align: middle;
+    }
+
+    table {
+        width: 100% !important;
+    }
+
+</style>
+
+<a asp-action="AddReportReason" asp-controller="AdminReports" class="btn btn-primary mb-1">@localizer.Get("AddNewReportReason")</a>
+
+
+<table id="reportReasonsTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @localizer.Get("Reason")
+
+            </th>
+            <th>
+                @localizer.Get("Type")
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+
+@section Scripts {
+    <script src="/lib/DataTables/datatables.min.js"></script>
+    <script>
+        /*$(document).ready(function () {
+            $("#myTable").DataTable({
+                paging: true,--
+                responsive: true,
+            });
+        });*/
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+        $(document).ready(function () {
+            $('#reportReasonsTable').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                searching: false,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: '/AdminReports/GetDataReportReasons',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#usersActionLogDataTable_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                    }
+                },
+                columns: [
+                    { data: 'reason' },
+                    { data: 'reasonType' },
+                    {
+                        data: "id",
+                        render: function (dataField) {
+                            return '<a href="#" onclick="addActionToForm(\'/AdminReports/RemoveReportReason/' + dataField + '\')">@localizer.Get("Remove")</a>';
+                        }
+
+                    }
+                ]
+            });
+        });
+
+    </script>
+}

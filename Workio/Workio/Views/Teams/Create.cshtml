@@ -1,0 +1,170 @@
+﻿@model Workio.Models.Team
+@{
+    ViewData["Title"] = @localizer.Get("CreateTeam");
+}
+
+<style>
+    .override-form-helper {
+        width: 100%;
+        font-size: .875em;
+        color: #757575;
+        margin-top: 3px;
+    }
+</style>
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <input asp-for="TeamName" name="TeamName" type="text" class="form-control" id="TeamName" required />
+                        <label asp-for="TeamName" class="form-label">@localizer.Get("TeamName")*</label>
+                        <span asp-validation-for="TeamName" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <input asp-for="Description" name="Description" type="text" class="form-control" id="Description" required />
+                        <label asp-for="Description" class="form-label">@localizer.Get("Description")*</label>
+                        <span asp-validation-for="Description" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <label asp-for="LanguageLocalizationId" class="form-label">@localizer.Get("TeamLanguage")</label>
+                    <select asp-for="LanguageLocalizationId" asp-items="@(new SelectList(ViewBag.Languages, nameof(Localization.LocalizationId), nameof(Localization.Language)))" class="form-select" aria-label="Team Language" required></select>
+                    <span asp-validation-for="LanguageLocalizationId" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <label asp-for="Tags" class="form-label">@localizer.Get("Tags") <a data-mdb-toggle="tooltip" title="@localizer.Get("TeamTagsQuestionMarkHelper")"><i class="fa-solid fa-circle-question"></i></a></label>
+                    <input asp-for="Tags" type="text" id="tags"/>
+                    <div class="override-form-helper">@localizer.Get("TeamTagsHelper")</div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <label asp-for="PositionsString" class="form-label">@localizer.Get("OpenPositions") <a data-mdb-toggle="tooltip" title="@localizer.Get("TeamPositionsQuestionMarkHelper")"><i class="fa-solid fa-circle-question"></i></a></label>
+                    <input asp-for="PositionsString" type="text" id="positions" />
+                    <div class="override-form-helper">@localizer.Get("TeamPositionsHelper")</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <div class="form-group">
+                        <a class="btn btn-secondary" asp-action="Index">@localizer.Get("Cancel")</a>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="form-group">
+                        <button id="submit-team" button type="submit" value="@localizer.Get("Create")" class="btn btn-primary">@localizer.Get("Create")</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            var maxTagLength = 24;
+            var maxPositionLength = 24;
+            $("#tags").selectize({
+                plugins: ["remove_button"],
+                delimiter: ",",
+                persist: false,
+                create: function (input) {
+                    return {
+                        value: input,
+                        text: input,
+                    };
+                },
+                createFilter: function(input) { return input.length <= maxTagLength; },
+                onChange: function(value) {
+                    var tags = value.split(",");
+
+                    var totalLength = tags.reduce(function (sum, tag) {
+                      return sum + tag.length;
+                    }, 0);
+
+                    var remainingLength = 192 - totalLength;
+
+                    if(remainingLength < maxTagLength)
+                        maxTagLength = remainingLength;
+                    else if(remainingLength > maxTagLength && maxTagLength < 24)
+                        maxTagLength = 24;
+
+                    var maxTags = remainingLength / 24;
+                    var currentTags = tags.length;
+                    var maxItems = maxTags + currentTags;
+                    this.settings.maxItems = maxItems;
+                    this.updatePlaceholder();
+                }
+            });
+            $("#positions").selectize({
+                plugins: ["remove_button"],
+                delimiter: ",",
+                persist: false,
+                create: function (input) {
+                    return {
+                        value: input,
+                        text: input,
+                    };
+                },
+                createFilter: function(input) { return input.length <= maxPositionLength },
+                onChange: function(value) {
+                    var positions = value.split(",");
+                    var totalLength = positions.reduce(function (sum, pos) {
+                      return sum + pos.length;
+                    }, 0);
+                    var remainingLength = 192 - totalLength;
+                    if(remainingLength < maxPositionLength)
+                        maxPositionLength = remainingLength;
+                    else if(remainingLength > maxPositionLength && maxPositionLength < 24)
+                        maxPositionLength = 24;
+                    var maxPositions = remainingLength / 24;
+                    var currentPositions = positions.length;
+                    var maxItems = maxPositions + currentPositions;
+                    this.settings.maxItems = maxItems;
+                    this.updatePlaceholder();
+                }
+            });
+        });
+    </script>
+    
+}
+
+    <script>
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+            const submitFormButton = document.getElementById("submit-team");
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    submitFormButton.disabled = false;
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    else{
+                        submitFormButton.disabled = true;
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>

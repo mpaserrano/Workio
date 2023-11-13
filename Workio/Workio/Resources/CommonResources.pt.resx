@@ -1,0 +1,2151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Company" xml:space="preserve">
+    <value>Empresa</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Data de Fim</value>
+  </data>
+  <data name="Endorsements" xml:space="preserve">
+    <value>Recomendações</value>
+  </data>
+  <data name="Experiences" xml:space="preserve">
+    <value>Experiências</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Iniciar Sessão</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Palavra-passe alterada com sucesso.</value>
+  </data>
+  <data name="PasswordChangedInvalidOldPassword" xml:space="preserve">
+    <value>Palavra-passe antiga está incorreta.</value>
+  </data>
+  <data name="OpenPositions" xml:space="preserve">
+    <value>Posições Abertas</value>
+  </data>
+  <data name="Present" xml:space="preserve">
+    <value>Presente</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Por favor preencha este campo!</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Registe-se</value>
+  </data>
+  <data name="SkillName" xml:space="preserve">
+    <value>Habilidade</value>
+  </data>
+  <data name="Skills" xml:space="preserve">
+    <value>Habilidades</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Data de Inicio</value>
+  </data>
+  <data name="TeamName" xml:space="preserve">
+    <value>Nome da Equipa</value>
+  </data>
+  <data name="TotalOfEndorsements" xml:space="preserve">
+    <value>Total de Recomendações</value>
+  </data>
+  <data name="WorkTitle" xml:space="preserve">
+    <value>Titulo da experiência</value>
+  </data>
+  <data name="YouAreBlocked" xml:space="preserve">
+    <value>Você está bloqueado por este utilizador :(</value>
+  </data>
+  <data name="Positions" xml:space="preserve">
+    <value>Posições</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceitar</value>
+  </data>
+  <data name="AcceptConnectionRequest" xml:space="preserve">
+    <value>Aceitar pedido</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Ações</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Administrador</value>
+  </data>
+  <data name="AdminDashboard" xml:space="preserve">
+    <value>Painel de Administrador</value>
+  </data>
+  <data name="AlreadyRated" xml:space="preserve">
+    <value>Já avaliaste este utilizador</value>
+  </data>
+  <data name="ApplyToBeCertified" xml:space="preserve">
+    <value>Pedir para se tornar numa Entidade Certificada</value>
+  </data>
+  <data name="AttachPDF" xml:space="preserve">
+    <value>Anexar ficheiro PDF</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Voltar à lista</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Bloquear</value>
+  </data>
+  <data name="BlockedUsers" xml:space="preserve">
+    <value>Utilizadores bloqueados</value>
+  </data>
+  <data name="Blocks" xml:space="preserve">
+    <value>Bloqueados</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="ChooseReportReason" xml:space="preserve">
+    <value>Indique a razão</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Conectar</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>Conexões</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Criar</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Criar Novo</value>
+  </data>
+  <data name="CreateTeam" xml:space="preserve">
+    <value>Criar Equipas</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Apagar</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Tem a certeza que quer apagar?</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalhes</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="EditSkill" xml:space="preserve">
+    <value>Editar skill</value>
+  </data>
+  <data name="Endorse" xml:space="preserve">
+    <value>Recomendar</value>
+  </data>
+  <data name="EntityNeeds" xml:space="preserve">
+    <value>Para ser uma entidade certificada precisas</value>
+  </data>
+  <data name="EntityStatusRequest" xml:space="preserve">
+    <value>Pedido de estatuto de entidade registada</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="ErrorOcurred" xml:space="preserve">
+    <value>Ocorreu um erro a processar o seu pedido</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Evento</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Eventos</value>
+  </data>
+  <data name="FieldCheck" xml:space="preserve">
+    <value>Depois de preencheres os campos, clica no botão para submeteres o pedido</value>
+  </data>
+  <data name="FileSubmitted" xml:space="preserve">
+    <value>Ficheiro Submetido</value>
+  </data>
+  <data name="FinishProject" xml:space="preserve">
+    <value>Concluir Projeto</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="GiveOwnership" xml:space="preserve">
+    <value>Dar Posse</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="LeaveTeam" xml:space="preserve">
+    <value>Sair da equipa</value>
+  </data>
+  <data name="LinkedIn" xml:space="preserve">
+    <value>LinkedIn</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Membros</value>
+  </data>
+  <data name="MyTeams" xml:space="preserve">
+    <value>As minhas equipas</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>Sem dados</value>
+  </data>
+  <data name="NoGitHubProfile" xml:space="preserve">
+    <value>Este utilizador nao tem um perfil GitHub configurado</value>
+  </data>
+  <data name="NoLinkedInProfile" xml:space="preserve">
+    <value>Este utilizador nao tem um perfil LinkedIn configurado</value>
+  </data>
+  <data name="OpenRegistrations" xml:space="preserve">
+    <value>Abrir Inscrições</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="PendingRequests" xml:space="preserve">
+    <value>Pedidos Pendentes</value>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>Privacidade</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Avaliar</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Avaliação</value>
+  </data>
+  <data name="RatingHelp" xml:space="preserve">
+    <value>Aqui podes avaliar um utilizador de 0 a 5 e deixar um comentário</value>
+  </data>
+  <data name="RatingModel" xml:space="preserve">
+    <value>Modelo de avaliações</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Razão</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registar</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Rejeitar</value>
+  </data>
+  <data name="RejectConnectionRequest" xml:space="preserve">
+    <value>Rejeitar pedido</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="RemoveConnection" xml:space="preserve">
+    <value>Remover Conexão</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Denunciar</value>
+  </data>
+  <data name="ReportReason" xml:space="preserve">
+    <value>Tipo de denuncia</value>
+  </data>
+  <data name="ReportTeam" xml:space="preserve">
+    <value>Denunciar Equipa</value>
+  </data>
+  <data name="ReportThankYou" xml:space="preserve">
+    <value>Obrigado por denunciar</value>
+  </data>
+  <data name="ReportUser" xml:space="preserve">
+    <value>Denunciar Utilizador</value>
+  </data>
+  <data name="RequestAccess" xml:space="preserve">
+    <value>Pedir Acesso</value>
+  </data>
+  <data name="RequestDetails" xml:space="preserve">
+    <value>Detalhes do pedido</value>
+  </data>
+  <data name="RequestToBeEntity" xml:space="preserve">
+    <value>Pedido para se tornar numa entidade certificada</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Guardar Mudanças</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Procurar</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Definições</value>
+  </data>
+  <data name="ShowMore" xml:space="preserve">
+    <value>Ver Mais</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submeter</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Etiquetas</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Equipa</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Equipas</value>
+  </data>
+  <data name="Unblock" xml:space="preserve">
+    <value>Desbloquear</value>
+  </data>
+  <data name="Unendorse" xml:space="preserve">
+    <value>Desaprovar</value>
+  </data>
+  <data name="User404" xml:space="preserve">
+    <value>Utilizador não encontrado :(</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Utilizadores</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bem-vindo</value>
+  </data>
+  <data name="WhyBeCertifiedEntity" xml:space="preserve">
+    <value>Porque queres ser uma entidade certificada?</value>
+  </data>
+  <data name="Workio" xml:space="preserve">
+    <value>Workio</value>
+  </data>
+  <data name="YouAreRating" xml:space="preserve">
+    <value>Estás a avaliar</value>
+  </data>
+  <data name="2FA" xml:space="preserve">
+    <value>Autenticação de dois fatores</value>
+  </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>Sobre Mim</value>
+  </data>
+  <data name="AcceptInvite" xml:space="preserve">
+    <value>Aceitar Convite</value>
+  </data>
+  <data name="AddLogin" xml:space="preserve">
+    <value>Adicionar outro serviço de login.</value>
+  </data>
+  <data name="BannerPreview" xml:space="preserve">
+    <value>Pré-visualização do Banner</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Mudar email</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Mudar a palavra-chave</value>
+  </data>
+  <data name="CheckTerms" xml:space="preserve">
+    <value>Concordo com os Termos e Condições.</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="ClickToLogOut" xml:space="preserve">
+    <value>Clica aqui para sair</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Fechado</value>
+  </data>
+  <data name="CloseRegistrations" xml:space="preserve">
+    <value>Fechar Inscrições</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comentário</value>
+  </data>
+  <data name="ConfirmEmail" xml:space="preserve">
+    <value>Confirmar email</value>
+  </data>
+  <data name="ConfirmEmailChange" xml:space="preserve">
+    <value>Confirmar mudança de email</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmar palavra-chave</value>
+  </data>
+  <data name="CreateEvent" xml:space="preserve">
+    <value>Criar Evento</value>
+  </data>
+  <data name="Creator" xml:space="preserve">
+    <value>Criador</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EnterYourEmail" xml:space="preserve">
+    <value>Introduz o teu email.</value>
+  </data>
+  <data name="EventTags" xml:space="preserve">
+    <value>Tags do Evento</value>
+  </data>
+  <data name="EventTagsHelp" xml:space="preserve">
+    <value>Escreve as tags do evento separadas por ,. Ex: games, gamejam, etc...</value>
+  </data>
+  <data name="EventURLHelp" xml:space="preserve">
+    <value>Site oficial do host. Ex: https://itch.io</value>
+  </data>
+  <data name="ExternalLoginAccPt1" xml:space="preserve">
+    <value>Associa a tua</value>
+  </data>
+  <data name="ExternalLoginAccPt2" xml:space="preserve">
+    <value>account.</value>
+  </data>
+  <data name="ExternalLoginRegSucc1" xml:space="preserve">
+    <value>Registaste-te com sucesso utilizando</value>
+  </data>
+  <data name="ExternalLoginRegSucc2" xml:space="preserve">
+    <value>Introduz o teu nome desejado e clica no botão para finalizar o login</value>
+  </data>
+  <data name="ExternalLogins" xml:space="preserve">
+    <value>Logins Externos</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>Diretório</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Acabado</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Esqueci-me da palavra-chave</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Esqueceste-te da tua palavra-chave?</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="InvitesSent" xml:space="preserve">
+    <value>Pedidos Enviados</value>
+  </data>
+  <data name="InviteUser" xml:space="preserve">
+    <value>Convidar Utilizador</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="LearnAbout" xml:space="preserve">
+    <value>Aprender sobre</value>
+  </data>
+  <data name="LoginWAccPt1" xml:space="preserve">
+    <value>Faz login com a tua</value>
+  </data>
+  <data name="LoginWAccPt2" xml:space="preserve">
+    <value>account</value>
+  </data>
+  <data name="LogOutSuccess" xml:space="preserve">
+    <value>Saiste com sucesso da aplicação.</value>
+  </data>
+  <data name="Log_In" xml:space="preserve">
+    <value>Iniciar sessão</value>
+  </data>
+  <data name="Log_Out" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="ManageAppearance" xml:space="preserve">
+    <value>Gerir a aparência</value>
+  </data>
+  <data name="ManageEmail" xml:space="preserve">
+    <value>Gerir Email</value>
+  </data>
+  <data name="ManageYourExternalLogins" xml:space="preserve">
+    <value>Gerir logins externos</value>
+  </data>
+  <data name="NewEmail" xml:space="preserve">
+    <value>Novo email</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Palavra-chave nova</value>
+  </data>
+  <data name="NotAMemberYet" xml:space="preserve">
+    <value>Ainda não és membro?</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Palavra-chave antiga</value>
+  </data>
+  <data name="OnGoing" xml:space="preserve">
+    <value>A decorrer</value>
+  </data>
+  <data name="ParticipationRequests" xml:space="preserve">
+    <value>Pedidos de participação</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Palavra-chave</value>
+  </data>
+  <data name="PendingConnections" xml:space="preserve">
+    <value>Conexões Pendentes</value>
+  </data>
+  <data name="PersonalData" xml:space="preserve">
+    <value>Dados Pessoais</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Política de privacidade</value>
+  </data>
+  <data name="ProfilePicture" xml:space="preserve">
+    <value>Foto de perfil</value>
+  </data>
+  <data name="RaterID" xml:space="preserve">
+    <value>ID do avaliador</value>
+  </data>
+  <data name="RateUser" xml:space="preserve">
+    <value>Avaliar Utilizador</value>
+  </data>
+  <data name="ReceiverID" xml:space="preserve">
+    <value>ID do recetor</value>
+  </data>
+  <data name="RegisteredLogins" xml:space="preserve">
+    <value>Logins registados</value>
+  </data>
+  <data name="RejectInvite" xml:space="preserve">
+    <value>Rejeitar Convite</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Lembrar-me?</value>
+  </data>
+  <data name="RemoveInterest" xml:space="preserve">
+    <value>Remover interesse</value>
+  </data>
+  <data name="ReportEvent" xml:space="preserve">
+    <value>Denunciar Evento</value>
+  </data>
+  <data name="RequestPendingApproval" xml:space="preserve">
+    <value>Pedido à espera de aprovação</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Alterar</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Alterar palavra-chave</value>
+  </data>
+  <data name="ResetYourPassword" xml:space="preserve">
+    <value>Altera a tua palavra-chave</value>
+  </data>
+  <data name="SearchForUsers" xml:space="preserve">
+    <value>Procurar utilizadores...</value>
+  </data>
+  <data name="SendVerificationEmail" xml:space="preserve">
+    <value>Enviar email de confirmação</value>
+  </data>
+  <data name="ShowInterestMember" xml:space="preserve">
+    <value>Mostrar interesse como membro</value>
+  </data>
+  <data name="SignUpNow" xml:space="preserve">
+    <value>Regista-te agora</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Submeter Pedido</value>
+  </data>
+  <data name="TeamInvites" xml:space="preserve">
+    <value>Pedidos de equipas</value>
+  </data>
+  <data name="TeamLanguage" xml:space="preserve">
+    <value>Idioma da equipa</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="UpdatePassword" xml:space="preserve">
+    <value>Mudar palavra-chave</value>
+  </data>
+  <data name="UploadBanner" xml:space="preserve">
+    <value>Carregar imagem do banner</value>
+  </data>
+  <data name="URL" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="AddMilestone" xml:space="preserve">
+    <value>Adicionar Objetivo</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Morada</value>
+  </data>
+  <data name="ChooseMapLocation" xml:space="preserve">
+    <value>Escolha um sitio no mapa</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Criado</value>
+  </data>
+  <data name="DontHaveATeam" xml:space="preserve">
+    <value>Não tens uma equipa? Cria uma</value>
+  </data>
+  <data name="Enrollments" xml:space="preserve">
+    <value>Inscrições</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+    <value>Acabar</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>aqui</value>
+  </data>
+  <data name="IsRemote" xml:space="preserve">
+    <value>É remoto</value>
+  </data>
+  <data name="Joined" xml:space="preserve">
+    <value>Interessado</value>
+  </data>
+  <data name="MapLocationHelp" xml:space="preserve">
+    <value>Clique no mapa para escolher a localização do evento, pode também pesquisar</value>
+  </data>
+  <data name="Milestone" xml:space="preserve">
+    <value>Objetivo</value>
+  </data>
+  <data name="Milestones" xml:space="preserve">
+    <value>Objetivos</value>
+  </data>
+  <data name="MilestoneTitle" xml:space="preserve">
+    <value>Título do objetivo</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Aberto</value>
+  </data>
+  <data name="UpdateFilter" xml:space="preserve">
+    <value>Atualizar Filtro</value>
+  </data>
+  <data name="EventEnrollments" xml:space="preserve">
+    <value>Inscrições no evento</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Localização</value>
+  </data>
+  <data name="RemoveInterestTeam" xml:space="preserve">
+    <value>Remove interesse da equipa</value>
+  </data>
+  <data name="ShowInterestTeam" xml:space="preserve">
+    <value>Mostrar interesse como equipa</value>
+  </data>
+  <data name="ActionReason" xml:space="preserve">
+    <value>Razão da ação</value>
+  </data>
+  <data name="ActionType" xml:space="preserve">
+    <value>Tipo de ação</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="AddNewReportReason" xml:space="preserve">
+    <value>Criar razão de denúncia</value>
+  </data>
+  <data name="AllF" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="AllM" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Aprovar</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="ArchivedPluralF" xml:space="preserve">
+    <value>Arquivadas</value>
+  </data>
+  <data name="ArchivedPluralM" xml:space="preserve">
+    <value>Arquivados</value>
+  </data>
+  <data name="AreYouSure?" xml:space="preserve">
+    <value>Tens a certeza?</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="Ban" xml:space="preserve">
+    <value>Ban</value>
+  </data>
+  <data name="BanEnds" xml:space="preserve">
+    <value>Fim do ban</value>
+  </data>
+  <data name="Banned" xml:space="preserve">
+    <value>Banned</value>
+  </data>
+  <data name="BannedPluralF" xml:space="preserve">
+    <value>Banidas</value>
+  </data>
+  <data name="BannedPluralM" xml:space="preserve">
+    <value>Banidos</value>
+  </data>
+  <data name="BannedSingularF" xml:space="preserve">
+    <value>Banida</value>
+  </data>
+  <data name="BannedSingularM" xml:space="preserve">
+    <value>Banido</value>
+  </data>
+  <data name="ChangedEvent" xml:space="preserve">
+    <value>Evento alterado</value>
+  </data>
+  <data name="ChangedTeam" xml:space="preserve">
+    <value>Equipa alterada</value>
+  </data>
+  <data name="ChangedUser" xml:space="preserve">
+    <value>Utilizador alterado</value>
+  </data>
+  <data name="Changes" xml:space="preserve">
+    <value>Mudanças</value>
+  </data>
+  <data name="ChangesModerationLog" xml:space="preserve">
+    <value>Registo de mudanças de moderação</value>
+  </data>
+  <data name="ClosedPluralF" xml:space="preserve">
+    <value>Fechadas</value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>Data de criação</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dasboard</value>
+  </data>
+  <data name="DateOfSubmission" xml:space="preserve">
+    <value>Data de submissão</value>
+  </data>
+  <data name="EntityRequests" xml:space="preserve">
+    <value>Pedidos de entidade</value>
+  </data>
+  <data name="EventInformation" xml:space="preserve">
+    <value>Informação de evento</value>
+  </data>
+  <data name="EventModerationLog" xml:space="preserve">
+    <value>Registo de evento</value>
+  </data>
+  <data name="EventReport" xml:space="preserve">
+    <value>Denúncia de evento</value>
+  </data>
+  <data name="EventsModeration" xml:space="preserve">
+    <value>Moderação de eventos</value>
+  </data>
+  <data name="EventsSoon" xml:space="preserve">
+    <value>Eventos em breve</value>
+  </data>
+  <data name="EventTitle" xml:space="preserve">
+    <value>Título do evento</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Ficheiro</value>
+  </data>
+  <data name="FinishedPluralF" xml:space="preserve">
+    <value>Acabadas</value>
+  </data>
+  <data name="Logs" xml:space="preserve">
+    <value>Registos</value>
+  </data>
+  <data name="ManageEvents" xml:space="preserve">
+    <value>Gerir Eventos</value>
+  </data>
+  <data name="ManageTeams" xml:space="preserve">
+    <value>Gerir equipas</value>
+  </data>
+  <data name="NotBanned" xml:space="preserve">
+    <value>Sem ban</value>
+  </data>
+  <data name="NumberOfReports" xml:space="preserve">
+    <value>Número de denúncias</value>
+  </data>
+  <data name="OpenPluralF" xml:space="preserve">
+    <value>Abertas</value>
+  </data>
+  <data name="OtherReports" xml:space="preserve">
+    <value>Outras denúncias</value>
+  </data>
+  <data name="PersonalInformation" xml:space="preserve">
+    <value>Informação Pessoal</value>
+  </data>
+  <data name="PreviousReports" xml:space="preserve">
+    <value>Denúncias anteriores</value>
+  </data>
+  <data name="RecommendedPluralF" xml:space="preserve">
+    <value>Recomendadas</value>
+  </data>
+  <data name="RecommendedPluralM" xml:space="preserve">
+    <value>Recomendados</value>
+  </data>
+  <data name="RegularUsersOnly" xml:space="preserve">
+    <value>Esta página está disponiveis apenas para utilizadores não certificados</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejeitado</value>
+  </data>
+  <data name="Remote" xml:space="preserve">
+    <value>Remoto</value>
+  </data>
+  <data name="Reported" xml:space="preserve">
+    <value>Reportado</value>
+  </data>
+  <data name="Reporter" xml:space="preserve">
+    <value>Denunciante</value>
+  </data>
+  <data name="ReportName" xml:space="preserve">
+    <value>Denúncia</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Denúncias</value>
+  </data>
+  <data name="ReportType" xml:space="preserve">
+    <value>Alvo de denúncia</value>
+  </data>
+  <data name="RequestPending" xml:space="preserve">
+    <value>Pedido pendente</value>
+  </data>
+  <data name="RequestRejected" xml:space="preserve">
+    <value>Pedido rejeitado</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Permissão</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Permissões</value>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>Ver Mais</value>
+  </data>
+  <data name="ShowingLogsFor" xml:space="preserve">
+    <value>Mostrar registos para</value>
+  </data>
+  <data name="ShowInterest" xml:space="preserve">
+    <value>Mostrar Interesse</value>
+  </data>
+  <data name="Suspended" xml:space="preserve">
+    <value>Suspenso</value>
+  </data>
+  <data name="TeamInformation" xml:space="preserve">
+    <value>Informação da equipa</value>
+  </data>
+  <data name="TeamModerationLog" xml:space="preserve">
+    <value>Registo de equipa</value>
+  </data>
+  <data name="TeamReport" xml:space="preserve">
+    <value>Denúncia de equipa</value>
+  </data>
+  <data name="TeamsAreLookingForPeople" xml:space="preserve">
+    <value>Equipas à procura de membros</value>
+  </data>
+  <data name="TeamsModeration" xml:space="preserve">
+    <value>Moderação de equipas</value>
+  </data>
+  <data name="TopEvents" xml:space="preserve">
+    <value>Eventos Principais</value>
+  </data>
+  <data name="Unban" xml:space="preserve">
+    <value>Unban</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Utilizador</value>
+  </data>
+  <data name="UserModerationLog" xml:space="preserve">
+    <value>Registo de utilizador</value>
+  </data>
+  <data name="UserReport" xml:space="preserve">
+    <value>Denúncia de utilizador</value>
+  </data>
+  <data name="UsersAreLookingForATeam" xml:space="preserve">
+    <value>Utilizadores à procura de equipas</value>
+  </data>
+  <data name="UsersModeration" xml:space="preserve">
+    <value>Moderação de utilizadores</value>
+  </data>
+  <data name="HomeEventsCalendarHeader" xml:space="preserve">
+    <value>Calendário de Eventos</value>
+  </data>
+  <data name="AcceptedRequestTeam" xml:space="preserve">
+    <value>Pedido de participação aceite</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Todas as equipas</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Abril</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Agosto</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Dezembro</value>
+  </data>
+  <data name="EventsCreatedPerMonth" xml:space="preserve">
+    <value>Eventos criadas por m\u00EAs</value>
+  </data>
+  <data name="EventsCreatedThisYear" xml:space="preserve">
+    <value>Eventos criados este ano</value>
+  </data>
+  <data name="EventsNearMe" xml:space="preserve">
+    <value>Eventos perto de mim</value>
+  </data>
+  <data name="EventsParticipated" xml:space="preserve">
+    <value>Participacao em eventos</value>
+  </data>
+  <data name="EventsParticipatedIn" xml:space="preserve">
+    <value>Participação em eventos</value>
+  </data>
+  <data name="EventsSuspended" xml:space="preserve">
+    <value>Eventos banidos</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Fevereiro</value>
+  </data>
+  <data name="FindIt" xml:space="preserve">
+    <value>Descobrir</value>
+  </data>
+  <data name="FoundTeam" xml:space="preserve">
+    <value>Encontrou equipa</value>
+  </data>
+  <data name="GotInvited" xml:space="preserve">
+    <value>Recebeu Convite</value>
+  </data>
+  <data name="Interested" xml:space="preserve">
+    <value>Interessado</value>
+  </data>
+  <data name="InterestedInEvents" xml:space="preserve">
+    <value>Interessados em eventos</value>
+  </data>
+  <data name="InterestedTeams" xml:space="preserve">
+    <value>Equipas interessadas</value>
+  </data>
+  <data name="InterestedUsers" xml:space="preserve">
+    <value>Utilizadores interessados</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Janeiro</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Junho</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Junho</value>
+  </data>
+  <data name="Loading..." xml:space="preserve">
+    <value>A carregar...</value>
+  </data>
+  <data name="MapClickForCurrentLocation" xml:space="preserve">
+    <value>Clique no mapa para usar a sua localização atual</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Março</value>
+  </data>
+  <data name="MarkAsRead" xml:space="preserve">
+    <value>Marcar como lida</value>
+  </data>
+  <data name="MarkAsUnread" xml:space="preserve">
+    <value>Marcar como não lida</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Maio</value>
+  </data>
+  <data name="NewF" xml:space="preserve">
+    <value>Nova</value>
+  </data>
+  <data name="NewRequestTeam" xml:space="preserve">
+    <value>Novo pedido de participação</value>
+  </data>
+  <data name="NoEventsFound" xml:space="preserve">
+    <value>Não foram encontrados eventos</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>Sem equipa</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notificações</value>
+  </data>
+  <data name="NotInterested" xml:space="preserve">
+    <value>Sem interesse</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Novembro</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Outubro</value>
+  </data>
+  <data name="Owned" xml:space="preserve">
+    <value>Dono</value>
+  </data>
+  <data name="RemoveTeamInterest" xml:space="preserve">
+    <value>Remover interesse da equipa</value>
+  </data>
+  <data name="RequestedAccess" xml:space="preserve">
+    <value>Pediu Acesso</value>
+  </data>
+  <data name="SearchFromHere" xml:space="preserve">
+    <value>Procurar daqui</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Setembro</value>
+  </data>
+  <data name="ShowAllF" xml:space="preserve">
+    <value>Mostrar todas</value>
+  </data>
+  <data name="ShowReadF" xml:space="preserve">
+    <value>Mostrar lidas</value>
+  </data>
+  <data name="ShowUnreadF" xml:space="preserve">
+    <value>Mostrar não lidas</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Estatísticas</value>
+  </data>
+  <data name="SuspendedEvent" xml:space="preserve">
+    <value>Este evento foi suspenso</value>
+  </data>
+  <data name="SuspendedTeam" xml:space="preserve">
+    <value>Esta equipa foi suspensa</value>
+  </data>
+  <data name="TeamInvolvement" xml:space="preserve">
+    <value>Como se juntou às equipas</value>
+  </data>
+  <data name="TeamNewOwner" xml:space="preserve">
+    <value>A equipa {0} tem dono novo</value>
+  </data>
+  <data name="TeamParticipation" xml:space="preserve">
+    <value>Como se juntou às equipas</value>
+  </data>
+  <data name="TeamsCompleted" xml:space="preserve">
+    <value>Equipas Acabadas</value>
+  </data>
+  <data name="TeamsCreatedPerMonth" xml:space="preserve">
+    <value>Equipas criadas por m\u00EAs</value>
+  </data>
+  <data name="TeamsCreatedthisYear" xml:space="preserve">
+    <value>Equipas criadas este ano</value>
+  </data>
+  <data name="TeamsParticipatedIn" xml:space="preserve">
+    <value>Estado das equipas que faz parte</value>
+  </data>
+  <data name="TeamsStatus" xml:space="preserve">
+    <value>Estados das equipas</value>
+  </data>
+  <data name="TeamsSuspended" xml:space="preserve">
+    <value>Equipas banidas</value>
+  </data>
+  <data name="TeamStatusUpdatedTo" xml:space="preserve">
+    <value>Estado da equipa atualizado para {0}</value>
+  </data>
+  <data name="TeamsYouAreAMemberOf" xml:space="preserve">
+    <value>Equipas das quais fazes parte</value>
+  </data>
+  <data name="TotalEventsCreated" xml:space="preserve">
+    <value>Total de eventos criados</value>
+  </data>
+  <data name="TotalTeamsCreated" xml:space="preserve">
+    <value>Total de equipas criadas</value>
+  </data>
+  <data name="TotalUsersRegistered" xml:space="preserve">
+    <value>Total de utilizadores registados</value>
+  </data>
+  <data name="UsersBanned" xml:space="preserve">
+    <value>Utilizadores banidos</value>
+  </data>
+  <data name="UsersInterestedinEvents" xml:space="preserve">
+    <value>Utilizadores interessados em eventos</value>
+  </data>
+  <data name="UsersRegisteredPerMonth" xml:space="preserve">
+    <value>Utilizadores registados por m\u00EAs</value>
+  </data>
+  <data name="UsersRegisteredthisYear" xml:space="preserve">
+    <value>Utilizadores registados este ano</value>
+  </data>
+  <data name="UsersVSTeamsInterest" xml:space="preserve">
+    <value>Interesse de utilizadores VS Interesse de equipas</value>
+  </data>
+  <data name="UsersVSTeamsInterestinEvents" xml:space="preserve">
+    <value>Interesse de utilizadores VS interesse de equipas em eventos</value>
+  </data>
+  <data name="UsersWhoFoundTeam" xml:space="preserve">
+    <value>Utilizadores que encontraram equipa</value>
+  </data>
+  <data name="UsersWithTeam" xml:space="preserve">
+    <value>Utilizadores com equipa</value>
+  </data>
+  <data name="YouAreHere" xml:space="preserve">
+    <value>Estás aqui</value>
+  </data>
+  <data name="YouAreTeamNewOwner" xml:space="preserve">
+    <value>És o novo dono de {0}</value>
+  </data>
+  <data name="YouWereInvitedToTeam" xml:space="preserve">
+    <value>Foste convidado para {0}</value>
+  </data>
+  <data name="Click" xml:space="preserve">
+    <value>Clique</value>
+  </data>
+  <data name="NewConnectionNotification" xml:space="preserve">
+    <value>Nova conexão</value>
+  </data>
+  <data name="toSeeMore" xml:space="preserve">
+    <value>para ver mais</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notificação</value>
+  </data>
+  <data name="RequestToConnectSent" xml:space="preserve">
+    <value>Pedido de conexão enviado</value>
+  </data>
+  <data name="Account Suspended" xml:space="preserve">
+    <value>Conta suspensa</value>
+  </data>
+  <data name="New Notification" xml:space="preserve">
+    <value>Nova notificação</value>
+  </data>
+  <data name="Remove Ban Account" xml:space="preserve">
+    <value>Suspensão removida</value>
+  </data>
+  <data name="UserUnsuspendedSuccess" xml:space="preserve">
+    <value>Removida a suspensão</value>
+  </data>
+  <data name="ProfileGraphEmptyEventsParticipatedOwner" xml:space="preserve">
+    <value>Você ainda não participou de nenhum evento</value>
+  </data>
+  <data name="ProfileGraphEmptyEventsParticipatedVisitor" xml:space="preserve">
+    <value>Este utilizador ainda não participou de nenhum evento</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsInvolvedOwner" xml:space="preserve">
+    <value>Você ainda não se juntou a nenhuma equipa</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsInvolvedVisitor" xml:space="preserve">
+    <value>Este utilizador ainda não se juntou a nenhuma equipa</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsParticipatedOwner" xml:space="preserve">
+    <value>Você ainda não se juntou a nenhuma equipa</value>
+  </data>
+  <data name="ProfileGraphEmptyTeamsParticipatedVisitor" xml:space="preserve">
+    <value>Este utilizador ainda não se juntou a nenhuma equipa</value>
+  </data>
+  <data name="AdminStatsOtherData" xml:space="preserve">
+    <value>Outros dados</value>
+  </data>
+  <data name="StatsAllValueOutOfValue" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="StatsEventsCreations" xml:space="preserve">
+    <value>Criação de eventos</value>
+  </data>
+  <data name="StatsEventsInteressesOrigins" xml:space="preserve">
+    <value>Origem dos interesses</value>
+  </data>
+  <data name="StatsEventsNoGraphDataEventInteressesOrigin" xml:space="preserve">
+    <value>Sem dados a apresentar.</value>
+  </data>
+  <data name="StatsEventsNoGraphDataEventsPerMonth" xml:space="preserve">
+    <value>Não existe eventos criados este ano.</value>
+  </data>
+  <data name="StatsEventsNoGraphDataEventsUsersInteressed" xml:space="preserve">
+    <value>Sem dados a apresentar.</value>
+  </data>
+  <data name="StatsEventsPerMonthEventsLegend" xml:space="preserve">
+    <value>Eventos</value>
+  </data>
+  <data name="StatsTeamsCreations" xml:space="preserve">
+    <value>Criação de equipas</value>
+  </data>
+  <data name="StatsTeamsNoGraphDataTeamsPerMonth" xml:space="preserve">
+    <value>Não existe equipas criadas este ano.</value>
+  </data>
+  <data name="StatsTeamsNoGraphDataTeamsStates" xml:space="preserve">
+    <value>Não existe equipas criadas.</value>
+  </data>
+  <data name="StatsTeamsPerMonthTeamsLegend" xml:space="preserve">
+    <value>Equipas</value>
+  </data>
+  <data name="StatsUsersNoGraphDataUsersPerMonth" xml:space="preserve">
+    <value>Não existe utilizadores novos este ano.</value>
+  </data>
+  <data name="StatsUsersNoGraphDataUsersWithTeam" xml:space="preserve">
+    <value>Sem dados a apresentar.</value>
+  </data>
+  <data name="StatsUsersPerMonthUsersLegend" xml:space="preserve">
+    <value>Utilizadores</value>
+  </data>
+  <data name="StatsUsersRegistations" xml:space="preserve">
+    <value>Registo de utilizadores</value>
+  </data>
+  <data name="FeaturedEvent" xml:space="preserve">
+    <value>Evento destacado</value>
+  </data>
+  <data name="AdminOptionRemoveEventBan" xml:space="preserve">
+    <value>Retirar banimento</value>
+  </data>
+  <data name="AdminOptionRemoveEventFeatured" xml:space="preserve">
+    <value>Remover destaque do evento</value>
+  </data>
+  <data name="AdminOptionSetEventBan" xml:space="preserve">
+    <value>Banir evento</value>
+  </data>
+  <data name="AdminOptionSetEventFeatured" xml:space="preserve">
+    <value>Destacar evento</value>
+  </data>
+  <data name="OpenDMs" xml:space="preserve">
+    <value>Receber mensagens de outros utilizadores</value>
+  </data>
+  <data name="ReceiveIRLNotifications" xml:space="preserve">
+    <value>Receber notificações em tempo real</value>
+  </data>
+  <data name="SendEmailNotifications" xml:space="preserve">
+    <value>Receber notificações por email</value>
+  </data>
+  <data name="YourPrivacySettingsHaveBeenUpdated" xml:space="preserve">
+    <value>As tuas definições de privacidade foram atualizadas</value>
+  </data>
+  <data name="ConfirmAction?" xml:space="preserve">
+    <value>Tem a certeza desta ação?</value>
+  </data>
+  <data name="Leave Chat" xml:space="preserve">
+    <value>Abandonar Conversa</value>
+  </data>
+  <data name="Leaving this chat also means leaving your team. Do you still want to leave?" xml:space="preserve">
+    <value>Abandonar esta conversa também significa abandonar a tua equipa. Deseja, mesmo assim, progredir?</value>
+  </data>
+  <data name="ChangeFeatured" xml:space="preserve">
+    <value>Alterar destaque do evento</value>
+  </data>
+  <data name="MarkAsFeatured" xml:space="preserve">
+    <value>Evento destacado!</value>
+  </data>
+  <data name="RemoveFeatured" xml:space="preserve">
+    <value>Evento removido dos destaques</value>
+  </data>
+  <data name="SuccessChangingFeaturedStatus" xml:space="preserve">
+    <value>Sucesso alterando o destaque do evento</value>
+  </data>
+  <data name="No Actions" xml:space="preserve">
+    <value>Sem Ações</value>
+  </data>
+  <data name="CancelConnectionRequest" xml:space="preserve">
+    <value>Cancelar pedido</value>
+  </data>
+  <data name="Connection Removed" xml:space="preserve">
+    <value>Conexão removida</value>
+  </data>
+  <data name="Error accepting request. Request may be invalid" xml:space="preserve">
+    <value>Erro ao aceitar pedido. O pedido pode já não ser válido.</value>
+  </data>
+  <data name="Error while cancelling request. Request may be invalid." xml:space="preserve">
+    <value>Erro ao cancelar pedido. O pedido pode já não ser válido</value>
+  </data>
+  <data name="Error while rejecting request. Request may be invalid." xml:space="preserve">
+    <value>Erro ao rejeitar pedido. O pedido pode já não ser válido.</value>
+  </data>
+  <data name="Error while removing connection. Connection may be invalid." xml:space="preserve">
+    <value>Erro ao remover conexão. A conexão pode já não ser válida.</value>
+  </data>
+  <data name="FailedSendingRequest" xml:space="preserve">
+    <value>Envio do pedido falhou</value>
+  </data>
+  <data name="Rejected request" xml:space="preserve">
+    <value>Pedido rejeitado</value>
+  </data>
+  <data name="Request Accepted" xml:space="preserve">
+    <value>Pedido aceite</value>
+  </data>
+  <data name="Request cancelled" xml:space="preserve">
+    <value>Pedido cancelado</value>
+  </data>
+  <data name="SendMessage" xml:space="preserve">
+    <value>Enviar mensagem</value>
+  </data>
+  <data name="EventTagsQuestionMarkHelper" xml:space="preserve">
+    <value>Chaves para identificar o contexto do evento</value>
+  </data>
+  <data name="TeamPositionsHelper" xml:space="preserve">
+    <value>Escreva as posições separadas por,. Ex: programador, designer grafico, ...</value>
+  </data>
+  <data name="TeamPositionsQuestionMarkHelper" xml:space="preserve">
+    <value>Responsabilidades necessárias na equipa</value>
+  </data>
+  <data name="TeamTagsHelper" xml:space="preserve">
+    <value>Escreva as etiquetas separadas por ,. Ex: website, receitas, comida, ...</value>
+  </data>
+  <data name="TeamTagsQuestionMarkHelper" xml:space="preserve">
+    <value>Chaves para identificar o contexto da equipa</value>
+  </data>
+  <data name="RatingSubmitted" xml:space="preserve">
+    <value>Avaliação submetida</value>
+  </data>
+  <data name="RatingUpdated" xml:space="preserve">
+    <value>Avaliação atualizada</value>
+  </data>
+  <data name="RatingUpdateFail" xml:space="preserve">
+    <value>Não foi possível atualizar a avaliação</value>
+  </data>
+  <data name="RatingValid" xml:space="preserve">
+    <value>Tem de estar entre 0 e 5</value>
+  </data>
+  <data name="Can't delete Admin" xml:space="preserve">
+    <value>Não é possivel eliminar uma conta Admin</value>
+  </data>
+  <data name="Delete data and close my account" xml:space="preserve">
+    <value>Apagar dados e fechar conta</value>
+  </data>
+  <data name="Delete Personal Data" xml:space="preserve">
+    <value>Eliminar dados pessoais</value>
+  </data>
+  <data name="Deleting this data will permanently remove your account, and this cannot be recovered." xml:space="preserve">
+    <value>Eliminar a sua informação irá remover a sua conta permanentemente, sem possibilidade de recuperação.</value>
+  </data>
+  <data name="Error deleting user" xml:space="preserve">
+    <value>Erro ao eliminar conta</value>
+  </data>
+  <data name="Error: Give ownership of your teams first!" xml:space="preserve">
+    <value>Não é possivel eliminar a conta enquanto for lider de algumas equipas.</value>
+  </data>
+  <data name="Incorrect password" xml:space="preserve">
+    <value>Password Incorreta</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="All Events" xml:space="preserve">
+    <value>Todos os eventos</value>
+  </data>
+  <data name="Change your account settings" xml:space="preserve">
+    <value>Altera as configurações da conta</value>
+  </data>
+  <data name="GetRandomTeam" xml:space="preserve">
+    <value>Obter uma equipa aleatória</value>
+  </data>
+  <data name="Manage your account" xml:space="preserve">
+    <value>Gere a tua conta</value>
+  </data>
+  <data name="Save changes" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Search for a team name, skill or position" xml:space="preserve">
+    <value>Procura por uma equipa, habilidade ou posição</value>
+  </data>
+  <data name="Search Team" xml:space="preserve">
+    <value>Procurar equipa</value>
+  </data>
+  <data name="Send Message" xml:space="preserve">
+    <value>Enviar mensagem</value>
+  </data>
+  <data name="Share via..." xml:space="preserve">
+    <value>Partilhar via...</value>
+  </data>
+  <data name="RatingUserHint" xml:space="preserve">
+    <value>Apenas pode avaliar utilizadores com quem esteve na mesma equipa</value>
+  </data>
+  <data name="ChangeRole" xml:space="preserve">
+    <value>Alterar Permissão</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="AddedPendingListFail" xml:space="preserve">
+    <value>Não foi possível adicionar-te à lista de participantes pendentes</value>
+  </data>
+  <data name="AddedPendingListSuccess" xml:space="preserve">
+    <value>Foste adicionado à lista de participantes pendentes</value>
+  </data>
+  <data name="AddMilestoneFail" xml:space="preserve">
+    <value>Não foi possivel adicionar a milestone</value>
+  </data>
+  <data name="AddMilestoneSuccess" xml:space="preserve">
+    <value>A milestone foi adicionada</value>
+  </data>
+  <data name="AlreadyEnrollAsUser" xml:space="preserve">
+    <value>Já estás inscrito neste evento como utilizador</value>
+  </data>
+  <data name="AlreadyPendingRequest" xml:space="preserve">
+    <value>Já tens um pedido de entidade certificada pendente de aprovação</value>
+  </data>
+  <data name="ApproveRequest" xml:space="preserve">
+    <value>Pedido aprovado</value>
+  </data>
+  <data name="Can't leave chats where you are the owner" xml:space="preserve">
+    <value>Não é possível sair de chats dos quais és o dono</value>
+  </data>
+  <data name="CanAddRolesToAdmin" xml:space="preserve">
+    <value>Não é possível adicionar cargos ao admin</value>
+  </data>
+  <data name="CancelEnroll" xml:space="preserve">
+    <value>Cancelaste a inscrição no evento</value>
+  </data>
+  <data name="CancelEnrollFail" xml:space="preserve">
+    <value>Não foi possível cancelar a inscrição no evento</value>
+  </data>
+  <data name="CancelTeamEnroll" xml:space="preserve">
+    <value>Não foi possível cancelar a inscrição da equipa no evento</value>
+  </data>
+  <data name="CanChangeAdminRoles" xml:space="preserve">
+    <value>Não é possível mudar o cargo do Admin</value>
+  </data>
+  <data name="CantEnrollAsUserIfTeam" xml:space="preserve">
+    <value>Não é possível inscreveres-te no evento se já tens uma equipa inscrita</value>
+  </data>
+  <data name="CantGiveAdminRole" xml:space="preserve">
+    <value>Não é possível dar o cargo de Admin</value>
+  </data>
+  <data name="CantRemoveRolesFromAdmin" xml:space="preserve">
+    <value>Não é possível remover o cargo do admin</value>
+  </data>
+  <data name="Couldn't create a chat at the moment" xml:space="preserve">
+    <value>Não foi possível criar sala de chat</value>
+  </data>
+  <data name="Couldn't create experience" xml:space="preserve">
+    <value>Não foi possível criar a experiência</value>
+  </data>
+  <data name="CreateTeamFail" xml:space="preserve">
+    <value>Não foi possível criar a equipa</value>
+  </data>
+  <data name="CreateTeamSuccess" xml:space="preserve">
+    <value>Equipa criada</value>
+  </data>
+  <data name="DeleteMilestoneFail" xml:space="preserve">
+    <value>Não foi possível apagar a milestone</value>
+  </data>
+  <data name="DeleteMilestoneSuccess" xml:space="preserve">
+    <value>Apagaste a milestone</value>
+  </data>
+  <data name="Downvoted" xml:space="preserve">
+    <value>Deste downvote a este evento</value>
+  </data>
+  <data name="DownvoteFail" xml:space="preserve">
+    <value>Não foi possível dar downvote a este evento</value>
+  </data>
+  <data name="Enrolled" xml:space="preserve">
+    <value>Estás inscrito no evento</value>
+  </data>
+  <data name="EnrollFail" xml:space="preserve">
+    <value>Não foi possível inscreveres-te no evento</value>
+  </data>
+  <data name="EnrollMemberWithTeam" xml:space="preserve">
+    <value>Não é possível inscrever como membro se tens uma equipa inscrita</value>
+  </data>
+  <data name="Error getting chatroom" xml:space="preserve">
+    <value>Não foi possível obter a sala de chat</value>
+  </data>
+  <data name="Error Sending Message. This user has closed DMs." xml:space="preserve">
+    <value>Erro ao mandar mensagem, este utilizador fechou as suas DMs</value>
+  </data>
+  <data name="EventBanned" xml:space="preserve">
+    <value>O evento foi banido</value>
+  </data>
+  <data name="EventBannedFail" xml:space="preserve">
+    <value>Não foi possível banir o evento</value>
+  </data>
+  <data name="EventCreated" xml:space="preserve">
+    <value>O evento foi criado</value>
+  </data>
+  <data name="EventCreateFail" xml:space="preserve">
+    <value>Não foi possível criar o evento</value>
+  </data>
+  <data name="EventEnded" xml:space="preserve">
+    <value>Terminaste o evento</value>
+  </data>
+  <data name="EventUnbanned" xml:space="preserve">
+    <value>O evento deixou de estar banido</value>
+  </data>
+  <data name="EventUnbannedFail" xml:space="preserve">
+    <value>Não foi possível remover o estado de banido do evento</value>
+  </data>
+  <data name="EventUpdate" xml:space="preserve">
+    <value>O evento foi atualizado</value>
+  </data>
+  <data name="EventUpdateFail" xml:space="preserve">
+    <value>Não foi possível atualizar o evento</value>
+  </data>
+  <data name="EventUpdateStatusFail" xml:space="preserve">
+    <value>Não foi possível alterar o estado do evento</value>
+  </data>
+  <data name="FailedAcceptReport" xml:space="preserve">
+    <value>Não foi possível aceitar o reporte</value>
+  </data>
+  <data name="FailedApproveRequest" xml:space="preserve">
+    <value>Não foi possível aprovar o pedido</value>
+  </data>
+  <data name="FailedReasonAdded" xml:space="preserve">
+    <value>Não foi possível adicionar a razão de reporte</value>
+  </data>
+  <data name="FailedReasonRemoved" xml:space="preserve">
+    <value>Não foi possível remover a razão de reporte</value>
+  </data>
+  <data name="FailedRejectRequest" xml:space="preserve">
+    <value>Não foi possível rejeitar o pedido</value>
+  </data>
+  <data name="FailedReportRejected" xml:space="preserve">
+    <value>Não foi possível rejeitar o reporte</value>
+  </data>
+  <data name="FailedToChangeFeaturedStatus" xml:space="preserve">
+    <value>Não foi possível por o evento como featured</value>
+  </data>
+  <data name="FileMustBePdf" xml:space="preserve">
+    <value>O ficheiro tem de ser em formato pdf</value>
+  </data>
+  <data name="FillAllFields" xml:space="preserve">
+    <value>É necessário preencher todos os campos</value>
+  </data>
+  <data name="GiveOwnershipFail" xml:space="preserve">
+    <value>Não foi possível alterar o líder da equipa</value>
+  </data>
+  <data name="GiveOwnershipSuccess" xml:space="preserve">
+    <value>O líder da equipa foi alterado</value>
+  </data>
+  <data name="InscriptionsClosed" xml:space="preserve">
+    <value>Fechaste as inscrições para esta equipa</value>
+  </data>
+  <data name="InscriptionsOpen" xml:space="preserve">
+    <value>Abriste as inscrições para esta equipa</value>
+  </data>
+  <data name="Invalid Operation" xml:space="preserve">
+    <value>Operação Inválida</value>
+  </data>
+  <data name="InviteAcceptedFail" xml:space="preserve">
+    <value>Não foi possível aceitar o convite</value>
+  </data>
+  <data name="InviteAcceptedSuccess" xml:space="preserve">
+    <value>Aceitaste o convite</value>
+  </data>
+  <data name="InviteCanceledFail" xml:space="preserve">
+    <value>Não foi possível cancelar o pedido de convite efetuado</value>
+  </data>
+  <data name="InviteCanceledSuccess" xml:space="preserve">
+    <value>Cancelaste o pedido de convite para este utilizador</value>
+  </data>
+  <data name="InviteRejectedFail" xml:space="preserve">
+    <value>Não foi possível rejeitar o convite</value>
+  </data>
+  <data name="InviteRejectedSuccess" xml:space="preserve">
+    <value>Rejeitaste o convite</value>
+  </data>
+  <data name="InviteUserError" xml:space="preserve">
+    <value>Não foi possível convidar este utilizador</value>
+  </data>
+  <data name="InviteUserSuccess" xml:space="preserve">
+    <value>Convidaste este utilizador</value>
+  </data>
+  <data name="LeftTeamFail" xml:space="preserve">
+    <value>Não foi possível sair da equipa</value>
+  </data>
+  <data name="LeftTeamSuccess" xml:space="preserve">
+    <value>Saíste da equipa</value>
+  </data>
+  <data name="NoInterestedTeams" xml:space="preserve">
+    <value>Não existem equipas interessadas no evento de momento</value>
+  </data>
+  <data name="NotLoggedIn" xml:space="preserve">
+    <value>Tens de estar autenticado</value>
+  </data>
+  <data name="OwnATeamInterested" xml:space="preserve">
+    <value>És dono de uma equipa que já está interessado no evento</value>
+  </data>
+  <data name="ReasonAdded" xml:space="preserve">
+    <value>A razão de reporte foi adicionada</value>
+  </data>
+  <data name="ReasonRemoved" xml:space="preserve">
+    <value>A razão de reporte foi removida</value>
+  </data>
+  <data name="RejectRequest" xml:space="preserve">
+    <value>Pedido rejeitado</value>
+  </data>
+  <data name="RemoveDownvote" xml:space="preserve">
+    <value>Removeste o downvote deste evento</value>
+  </data>
+  <data name="RemoveDownvoteFail" xml:space="preserve">
+    <value>Não foi possível dar remover o downvote deste evento</value>
+  </data>
+  <data name="RemoveUpvote" xml:space="preserve">
+    <value>Removeste o upvote deste evento</value>
+  </data>
+  <data name="RemoveUpvoteFail" xml:space="preserve">
+    <value>Não foi possível dar remover o upvote deste evento</value>
+  </data>
+  <data name="ReportRejected" xml:space="preserve">
+    <value>Reporte rejeitado</value>
+  </data>
+  <data name="ReportSendFail" xml:space="preserve">
+    <value>Não foi possível enviar o reporte</value>
+  </data>
+  <data name="RequestFail" xml:space="preserve">
+    <value>Não foi possível enviar o pedido de entidade certificada</value>
+  </data>
+  <data name="RequestSent" xml:space="preserve">
+    <value>Pedido de entidade certificada enviado</value>
+  </data>
+  <data name="RequestUpdate" xml:space="preserve">
+    <value>O pedido foi atualizado</value>
+  </data>
+  <data name="RequestUpdateFail" xml:space="preserve">
+    <value>Não foi possível atualizar o pedido</value>
+  </data>
+  <data name="RoleAddedToUser" xml:space="preserve">
+    <value>O cargo foi adicionado com sucesso</value>
+  </data>
+  <data name="RoleChanged" xml:space="preserve">
+    <value>O cargo foi mudado com sucesso</value>
+  </data>
+  <data name="RoleChangedError" xml:space="preserve">
+    <value>Não foi possível mudar o cargo</value>
+  </data>
+  <data name="RoleRemovedFromUser" xml:space="preserve">
+    <value>O cargo foi removido com sucesso</value>
+  </data>
+  <data name="TeamBanned" xml:space="preserve">
+    <value>A equipa foi banida</value>
+  </data>
+  <data name="TeamBannedFail" xml:space="preserve">
+    <value>Não foi possível banir a equipa</value>
+  </data>
+  <data name="TeamEnroll" xml:space="preserve">
+    <value>A equipa foi inscrita no evento</value>
+  </data>
+  <data name="TeamFinished" xml:space="preserve">
+    <value>Alteraste o estado da equipa para acabada</value>
+  </data>
+  <data name="TeamStatusFail" xml:space="preserve">
+    <value>Não foi possível alterar o estado da equipa</value>
+  </data>
+  <data name="TeamUnbanned" xml:space="preserve">
+    <value>A equipa deixou de estar banida</value>
+  </data>
+  <data name="TeamUnbannedFail" xml:space="preserve">
+    <value>Não foi possível removar o estado de banida da equipa</value>
+  </data>
+  <data name="This user has closed DMs" xml:space="preserve">
+    <value>Este utilizador fechou as suas DMs</value>
+  </data>
+  <data name="UpdateMilestoneFail" xml:space="preserve">
+    <value>Não foi possível atualizar a milestone</value>
+  </data>
+  <data name="UpdateMilestoneSuccess" xml:space="preserve">
+    <value>Atualizaste a milestone</value>
+  </data>
+  <data name="UpdateTeamFail" xml:space="preserve">
+    <value>Não foi possível atualizar a equipa</value>
+  </data>
+  <data name="UpdateTeamSuccess" xml:space="preserve">
+    <value>Atualizaste a equipa</value>
+  </data>
+  <data name="Upvoted" xml:space="preserve">
+    <value>Deste upvote a este evento</value>
+  </data>
+  <data name="UpvoteFail" xml:space="preserve">
+    <value>Não foi possível dar upvote a este evento</value>
+  </data>
+  <data name="UserAddedSuccess" xml:space="preserve">
+    <value>O utilizador foi adicionado à equipa</value>
+  </data>
+  <data name="UserAddError" xml:space="preserve">
+    <value>Não foi possível adicionar o utilizador à equipa</value>
+  </data>
+  <data name="UserAlreadyHasRole" xml:space="preserve">
+    <value>O utilizador já tem esse cargo</value>
+  </data>
+  <data name="UserBanned" xml:space="preserve">
+    <value>O utilizador foi banido</value>
+  </data>
+  <data name="UserDoesntHaveRole" xml:space="preserve">
+    <value>O utilizador não tem esse cargo</value>
+  </data>
+  <data name="UserRejectedFail" xml:space="preserve">
+    <value>Não foi possível rejeitar o pedido deste utilizador</value>
+  </data>
+  <data name="UserRejectedSuccess" xml:space="preserve">
+    <value>Rejeitaste o pedido deste utilizador</value>
+  </data>
+  <data name="UserRemovedSuccess" xml:space="preserve">
+    <value>Removeste este utilizador da tua equipa</value>
+  </data>
+  <data name="UserRemoveFail" xml:space="preserve">
+    <value>Não foi possível remover este utilizador da tua equipa</value>
+  </data>
+  <data name="UserSuspendedSuccess" xml:space="preserve">
+    <value>Utilizador foi suspendido com sucesso</value>
+  </data>
+  <data name="UserSuspendsError" xml:space="preserve">
+    <value>Não foi possível suspender o utilizador</value>
+  </data>
+  <data name="UserUnsuspendsError" xml:space="preserve">
+    <value>Não foi possível remover a suspensão do utilizador</value>
+  </data>
+  <data name="WhileInviteUserError" xml:space="preserve">
+    <value>Ocorreu um erro ao convidar este utilizador</value>
+  </data>
+  <data name="You can't add someone that is blocked" xml:space="preserve">
+    <value>Não podes adicionar um utilizador que está bloqueado</value>
+  </data>
+  <data name="You're Blocked" xml:space="preserve">
+    <value>Estás bloqueado por este utilizador</value>
+  </data>
+  <data name="A user with this login already exists." xml:space="preserve">
+    <value>Já existe um utilizador com este login.</value>
+  </data>
+  <data name="An unknown failure has occurred." xml:space="preserve">
+    <value>Ocorreu uma falha.</value>
+  </data>
+  <data name="Email {0} is already taken." xml:space="preserve">
+    <value>Email {0} já está em uso.</value>
+  </data>
+  <data name="Email {0} is invalid." xml:space="preserve">
+    <value>Email {0} é inválido.</value>
+  </data>
+  <data name="Incorrect password." xml:space="preserve">
+    <value>Palavra-chave incorreta.</value>
+  </data>
+  <data name="Invalid token." xml:space="preserve">
+    <value>Token inválido.</value>
+  </data>
+  <data name="Lockout is not enabled for this user." xml:space="preserve">
+    <value>Não é possivel banir este utilizador</value>
+  </data>
+  <data name="Name must be max {0} characters long." xml:space="preserve">
+    <value>Nome deve ter no máximo {0} caracteres.</value>
+  </data>
+  <data name="Passwords must be at least {0} characters." xml:space="preserve">
+    <value>Palavras-chave devem conter pelo menos {0} caracteres.</value>
+  </data>
+  <data name="Passwords must have at least one digit ('0'-'9')." xml:space="preserve">
+    <value>Palavras-chave devem conter pelo menos um digito ('0'-'9').</value>
+  </data>
+  <data name="Passwords must have at least one lowercase ('a'-'z')." xml:space="preserve">
+    <value>Palavras-chave devem conter pelo menos uma minúscula ('a'-'z').</value>
+  </data>
+  <data name="Passwords must have at least one non alphanumeric character." xml:space="preserve">
+    <value>Palavras-chave devem conter pelo menos um caracter não alfa-numérico.</value>
+  </data>
+  <data name="Passwords must have at least one uppercase ('A'-'Z')." xml:space="preserve">
+    <value>Palavras-chave devem conter pelo menos uma maiúscula ('A'-'Z').</value>
+  </data>
+  <data name="Role name {0} is already taken." xml:space="preserve">
+    <value>Nome da permissão {0} já está em uso</value>
+  </data>
+  <data name="Role name {0} is invalid." xml:space="preserve">
+    <value>Nome da permissão {0} não é válido.</value>
+  </data>
+  <data name="The password and confirmation password do not match." xml:space="preserve">
+    <value>As palavras-chave não coincidem.</value>
+  </data>
+  <data name="The Password field is required." xml:space="preserve">
+    <value>A palavra-chave é obrigatória.</value>
+  </data>
+  <data name="The {0} must be at least {2} and at max {1} characters long." xml:space="preserve">
+    <value>A {0} deve ter pelo menos {2} caracteres e no máximo {1} caracteres.</value>
+  </data>
+  <data name="User already has a password set." xml:space="preserve">
+    <value>Utilizador já tem uma palavra-chave.</value>
+  </data>
+  <data name="User already in role {0}." xml:space="preserve">
+    <value>Utilizador já está na permissão {0}.</value>
+  </data>
+  <data name="User is not in role {0}." xml:space="preserve">
+    <value>Utilizador não está na permissão {0}.</value>
+  </data>
+  <data name="User Name {0} is already taken." xml:space="preserve">
+    <value>User Name {0} já está em uso.</value>
+  </data>
+  <data name="User name {0} is invalid, can only contain letters or digits." xml:space="preserve">
+    <value>User Name {0} é inválido, deve conter só letras ou digitos.</value>
+  </data>
+  <data name="You must agree to the terms and conditions." xml:space="preserve">
+    <value>Deve concordar com os termos e condições.</value>
+  </data>
+  <data name="Your password must have at least one non-alphanumeric character, one uppercase letter, one lowercase letter, and be at least 8 characters long." xml:space="preserve">
+    <value>A tua palavra-chave deve conter pelo menos 1 caracter especial, 1 letre maiúscula, 1 minúscula, e deve ter pelo menos 8 caracteres.</value>
+  </data>
+  <data name="Error sending email confirmation. Please try again later." xml:space="preserve">
+    <value>Error: Erro ao enviar email de confirmação. Por favor tente outra vez.</value>
+  </data>
+  <data name="Invalid image file. Only .png, .jpg, .jpeg, .gif, and .tif files are allowed." xml:space="preserve">
+    <value>Formato da imagem inválido. Só são aceites ficheiro em .png, .jpg, .jpeg, .gif, e .tif</value>
+  </data>
+  <data name="This field is required." xml:space="preserve">
+    <value>Este campo é obrigatório.</value>
+  </data>
+  <data name="Your account contains personal data that you have given us. This page allows you to download or delete that data." xml:space="preserve">
+    <value>A tua conta contem dados pessoais que tu nos deste. Esta página permite baixar esses dados ou então apagá-los.</value>
+  </data>
+  <data name="Your profile has been updated" xml:space="preserve">
+    <value>O teu perfil foi atualizado</value>
+  </data>
+  <data name="2fa has been disabled. You can reenable 2fa when you setup an authenticator app" xml:space="preserve">
+    <value>2FA foi desativado. Consegues reativar 2FA quando deres setup a uma app.</value>
+  </data>
+  <data name="Add authenticator app" xml:space="preserve">
+    <value>Adicionar autenticador</value>
+  </data>
+  <data name="Authenticator app" xml:space="preserve">
+    <value>Aplicação de autenticador</value>
+  </data>
+  <data name="before you can log in with a recovery code." xml:space="preserve">
+    <value>antes de conseguir iniciar a recuperação do código.</value>
+  </data>
+  <data name="Disable 2FA" xml:space="preserve">
+    <value>Desativar 2FA</value>
+  </data>
+  <data name="Disable two-factor authentication (2FA)" xml:space="preserve">
+    <value>Desativar o 2FA</value>
+  </data>
+  <data name="Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should" xml:space="preserve">
+    <value>Desativar 2FA não altera as chaves da aplicação de autenticação. Se deseja mudar as chaves deve</value>
+  </data>
+  <data name="Forget this browser" xml:space="preserve">
+    <value>Esquecer este browser</value>
+  </data>
+  <data name="generate a new set of recovery codes" xml:space="preserve">
+    <value>gerar novos códigos de recuperação</value>
+  </data>
+  <data name="Generate Recovery Codes" xml:space="preserve">
+    <value>Gerar códigos de recuperação.</value>
+  </data>
+  <data name="Generate two-factor authentication (2FA) recovery codes" xml:space="preserve">
+    <value>Gerar códigos de recuperação 2FA</value>
+  </data>
+  <data name="Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should" xml:space="preserve">
+    <value>Gerar novos códigos de recuperação não altera as chaves usadas no autenticador. Se deseja alterar as chaves usadas na aplicação deve </value>
+  </data>
+  <data name="If you lose your device and don't have the recovery codes you will lose access to your account." xml:space="preserve">
+    <value>Se perde o seu dispositivo e não conseguir recuperar os códigos irá perder o acesso à sua conta.</value>
+  </data>
+  <data name="If you reset your authenticator key your authenticator app will not work until you reconfigure it." xml:space="preserve">
+    <value>Se resetar a chave do autenticador, a sua aplicação de autenticação não irá funcionar até reconfigura-la.</value>
+  </data>
+  <data name="Privacy and cookie policy have not been accepted." xml:space="preserve">
+    <value>Politica de privacidade e cookies não foram aceites.</value>
+  </data>
+  <data name="Put these codes in a safe place." xml:space="preserve">
+    <value>Guarde os códigos num lugar seguro.</value>
+  </data>
+  <data name="recovery codes left" xml:space="preserve">
+    <value>códigos restantes</value>
+  </data>
+  <data name="Reset authenticator app" xml:space="preserve">
+    <value>Resetar autenticador</value>
+  </data>
+  <data name="Reset authenticator key" xml:space="preserve">
+    <value>Resetar chave do autenticador</value>
+  </data>
+  <data name="Reset recovery codes" xml:space="preserve">
+    <value>Resetar códigos de recuperação</value>
+  </data>
+  <data name="reset your authenticator keys." xml:space="preserve">
+    <value>reseta-las aqui</value>
+  </data>
+  <data name="Set up authenticator app" xml:space="preserve">
+    <value>Configurar Autenticador</value>
+  </data>
+  <data name="The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code." xml:space="preserve">
+    <value>O browser atual foi esquecido. Quando iniciar sessão outra vez este browser irá pedir pelos códigos de 2FA.</value>
+  </data>
+  <data name="This action only disables 2FA." xml:space="preserve">
+    <value>Esta secção serve só para desativar 2FA.</value>
+  </data>
+  <data name="This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account." xml:space="preserve">
+    <value>Este processo desativa 2FA até verificar a sua aplicação de autenticação. Se não completar a configuração da aplicação de autenticação poderá perder acesso à sua conta.</value>
+  </data>
+  <data name="Two-factor authentication (2FA)" xml:space="preserve">
+    <value>Autenticação de 2 factores (2FA)</value>
+  </data>
+  <data name="You can" xml:space="preserve">
+    <value>Pode</value>
+  </data>
+  <data name="You have" xml:space="preserve">
+    <value>Tem</value>
+  </data>
+  <data name="You have 1 recovery code left." xml:space="preserve">
+    <value>Tem 1 código de recuperação restante.</value>
+  </data>
+  <data name="You have generated new recovery codes." xml:space="preserve">
+    <value>Geraste novos códigos de recuperação.</value>
+  </data>
+  <data name="You have no recovery codes left." xml:space="preserve">
+    <value>Não tem mais códigos de recuperação.</value>
+  </data>
+  <data name="You must" xml:space="preserve">
+    <value>Deve</value>
+  </data>
+  <data name="You must accept the policy before you can enable two factor authentication" xml:space="preserve">
+    <value>Deve aceitar a politica de privacidade e cookies antes de ativar 2FA</value>
+  </data>
+  <data name="You should" xml:space="preserve">
+    <value>Deve</value>
+  </data>
+  <data name="Your authenticator app key has been reset, you will need to configure your authenticator app using the new key." xml:space="preserve">
+    <value>A sua chave do autenticador foi resetada, precisa de configurar o autenticador com a nova chave.</value>
+  </data>
+  <data name="Entity" xml:space="preserve">
+    <value>Entidade</value>
+  </data>
+  <data name="ReportReasons" xml:space="preserve">
+    <value>Razões de denúncia</value>
+  </data>
+  <data name="ReportReasonEnglish" xml:space="preserve">
+    <value>Razão de denúncia - Inglês</value>
+  </data>
+  <data name="ReportReasonPortuguese" xml:space="preserve">
+    <value>Razão de denúncia - Português</value>
+  </data>
+  <data name="AlreadyAMember" xml:space="preserve">
+    <value>Já é membro</value>
+  </data>
+  <data name="Change Email" xml:space="preserve">
+    <value>Alterar email</value>
+  </data>
+  <data name="Confirm Email" xml:space="preserve">
+    <value>Confirmar email</value>
+  </data>
+  <data name="Hi" xml:space="preserve">
+    <value>Olá</value>
+  </data>
+  <data name="Recover Password" xml:space="preserve">
+    <value>Recuperar Palavra-Chave</value>
+  </data>
+  <data name="_here" xml:space="preserve">
+    <value>aqui</value>
+  </data>
+  <data name="click here to log in" xml:space="preserve">
+    <value>clique aqui para iniciar sessão.</value>
+  </data>
+  <data name="Click here to resend" xml:space="preserve">
+    <value>Clique aqui para reenviar</value>
+  </data>
+  <data name="clicking here" xml:space="preserve">
+    <value>clicar aqui</value>
+  </data>
+  <data name="Confirm your email" xml:space="preserve">
+    <value>Confirme o seu email</value>
+  </data>
+  <data name="Confirmation link to change email sent. Please check your email." xml:space="preserve">
+    <value>Link de confirmação enviado. Por favor verifique o seu email.</value>
+  </data>
+  <data name="Didn't get any email?" xml:space="preserve">
+    <value>Não recebeu nenhum email?</value>
+  </data>
+  <data name="Enter your email." xml:space="preserve">
+    <value>Introduza o seu email</value>
+  </data>
+  <data name="Error! Email already in use. Please use another one." xml:space="preserve">
+    <value>Error! Email em uso. Por favor use outro.</value>
+  </data>
+  <data name="Forgot password confirmation" xml:space="preserve">
+    <value>Confirmação de recuperação de palavra-chave</value>
+  </data>
+  <data name="Please check your email to confirm your account." xml:space="preserve">
+    <value>Por favor verifique o seu email para confirmar a conta.</value>
+  </data>
+  <data name="Please check your email to reset your password." xml:space="preserve">
+    <value>Por favor verifique o seu email para alterar a sua palavra-chave.</value>
+  </data>
+  <data name="Please confirm your account by" xml:space="preserve">
+    <value>Por favor confirme a sua conta por</value>
+  </data>
+  <data name="Register confirmation" xml:space="preserve">
+    <value>Confirmação de registo</value>
+  </data>
+  <data name="Resend" xml:space="preserve">
+    <value>Reenviar</value>
+  </data>
+  <data name="Resend email confirmation" xml:space="preserve">
+    <value>Reenviar email de confirmação</value>
+  </data>
+  <data name="Reset password confirmation" xml:space="preserve">
+    <value>Confirmação de alteração de palavra-chave</value>
+  </data>
+  <data name="Verification email sent. Please check your email." xml:space="preserve">
+    <value>Email de verificação enviado. Por favor verifique o seu email.</value>
+  </data>
+  <data name="Your email is unchanged." xml:space="preserve">
+    <value>O seu email está inalteravel.</value>
+  </data>
+  <data name="Your password has been reset. Please" xml:space="preserve">
+    <value>A sua palavra-chave foi alterada. Por favor</value>
+  </data>
+  <data name="Couldn't delete experience" xml:space="preserve">
+    <value>Não foi possível eliminar a experiência</value>
+  </data>
+  <data name="Couldn't edit experience" xml:space="preserve">
+    <value>Não foi possível editar a experiência.</value>
+  </data>
+  <data name="Error adding experience" xml:space="preserve">
+    <value>Erro ao adicionar experiência</value>
+  </data>
+  <data name="Error adding skill" xml:space="preserve">
+    <value>Erro ao adicionar habilidade</value>
+  </data>
+  <data name="Error deleting skill" xml:space="preserve">
+    <value>Erro ao eliminar habilidade</value>
+  </data>
+  <data name="Error editing skill" xml:space="preserve">
+    <value>Erro ao editar habilidade</value>
+  </data>
+  <data name="Success adding experience" xml:space="preserve">
+    <value>Sucesso ao adicionar a experiência</value>
+  </data>
+  <data name="Success adding skill" xml:space="preserve">
+    <value>Habilidade adicionada</value>
+  </data>
+  <data name="Success deleting experience" xml:space="preserve">
+    <value>Sucesso ao eliminar a experiência</value>
+  </data>
+  <data name="Success deleting skill" xml:space="preserve">
+    <value>Habilidade eliminada</value>
+  </data>
+  <data name="Success editing experience" xml:space="preserve">
+    <value>Sucesso ao editar a experiência</value>
+  </data>
+  <data name="Success editing skill" xml:space="preserve">
+    <value>Habilidade editada com sucesso</value>
+  </data>
+  <data name="ShowingRequestsFor" xml:space="preserve">
+    <value>Mostrar pedidos</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Membros da equipa</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="Add new Reason" xml:space="preserve">
+    <value>Adicionar nova razão de denúncia</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Completar</value>
+  </data>
+  <data name="Open Chat" xml:space="preserve">
+    <value>Abrir conversa</value>
+  </data>
+</root>

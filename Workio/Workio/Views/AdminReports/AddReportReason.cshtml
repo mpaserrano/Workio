@@ -1,0 +1,138 @@
+﻿@model Workio.Models.ReportReason
+
+
+<h1>@localizer.Get("Add new Reason")</h1>
+
+
+
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <form id="myForm" method="post" class="needs-validation" novalidate>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <label asp-for="ReasonType" class="form-label">
+                                @localizer.Get("ReportType")
+                            </label>
+                            <select id="reasonType" asp-for="ReasonType" class="form-select" asp-items="ViewBag.ReasonTypes" required></select>
+                            <span asp-validation-for="ReasonType" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <textarea id="reason" asp-for="Reason" name="Reason" rows="4" class="form-control" id="Reason" required></textarea>
+                                <label typeof="textarea" asp-for="Reason" class="form-label">@localizer.Get("ReportReasonEnglish")</label>
+                                <span asp-validation-for="Reason" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-12">
+                            <div class="form-outline">
+                                <textarea id="ReasonPortugues" name="ReasonPortugues" rows="4" class="form-control" required></textarea>
+                                <label typeof="textarea" for="ReasonPortugues" class="form-label">@localizer.Get("ReportReasonPortuguese")</label>
+                                <span validation-for="ReasonPortugues" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <a class="btn btn-secondary mb-1" asp-action="ReportReasons" asp-controller="AdminReports">
+                                    @localizer.Get("Cancel")
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <button type="submit" value="Submit" class="btn btn-primary">@localizer.Get("Submit")</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        <!--Toast notification lib-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function () {
+
+                var myForm = document.getElementById('myForm');
+                var logModal = document.getElementById('logModal');
+
+
+                myForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    if (!myForm.checkValidity()) {
+                        event.stopPropagation();
+                        myForm.classList.add('was-validated');
+                        return;
+                    }
+                    console.log("TESTE");
+
+                    $('#logModal').modal('show');
+                    logModal.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        // Check if the modal submit button is clicked
+                        if (event.target.id === 'submit-experience') {
+                            var logForm = document.getElementById('logForm')
+                            if (!logForm.checkValidity()) {
+                                event.stopPropagation();
+                                logForm.classList.add('was-validated')
+                                return;
+                            }
+
+                            var formData = {
+                                reasonType: $('#reasonType').val(),
+                                reason: $('#reason').val(),
+                                reasonPortugues: $('#ReasonPortugues').val(),
+                                description: $('#Description').val()
+                            };
+                            $('#logModal').modal('hide');
+                            $.ajax({
+                                type: 'POST',
+                                async: false,
+                                url: '/AdminReports/AddReportReason',
+                                data: JSON.stringify(formData),
+                                contentType: 'application/json',
+                                success: function (response) {
+                                    // Handle success response from server
+                                    console.log("success");
+                                    window.location.href = "/AdminReports/ReportReasons?success=" + response.success + "&error=" + !response.success;
+
+                                },
+                                error: function (error) {
+                                    // Handle error response from server
+                                    console.log("error");
+                                    window.location.href = "/AdminReports/ReportReasons?success=false&error=true";
+                                }
+                            });
+
+
+                        }
+                    });
+                });
+            });
+
+
+
+
+
+
+        </script>
+    }
+</div>

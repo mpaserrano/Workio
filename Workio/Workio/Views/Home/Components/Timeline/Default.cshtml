@@ -1,0 +1,312 @@
+﻿@using System.Globalization;
+
+<link href="~/lib/visjs/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+  <style type="text/css">
+    #visualization {
+      width: 100%;
+    }
+
+    #events-calendar-section {
+        margin-top: 35px;
+    }
+
+    .events-calendar-container {
+        width: 100%;
+        /*width: 99vw;*/
+        /*margin-left: calc(50% - 49.5vw);
+        border-right: none;
+        border-left: none;*/
+    }
+
+    .teal-blue-timeline-paint {
+        background-color: rgb(92, 178, 204);
+        border-color: teal;
+    }
+
+    .light-orange-timeline-paint {
+        background-color: rgb(249 143 34);
+        border-color: rgb(217 117 15);
+    }
+
+    .light-red-timeline-paint {
+        background-color: rgb(237 79 79);
+        border-color: rgb(201 36 36);
+    }
+
+    .light-pink-timeline-paint {
+        background-color: rgb(255 137 230);
+        border-color: rgb(255 115 225);
+    }
+
+    .light-gray-timeline-paint {
+        background-color: rgb(169 169 169);
+        border-color: rgb(133 133 133);
+    }
+
+    .timeline-default-font {
+        color: #e7dbdb;
+        text-shadow: 0px 0px 3px rgb(0 0 0 / 60%);
+        font-weight: 600;
+    }
+
+    .timeline-default-font a {
+        color: #ffffff!important;
+    }
+
+    .timeline-default-font a:hover {
+        text-decoration: underline;
+    }
+
+    .feature-event-timeline-icon {
+        color: #ffffff;
+        margin-right: 5px;
+    }
+  </style>
+
+<div id="events-calendar-section">
+    <div class="row">
+        <h4 class="fw-bold me-auto">@localizer.Get("HomeEventsCalendarHeader")</h4>
+    </div>
+    <div class="events-calendar-container">
+        <div class="card" id="visualization"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="~/lib/momentjs/moment-with-locales.js" on-content-loaded="true"></script>
+<script type="text/javascript" src="~/lib/visjs/vis-timeline-graph2d.min.js" on-content-loaded="true"></script>
+
+<script on-content-loaded="true">
+     class RandomCSSClassPicker {
+         constructor(classesStringArray) {
+             this.classesArray = classesStringArray;
+             this.currentClassIndex = 0;
+         }
+
+         get randomClass() {
+             let returnClass = this.classesArray[this.currentClassIndex];
+
+             this.currentClassIndex = this.currentClassIndex+ 1;
+
+             if (this.currentClassIndex >= this.classesArray.length) {
+                 this.currentClassIndex = 0;
+             }
+
+             return returnClass;
+         }
+     }
+
+    function getMaxStackAndDay(events, start, end) {
+        let currentDate = new Date(start);
+        let endDate = new Date(end);
+        let eventCountByDay = new Map();
+
+        while (currentDate <= endDate) {
+            events.forEach(event => {
+                let eventStartDate = new Date(event.start);
+                let eventEndDate = new Date(event.end);
+                let dateKey = formatDate(currentDate);
+
+                if (currentDate >= eventStartDate && currentDate <= eventEndDate) {
+                    if (eventCountByDay.has(dateKey)) {
+                        eventCountByDay.set(dateKey, eventCountByDay.get(dateKey) + 1);
+                    } else {
+                        eventCountByDay.set(dateKey, 1);
+                    }
+                }
+            });
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+
+        // Find the day with the maximum count of events
+        let maxDay = null;
+        let maxCount = -1;
+        eventCountByDay.forEach((count, day) => {
+            if (count > maxCount) {
+                maxCount = count;
+                maxDay = day;
+            }
+        });
+
+        return {
+            day: maxDay,
+            count: maxCount
+        };
+        //return eventCountByDay;
+    }
+
+        //Solicita ao controller os dados de eventos com a data entre os valores recebidos
+        function getEventsDataToTimeline(minDate, maxDate) {
+          return new Promise(function(resolve, reject) {
+            const xhr = new XMLHttpRequest();
+            var ajaxUrl = "/Events/GetEventsInRangeStartDate?minDate=" + minDate + "&maxDate=" + maxDate + "";
+            xhr.open("GET", ajaxUrl, true);
+            xhr.getResponseHeader("Content-type", "application/json");
+
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                var jsonData = JSON.parse(xhr.responseText);
+                resolve(jsonData);
+              } else {
+                reject(xhr.statusText);
+              }
+            };
+
+            xhr.onerror = function () {
+              reject("Network error");
+            };
+
+            xhr.send();
+          });
+        }
+
+        //Retorna um objeto Date com mais um dia em relação a string recebida.
+        function newDateWithOneMoreDay(strDate) {
+            var d = new Date(strDate);
+            d.setDate(d.getDate() + 1);
+
+            return d;
+        }
+
+        //Formata a data recebida (objeto Date) para YYYY-mm-dd
+        function formatDate(date) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        }
+
+        function compareRanges(range1, range2) {
+            let range1Start = range1[0];
+            let range1End = range1[1];
+
+            let range2Start = range2[0];
+            let range2End = range2[1];
+
+            if (range1Start <= range2End && range1End >= range2Start) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+            var cultureInfo = '@System.Globalization.CultureInfo.CurrentCulture.Name';
+            //Define a linguagem da timeline (tbm tem que ser ddefenido nas configs da timeline)
+            moment.locale(cultureInfo);
+
+            const timelineColorsClasses = [
+                "teal-blue-timeline-paint",
+                "light-orange-timeline-paint",
+                "light-red-timeline-paint",
+                "light-pink-timeline-paint",
+                "light-gray-timeline-paint"
+            ];
+
+            var colorPicker = new RandomCSSClassPicker(timelineColorsClasses);
+
+            var container = document.getElementById('visualization');
+            let currentDate = new Date('@DateTime.Now.ToString("MM/dd/yyyy")');
+            let startSearchDate = formatDate(currentDate);
+            let endSearchDate = formatDate(new Date(currentDate.setMonth(currentDate.getMonth() + 3)));
+
+            getEventsDataToTimeline(startSearchDate, endSearchDate)
+              .then(function(jsonData) {
+                var eventsData = jsonData.data;
+
+                var eventsTimelineData = [];
+
+                let count = 0;
+
+                eventsData.forEach(function(event) {
+                    let textContent = "";
+                    let importanceValue = 0;
+
+                    if (event.isFeatured) {
+                        textContent = '<a target="_blank" href="/Events/Details/' + event.eventId + '" data-mdb-toggle="tooltip" title="' + event.title + '"><i class="fa-solid fa-star feature-event-timeline-icon"></i>' + event.title + '</a>';
+                        importanceValue = -1;
+                    }
+                    else {
+                        textContent = '<a target="_blank" href="/Events/Details/' + event.eventId + '" data-mdb-toggle="tooltip" title="' + event.title + '">' + event.title + '</a>';
+                        importanceValue = count;
+                        count++;
+                    }
+
+                    eventsTimelineData.push({
+                        id: event.eventId,
+                        content: textContent,
+                        start: event.startDate,
+                        end: formatDate(newDateWithOneMoreDay(event.endDate)),
+                        className: colorPicker.randomClass + ' timeline-default-font',
+                        selectable: false,
+                        weight: importanceValue,
+                    });
+                });
+
+                // Create a DataSet (allows two way data-binding)
+                var items = new vis.DataSet(eventsTimelineData);
+                let numberOfRows = getMaxStackAndDay(eventsTimelineData, '2023-04-10', '2023-07-09').count;
+
+                var customSort = function(a, b) {
+                  // Access the custom attribute using the customAttr property
+                  var attrA = a.weight;
+                  var attrB = b.weight;
+
+                  // Compare the custom attributes and return a negative, positive, or zero value
+                  // based on your desired sorting logic
+                  if (attrA < attrB) {
+                    return -1; // a should come before b
+                  } else if (attrA > attrB) {
+                    return 1; // a should come after b
+                  } else {
+                    return 0; // the order of a and b does not matter
+                  }
+                };
+
+                let timeLineMaxZoom = 2640000000;
+
+                if (window.innerWidth < 991) {
+                // Update the zoomMax option to a lower value
+                    timeLineMaxZoom = 1640000000;
+                } else {
+                // Reset the zoomMax option to its original value
+                    timeLineMaxZoom = 2640000000;
+                }
+
+                var options = {
+                    locale: cultureInfo,
+                    orientation: 'top',
+                    xss: {disabled: true},
+                    //Define o tamnho com o tamanho da maior stack
+                    height: (48 * numberOfRows) + 150 + "px",
+                    width: "100%",
+                    type: "range",
+                    order: customSort,
+                    stack: true,
+                    showMajorLabels: true,
+                    showMinorLabels: true,
+                    min: startSearchDate,
+                    max: endSearchDate,
+                    moveable: true,
+                    verticalScroll: true,
+                    zoomable: true,
+                    zoomKey: "ctrlKey",
+                    zoomMax: timeLineMaxZoom,
+                    timeAxis: {
+                        scale: "day",
+                        step: 1
+                    },
+                    showCurrentTime: false,
+                    autoResize: true,
+                };
+
+                var timeline = new vis.Timeline(container, items, options);
+                timeline.moveTo(items.get()[0].start);
+             })
+             .catch(function(error) {
+                console.error("Error: " + error);
+             });
+        });
+   </script>

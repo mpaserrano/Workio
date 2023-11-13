@@ -1,0 +1,501 @@
+@model Workio.Models.Events.Event
+
+@{
+    ViewData["Title"] = @localizer.Get("Create");
+}
+
+<style>
+    .event-banner-image {
+        background-color: white;
+        height: calc(20.1290322581vw - 1px);
+        object-fit: cover;
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        border: 1px #00000021 solid;
+        border-right: none;
+        border-left: none;
+    }
+    .preview-banner-text-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .preview-banner-text {
+        margin: auto;
+    }
+
+    .override-form-helper {
+        width: 100%;
+        font-size: .875em;
+        color: #757575;
+        margin-top: 3px;
+    }
+
+    .form-helper {
+        margin-top: 3px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    #map {
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: calc(35.1290322581vw - 1px);
+    }
+
+    .readonly-style {
+        background-color: #e9ecef!important;
+    }
+</style>
+
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+<h4>@localizer.Get("CreateEvent")</h4>
+<hr />
+<div id="event-image-banner" class="event-banner-image"><div class="preview-banner-text-container"><span class="preview-banner-text">@localizer.Get("BannerPreview")</span></div></div>
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-group col-12">
+                    <label asp-for="BannerPicturePathFile" class="form-label">@localizer.Get("UploadBanner")</label>
+                    <div class="form-helper" style="width: 100%; font-size: .875em; color: #757575; margin-top: -7px;">Recommended: 820x165, 1640x330, 3280x660, 4920x990, 8200x1650</div>
+                    <div class="input-group">
+                        <input asp-for="BannerPicturePathFile" id="banner-picture-input" type="file" class="form-control form-control-lg" accept=".png,.jpg,.jpeg" onchange="changeImage(this)" />
+                        <button type="button" class="btn btn-link" data-mdb-ripple-color="dark" onclick="clearFile()">@localizer.Get("Clear")</button>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="BannerPicturePathFile" id="banner-error-message" class="invalid-feedback">Formato de imagem inválido!</span>
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <input asp-for="Title" name="Title" type="text" class="form-control" id="Title" required />
+                        <label asp-for="Title" class="form-label">@localizer.Get("Title")*</label>
+                        <span asp-validation-for="Title" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <input asp-for="Description" name="Description" type="text" class="form-control" id="Description" required />
+                        <label asp-for="Description" class="form-label">@localizer.Get("Description")*</label>
+                        <span asp-validation-for="Description" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <label asp-for="Tags" class="form-label">@localizer.Get("EventTags") <a data-mdb-toggle="tooltip" title="@localizer.Get("EventTagsQuestionMarkHelper")"><i class="fa-solid fa-circle-question"></i></a></label>
+                    <input asp-for="Tags" type="text" id="event-tags" />
+                    <div class="override-form-helper">@localizer.Get("EventTagsHelp")</div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label">@localizer.Get("StartDate")*</label>
+                        <input min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" onkeydown="return false" asp-for="StartDate" id="start-date-id" onclick="this.showPicker()" class="form-control" required />
+                        <span asp-validation-for="StartDate" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label">@localizer.Get("EndDate")*</label>
+                        <input min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" onkeydown="return false" id="end-date" onclick="this.showPicker()" asp-for="EndDate" class="form-control" required />
+                        <span asp-validation-for="EndDate" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <input asp-for="Url" name="Url"
+                            pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+                            id="url" type="url"  class="form-control" id="Url" />
+                        <label asp-for="Url" class="form-label">@localizer.Get("URL")<span id="url-field-mark"></span></label>
+                        <span asp-validation-for="Url" id="url-error-msg" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                        <div class="form-helper">@localizer.Get("EventURLHelp")</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input asp-for="IsInPerson" class="form-check-input" type="checkbox" sp-for="IsInPerson" id="is-remote-check" /> @localizer.Get("IsRemote")
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <input id="longitude-field" type="text" style="display: none;" asp-for="LongitudeText" class="form-control" />
+            <input id="latitude-field" type="text" style="display: none;" asp-for="LatitudeText" class="form-control" />
+            <div id="is-in-person-event-content">
+                <div class="row g-3 align-items-center mb-4">
+                    <div class="col-md-12">
+                        <div class="form-outline">
+                            <input asp-for="Address" type="text" class="form-control readonly-style" id="address-field" required />
+                            <label asp-for="Address" class="form-label">@localizer.Get("Address")</label>
+                            <span asp-validation-for="Address" class="invalid-feedback">@localizer.Get("ChooseMapLocation")</span>
+                            <div class="form-helper">@localizer.Get("MapLocationHelp")</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id='map'></div>
+            </div>
+
+            <div style="margin-top: 20px;" class="row">
+                <div class="col-auto">
+                    <div class="form-group">
+                        <a class="btn btn-secondary" asp-action="Index">@localizer.Get("Cancel")</a>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="form-group">
+                        <button id="submit-event" type="submit" value="Create" class="btn btn-primary">@localizer.Get("Create")</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <script>
+        const lngField = document.getElementById("longitude-field");
+        const latField = document.getElementById("latitude-field");
+        const addressField = document.getElementById("address-field");
+        var placedMarker = null;
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoianBvcnRhcyIsImEiOiJjbGV2eDVyNnowOTUyM29rYzMycTc5eml4In0.tt2VI2R27K7LAnvS6Kl8Gg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-8.83896875965655, 38.521685683795], // starting position [lng, lat]
+            zoom: 15 // starting zoom
+        });
+        
+        map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+            })
+        );
+
+        map.addControl(new mapboxgl.NavigationControl());
+
+        map.on('style.load', function () {
+            map.on('click', function (e) {
+                var coordinates = e.lngLat;
+
+                const xhr = new XMLHttpRequest();
+                var ajaxUrl = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + coordinates.lng + "," + coordinates.lat + ".json?access_token=pk.eyJ1IjoianBvcnRhcyIsImEiOiJjbGVvb2hmem4wNGRrM3NucXhrbmQwbDV1In0.mREPi7cABvTlvx-Ed_9_UA&limit=1&limit=1";
+
+                xhr.open("GET", ajaxUrl, true);
+                xhr.getResponseHeader("Content-type", "application/json");
+
+                var jsonData;
+
+                xhr.onload = function () {
+                    jsonData = JSON.parse(this.responseText);
+
+                    const marker = new mapboxgl.Marker()
+                        .setLngLat(coordinates)
+                        .addTo(map);
+                    lngField.value = coordinates.lng;
+                    latField.value = coordinates.lat;
+                    addressField.classList.add("active");
+                    addressField.value = jsonData['features'][0].place_name;
+
+                    if (placedMarker != null) {
+                        placedMarker.remove();
+                    }
+
+                    placedMarker = marker;
+                }
+
+                xhr.send();                
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var maxTagLength = 24;
+            $("#event-tags").selectize({
+                plugins: ["remove_button"],
+                delimiter: ",",
+                persist: false,
+                create: function (input) {
+                    return {
+                        value: input,
+                        text: input,
+                    };
+                },
+                createFilter: function(input) { return input.length <= maxTagLength },
+                onChange: function(value) {
+                    var tags = value.split(",");
+
+                    var totalLength = tags.reduce(function (sum, tag) {
+                      return sum + tag.length;
+                    }, 0);
+
+                    var remainingLength = 192 - totalLength;
+
+                    if(remainingLength < maxTagLength)
+                        maxTagLength = remainingLength;
+                    else if(remainingLength > maxTagLength && maxTagLength < 24)
+                        maxTagLength = 24;
+
+                    var maxTags = remainingLength / 24;
+                    var currentTags = tags.length;
+                    var maxItems = maxTags + currentTags;
+                    this.settings.maxItems = maxItems;
+                    this.updatePlaceholder();
+                }
+            });
+
+            var todayPlusOne = '@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")';
+
+            $("#start-date-id").change(function () {
+                if (new Date($("#end-date").val()) > new Date($("#start-date-id").val())) {
+                    $("#end-date").attr("min", $(this).val());
+                }
+                else if ($(this).val() !== '') {
+                    $("#end-date").val($(this).val());
+                    $("#end-date").attr("min", $(this).val());
+                }
+                else {
+                    if ($(this).val() === '') {
+                        $("#end-date").val("");
+                    }
+                    $("#end-date").attr("min", todayPlusOne);
+                }
+            });
+
+            const checkbox = document.getElementById('is-remote-check');
+            const urlRequiredMark = document.getElementById('url-field-mark');
+            const mapContent = document.getElementById('is-in-person-event-content');
+            const urlField = document.getElementById('url');
+
+            checkbox.addEventListener('change', (event) => {
+                if (event.currentTarget.checked) {
+                    mapContent.style.display = "none";
+                    urlRequiredMark.innerHTML = "*";
+                    urlField.required = true;
+                    addressField.required = false;
+                } else {
+                    mapContent.style.display = "block";
+                    urlRequiredMark.innerHTML = "";
+                    urlField.required = false;
+                    addressField.required = true;
+                }
+            });
+
+            $(".readonly-style").on('keydown paste focus mousedown', function (e) {
+                if (e.keyCode != 9) // ignore tab
+                    e.preventDefault();
+            });
+
+            const isValidUrl = urlString => {
+                var urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
+                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
+                    '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
+                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
+                    '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
+                    '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locator
+                return !!urlPattern.test(urlString);
+            }
+
+            var urlErrorMsg = document.getElementById('url-error-msg');
+
+            $("#url").keyup(function () {
+                if (this.value != "") {
+                    if (!isValidUrl(this.value)) {
+                        urlErrorMsg.innerText = "URL inválido";
+                    }
+                }
+                else {
+                    urlErrorMsg.innerText = '@localizer.Get("RequiredField")';
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function clearFile() {
+            document.getElementById('banner-picture-input').value = "";
+            document.getElementById('event-image-banner').style.content = "";
+        }
+
+        function changeImage(input) {
+            if (input.files[0] == null) {
+                document.getElementById('event-image-banner').style.content = source;
+            }
+            else {
+                var path = window.URL.createObjectURL(input.files[0]);
+                var source = "url(" + path + ")"
+
+                document.getElementById('event-image-banner').style.content = source;
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            (() => {
+                'use strict';
+
+                const isValidUrl = urlString => {
+                    var urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
+                        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
+                        '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
+                        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
+                        '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
+                        '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locator
+                    return !!urlPattern.test(urlString);
+                }
+
+                function bannerFormatValidation() {
+                    var bannerImageInput = document.getElementById("banner-picture-input");
+                    var bannerImageError = document.getElementById("banner-error-message");
+
+                    const file = bannerImageInput.files[0];
+
+                    $("#banner-picture-input").change(function () {
+                        const file = this.files[0];
+
+                        if (file != undefined) {
+                            const fileType = file['type'];
+                            const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                            if (!validImageTypes.includes(fileType)) {
+                                document.getElementById("banner-error-message").style.display = "block";
+                                this.style.color = "#dc4c64";
+                                this.style.borderColor = "#dc4c64";
+                                return false;
+                            }
+                            else {
+                                document.getElementById("banner-error-message").style.display = "none";
+                                this.style.color = null;
+                                this.style.borderColor = null;
+                            }
+                        }
+                    });
+
+                    if (file != undefined) {
+                        const fileType = file['type'];
+                        const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                        if (!validImageTypes.includes(fileType)) {
+                            bannerImageError.style.display = "block";
+                            bannerImageInput.style.color = "#dc4c64";
+                            bannerImageInput.style.borderColor = "#dc4c64";
+                            bannerImageInput.focus();
+                            return false;
+                        }
+                    }
+                    bannerImageError.style.display = "none";
+                    bannerImageInput.style.color = null;
+                    bannerImageInput.style.borderColor = null;
+                    return true;
+                }
+
+                function urlFormatValidation() {
+                    var url = document.getElementById('url').value;
+                    var urlErrorMsg = document.getElementById('url-error-msg');
+                    const checkbox = document.getElementById('is-remote-check');
+
+                    if (checkbox.checked == true || url != "") {
+                        if (url != "") {
+                            urlErrorMsg.innerText = "URL inválido";
+                            if (isValidUrl(url)) {
+                                return true;
+                            }
+                            else {
+                                return false;
+                            }
+
+                        }
+                        else {
+                            urlErrorMsg.innerText = '@localizer.Get("RequiredField")';
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                function customValidatons() {
+                    var isValid = true;
+
+                    if (!urlFormatValidation()) {
+                        isValid = false;
+                    }
+                    if (!bannerFormatValidation() && isValid != false) {
+                        isValid = false;
+                    }
+
+                    return isValid;
+                }
+
+                function injectData() {
+                    const checkbox = document.getElementById('is-remote-check');
+
+                    if (checkbox.checked == false) {
+                        const lngField = document.getElementById("longitude-field");
+                        const latField = document.getElementById("latitude-field");
+                        const addressField = document.getElementById("address-field");
+
+                        lngField.value = lngField.value.replace(".", ",");
+                        latField.value = latField.value.replace(".", ",");;
+                        checkbox.checked = true;
+                    }
+                    else {
+                        checkbox.checked = false;
+                    }
+                }
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.needs-validation');
+                const submitFormButton = document.getElementById("submit-event");
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms).forEach((form) => {
+                    form.addEventListener('submit', (event) => {
+                        submitFormButton.disabled = true;
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        if (!customValidatons()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        if (form.checkValidity() && customValidatons()) {
+                            injectData();
+                        }
+                        else {
+                            submitFormButton.disabled = false;
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            })();
+        });
+        
+    </script>
+}

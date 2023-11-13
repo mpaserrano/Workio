@@ -1,0 +1,144 @@
+﻿@model ReportEvent;
+
+<h1>@localizer.Get("EventReport")</h1>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">@localizer.Get("EventInformation")</h3>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p>
+                                @localizer.Get("Name")
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p>@Model.ReportedEvent.Title</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p>
+                                @localizer.Get("ReportReason")
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p>@Model.ReportReason.Reason</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p>
+                                @localizer.Get("Date")
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p>@Model.Date</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p>
+                                @localizer.Get("Status")
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            @if (Model.ReportStatus == ReportStatus.Pending)
+                            {
+                                <p style="color: orange">@localizer.Get("Pending")</p>
+                            }
+                            else if (Model.ReportStatus == ReportStatus.Accepted)
+
+                            {
+                                <p style="color: green">@localizer.Get("Accepted")</p>
+                            }
+                            else
+                            {
+                                <p style="color: red">@localizer.Get("Rejected")</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="card" style="height: 150px;">
+        <div class="card-body">
+            <h3 class="card-title">@localizer.Get("Description")</h3>
+            <div>
+                @Model.Description
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@if (Model.ReportStatus == ReportStatus.Pending)
+{
+    <div class="text-center">
+        <a href="#" class="btn btn-danger ms-auto" onclick="addActionToForm('/AdminReports/AcceptEventReport/@Model.Id')">@localizer.Get("Accept")</a>
+        <a href="#" class="btn btn-primary ms-auto" onclick="addActionToForm('/AdminReports/RejectEventReport/@Model.Id')">@localizer.Get("Reject")</a>
+    </div>
+}
+<h1>@localizer.Get("OtherReports")</h1>
+@foreach (ReportEvent item in ViewBag.OtherReports)
+{
+    <a asp-controller="AdminReports" asp-action="DetailsEvent" asp-route-id=@item.Id>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">@localizer.Get("EventInformation")</h4>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p>@localizer.Get("Name")</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <p>@item.ReportedEvent.Title</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p>@localizer.Get("ReportReason")</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <p>@item.ReportReason.Reason</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p>@localizer.Get("Date"):</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <p>@item.Date</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p>@localizer.Get("Status")</p>
+                    </div>
+                    <div class="col-sm-8">
+                        @if (item.ReportStatus == ReportStatus.Pending)
+                        {
+                            <p style="color: orange">@localizer.Get("Pending")</p>
+                        }
+                        else if (item.ReportStatus == ReportStatus.Accepted)
+
+                        {
+                            <p style="color: green">@localizer.Get("Accepted")</p>
+                        }
+                        else
+                        {
+                            <p style="color: red">@localizer.Get("Rejected")</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </a>
+}
+
+
+</div>
+

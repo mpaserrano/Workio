@@ -1,0 +1,208 @@
+﻿@model Workio.Models.RequestEntityStatus
+
+@{
+    ViewData["Title"] = @localizer.Get("Create");
+}
+
+<h4>@localizer.Get("RequestToBeEntity")</h4>
+@if (ViewBag.AlreadyRequested == true)
+{
+    <p></p>
+    <h5><b>@localizer.Get("Details")</b></h5>
+    @foreach (var item in ViewBag.UserInfo)
+    {
+        <table style="">
+            <tr>
+                <th>@localizer.Get("Reason"):</th>
+                <td style="padding: 5px">@item.Motivation</td>
+            </tr>
+            <tr>
+                <th>@localizer.Get("File Submitted"):</th>
+                <td style="padding: 5px">@item.OriginalFileName</td>
+            </tr>
+            <tr>
+                <th>@localizer.Get("Date Submitted"):</th>
+                <td style="padding: 5px">@item.RequestDate</td>
+            </tr>
+            <tr>
+                <th span class="fw-bold ms-4">@localizer.Get("State"):</th>
+                @switch (@item.RequestState)
+                {
+                    case (RequestState.Approved):
+                        {
+                            <th span class="badge rounded-pill badge-success">@item.RequestState</th>
+                            break;
+                        }
+                    case (RequestState.Rejected):
+                        {
+                            <th span class="badge rounded-pill badge-danger">@item.RequestState</th>
+                            break;
+                        }
+                    case (RequestState.Pending):
+                        {
+                            <th span class="badge rounded-pill badge-warning">@item.RequestState</th>
+                            break;
+                        }
+                }
+            </tr>
+        </table>
+    }
+    <p></p>
+    @if (ViewBag.RequestState == RequestState.Rejected)
+    {
+        <h5 class="text-danger">@localizer.Get("RequestRejected")</h5>
+        <h5>@localizer.Get("Please click")<a asp-action="Edit" asp-controller="RequestEntityStatus" asp-route-id="@ViewData["id"]"> @localizer.Get("here") </a>@localizer.Get("to update your request")</h5>
+        <div>
+            <a asp-action="Index" asp-controller="User">@localizer.Get("GoBack")</a>
+        </div>
+    }
+    else
+    {
+        <h5 class="text-warning"> @localizer.Get("RequestPending")</h5>
+        <h5>@localizer.Get("Please click")<a asp-action="Edit" asp-controller="RequestEntityStatus" asp-route-id="@ViewData["id"]"> @localizer.Get("here") </a>@localizer.Get("to update your request")</h5>
+        <div>
+            <a asp-action="Index" asp-controller="User">@localizer.Get("GoBack")</a>
+        </div>
+    }
+}
+else
+{
+    <hr />
+    <p></p>
+    <p>@localizer.Get("EntityNeeds"):</p>
+    <p></p>
+    <ol>
+        <li>@localizer.Get("WhyBeCertifiedEntity")</li>
+        <li>@localizer.Get("AttachPDF")</li>
+        <li>@localizer.Get("FieldCheck")</li>
+    </ol>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" asp-action="Create" asp-controller="RequestEntityStatus" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div class="row g-3 align-items-center mb-4">
+                <div class="col-md-12">
+                    <div class="form-outline">
+                        <textarea asp-for="Motivation" name="Motivation" rows="4" class="form-control" id="Description" required ></textarea>
+                        <label asp-for="Motivation" class="form-label">@localizer.Get("Reason")</label>
+                        <span asp-validation-for="Motivation" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-4">
+                <div class="form-group col-12">
+                    <label asp-for="FilePath" class="form-label">@localizer.Get("File")</label>
+                    <div class="input-group">
+                        <input asp-for="FilePath" id="file-input" type="file" class="form-control form-control-lg" accept=".pdf" required />
+                        <button type="button" class="btn btn-link" data-mdb-ripple-color="dark" onclick="clearFile()">@localizer.Get("Clear")</button>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="FilePath" id="file-error-message" class="invalid-feedback">@localizer.Get("Must have a PDF")</span>
+                </div>
+            </div>
+                <p></p>
+                <div class="form-group">
+                    <input type="submit" value="@localizer.Get("SubmitRequest")" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function clearFile() {
+            document.getElementById('file-input').value = "";
+        }
+
+        $(document).ready(function () {
+
+            function fileFormatValidation() {
+                    var fileInput = document.getElementById("file-input");
+                    var fileImageError = document.getElementById("file-error-message");
+
+                    const file = fileInput.files[0];
+
+                    if (file != undefined) {
+                        const fileType = file['type'];
+                        const validFileTypes = ['application/pdf'];
+                        if (!validFileTypes.includes(fileType)) {
+                            fileImageError.style.display = "block";
+                            fileInput.style.color = "#dc4c64";
+                            fileInput.style.borderColor = "#dc4c64";
+                            fileInput.focus();
+                            clearFile();
+                            return false;
+                        }
+                    }
+                    else{
+                        fileImageError.style.display = "block";
+                        fileInput.style.color = "#dc4c64";
+                        fileInput.style.borderColor = "#dc4c64";
+                        fileInput.focus();
+                        return false;
+                    }
+
+                    fileImageError.style.display = "none";
+                    fileInput.style.color = null;
+                    fileInput.style.borderColor = null;
+                    return true;
+                }
+
+            $("#file-input").change(function () {
+                const file = this.files[0];
+
+                if (file != undefined) {
+                    const fileType = file['type'];
+                    const validFileTypes = ['application/pdf'];
+                    if (!validFileTypes.includes(fileType)) {
+                        document.getElementById("file-error-message").style.display = "block";
+                        this.style.color = "#dc4c64";
+                        this.style.borderColor = "#dc4c64";
+                        clearFile();
+                        return false;
+                    }
+                    else {
+                        document.getElementById("file-error-message").style.display = "none";
+                        this.style.color = null;
+                        this.style.borderColor = null;
+                    }
+                }
+            });
+
+            function customValidatons() {
+                var isValid = true;
+
+                if (!fileFormatValidation() && isValid != false) {
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                    }
+                    if (!customValidatons()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,61 @@
+﻿@model Workio.Models.SkillModel
+@inject CommonLocalizationService localizer
+
+<div class="modal fade" id="skillsModal" tabindex="-1" data-mdb-backdrop="static" aria-labelledby="skillsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="User" asp-action="AddSkill" asp-route-showMore="@ViewData["showMore"]" id="skillForm" class="needs-validation" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="skillsModalLabel">@localizer.Get("Skills")</h5>
+                    <button type="reset" class="btn-close" id="closeModalSkill" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-outline">
+                            <input asp-for="Name" name="Name" type="text" class="form-control" id="Name" required />
+                            <label asp-for="Name" for="Name" class="form-label">@localizer.Get("SkillName")</label>
+                            <span asp-validation-for="Name" class="invalid-feedback">@localizer.Get("RequiredField")</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" id="closeModalSkill2" data-mdb-dismiss="modal">@localizer.Get("Close")</button>
+                    <button type="submit" id="submit-skill" class="btn btn-primary">@localizer.Get("Save changes")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        'use strict';
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation');
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        
+        document.getElementById('closeModalSkill').addEventListener("click", resetModal)
+        document.getElementById('closeModalSkill2').addEventListener("click", resetModal)
+
+        function resetModal() {
+            let deleteButton = document.getElementById('deleteSkill')
+
+            if (deleteButton != null) {
+                deleteButton.remove()
+            }
+
+            document.getElementById('skillsModal').querySelector('#skillForm').action = "/User/AddSkill?showMore=True"
+        }
+    })();
+</script>

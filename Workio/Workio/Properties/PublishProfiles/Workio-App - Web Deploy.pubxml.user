@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA1d1P3UM81UOkq5HaIVcXgwAAAAACAAAAAAAQZgAAAAEAACAAAACwLV+5on+FvlgGKLYr2Ks7OSSyra0I3/u+qA1UjQfv4wAAAAAOgAAAAAIAACAAAABpvncgBAxlBUNki79WCqPJHPKmff5aEviuKdU2slNIUoAAAAAuJXVDIVFND36nFUQLw2MNMh3rMF3KpqlvIG7RGb6Sbh9zzCMiaeTcJ1FwHZ0qwwuXVlgnEml2SJ22F6lu5GDjab9t/Vq/64/17xJebXwIfE2kRjybmMyoVA3n6UDsbBnHmt2wrMnXicakLLkz6KRRjy/q/yiXYw32w2MZ8iq5x0AAAABaSnfrExcwMMH9MizIGltoUTq6gJMUuRhBnH3X1dAzslWMQ693KR/YFA1CQ01MjB0V1ag2qPVA7Bmq3n+AXCEb</EncryptedPassword>
+    <History>True|2023-03-22T15:56:21.0672009Z;True|2023-03-08T15:21:05.0647042+00:00;True|2023-03-07T19:27:10.9604191+00:00;True|2023-03-07T19:03:42.5465033+00:00;False|2023-03-07T18:59:18.5260352+00:00;True|2023-03-07T13:54:36.2110248+00:00;True|2023-03-06T00:08:06.3997631+00:00;False|2023-03-05T23:59:30.2944597+00:00;False|2023-03-05T23:54:35.6226130+00:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=tcp:dbserverworkio.database.windows.net,1433%3bInitial Catalog=workio-db%3bUser Id=workioLucas%40dbserverworkio%3bPassword=!Esa2023%3f</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="Workio.Data.ApplicationDbContext">
+      <Value>Data Source=tcp:dbserverworkio.database.windows.net,1433%3bInitial Catalog=workio-db%3bUser Id=workioLucas%40dbserverworkio%3bPassword=!Esa2023%3f</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

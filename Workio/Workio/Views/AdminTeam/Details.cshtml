@@ -1,0 +1,282 @@
+﻿@model Workio.Models.Team
+@inject UserManager<User> UserManager;
+@inject Workio.Services.Interfaces.IUserService userService;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var currentCulture = Thread.CurrentThread.CurrentCulture.Name;
+}
+
+<link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+<style>
+    .table-user-profile-picture {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    #UserReports td {
+        vertical-align: middle;
+    }
+
+    #UserReports td .table-user-profile-picture {
+        margin-right: 10px;
+    }
+
+    #UserTeams td {
+        vertical-align: middle;
+    }
+</style>
+
+@{
+    User user = await userService.GetUser(Model.OwnerId.Value);
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="d-flex align-items-center">
+                        <div class="ms-3">
+                            <div><p class="fw-bold mb-1">@localizer.Get("TeamName"):  <a href="/Teams/Details/@Model.TeamId" >@Model.TeamName</a></p></div>
+                        </div>
+                        @if(!Model.IsBanned)
+                        {
+                            <a onclick="addActionToForm('/AdminTeam/BanTeamFromDetails/@Model.TeamId')" class="btn btn-danger ms-auto">@localizer.Get("Ban")</a>
+                        }
+                        else
+                        {
+                            <a onclick="addActionToForm('/AdminTeam/UnbanTeamFromDetails/@Model.TeamId')" class="btn btn-primary ms-auto">@localizer.Get("Unban")</a>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="ms-3">
+                    <div><p class="fw-bold mb-1">@localizer.Get("Creator"): <a href="/Admin/User/@user.Id" >@user.Name</a></p></div>
+                    <div class="d-flex align-items-center">
+                        @if (user.ProfilePicture != null)
+                        {
+                            <img class="rounded-circle profile-picture-preview" src="~/pfp/@user.ProfilePicture" alt="Profile Picture" class="pfp" />
+                        }
+                        else
+                        {
+                            <img class="rounded-circle profile-picture-preview" src="~/pfp/default.png" alt="Profile Picture" class="rounded-circle pfp" />
+                        }
+                        <div class="ms-3">
+                            <p class="text-muted mb-0">@user.Email</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="ms-3">
+                        <div><p class="fw-bold mb-1">@localizer.Get("Status")</p></div>
+                        @if(Model.IsBanned){
+                            <span class="badge rounded-pill badge-danger">@localizer.Get("BannedSingularM")</span>
+                        }
+                        else
+                        {
+                           @switch (Model.Status)
+                            {
+                                case (Workio.Models.TeamStatus.Open):
+                                    {
+                                        <span class="badge rounded-pill badge-success">@localizer.Get("Open")</span>
+                                        break;
+                                    }
+                                case (Workio.Models.TeamStatus.Closed):
+                                    {
+                                        <span class="badge rounded-pill badge-info">@localizer.Get("Closed")</span>
+                                        break;
+                                    }
+                                case (Workio.Models.TeamStatus.Finish):
+                                    {
+                                        <span class="badge rounded-pill badge-danger">@localizer.Get("Finished")</span>
+                                        break;
+                                    }
+                            } 
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <h4>@localizer.Get("PreviousReports")</h4>
+                </div>
+                <table id="TeamReports" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @localizer.Get("Reporter")
+                            </th>
+                            <th>
+                                @localizer.Get("Reason")
+                            </th>
+                            <th>
+                                @localizer.Get("Status")
+                            </th>
+                            <th>
+                                @localizer.Get("Date")
+                            </th>
+                            <th>
+                                @localizer.Get("Actions")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <h4>@localizer.Get("TeamMembers")</h4>
+                </div>
+                <table id="TeamMemberReports" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @localizer.Get("User")
+                            </th>
+                            <th>
+                                @localizer.Get("Status")
+                            </th>
+                            <th>
+                                @localizer.Get("NumberOfReports")
+                            </th>
+                            <th>
+                                @localizer.Get("Actions")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script>
+        var localizationUrl = '@currentCulture' == 'pt' ? '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-PT.json' : ''
+        $(document).ready(function () {
+            $('#TeamReports').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ajax: {
+                    url: '/AdminTeam/GetTeamReports',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                        d.id = '@Model.TeamId';
+                    }
+                },
+                columns: [
+                    { data: null,
+                        render: function (data, type, rowData, meta) {
+                            if (rowData.profilepicture == null || rowData.profilepicture == "") {
+                                return '<a href="/User/Index/' + rowData.reporterId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.reporterName + '</a>'
+                            }
+                            else {
+                                return '<a href="/User/Index/' + rowData.reporterId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.reporterProfilePicture + '"/>' + rowData.reporterName + '</a>'
+                            }
+                            
+                        }
+                    },
+                    { data: 'reportReason' },
+                    { data: null,
+                        render: function (data, type, rowData, meta) {
+                            if (rowData.reportStatus == 0) {
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("Rejected")" + '</span>'
+                            }
+                            if (rowData.reportStatus == 1) {
+                                return '<span class="badge rounded-pill badge-warning">' + "@localizer.Get("Pending")" + '</span>'
+                            }
+                            if (rowData.reportStatus == 2) {
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Accepted")" + '</span>'
+                            }
+                        }
+                            
+                    },
+                    { data: 'reportDate' },
+                    {
+                        data: null,
+                        render: function (data, type, rowData, meta) {
+                            return '<a href="/AdminReports/DetailsTeam/' + rowData.id + '" >@localizer.Get("Details")</a>'
+                        }
+                    }
+                ]
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            $('#TeamMemberReports').DataTable({
+                language: {
+                    url: localizationUrl,
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/AdminTeam/GetTeamMemberReports',
+                    type: 'GET',
+                    data: function (d) {
+                        // Add any required parameters to the request.
+                        d.searchValue = $('#TeamMemberReports_filter input').val();
+                        d.sortColumn = $('#sortColumnSelect').val();
+                        d.sortDirection = $('#sortDirectionSelect').val();
+                        d.id = '@Model.TeamId';
+                    }
+                },
+                columns: [
+                    { data: null,
+                        render: function (data, type, rowData, meta) {
+                            if (rowData.userProfilePicture == null || rowData.userProfilePicture == "") {
+                                return '<a href="/User/Index/' + rowData.userId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/default.png">' + rowData.userName + '</a>'
+                            }
+                            else {
+                                return '<a href="/User/Index/' + rowData.userId + '"><img class="rounded-circle table-user-profile-picture" src="/pfp/' + rowData.userProfilePicture + '"/>' + rowData.userName + '</a>'
+                            }
+                            
+                        }
+                    },
+                    { data: null,
+                        render: function (data, type, rowData, meta) {
+                            if(rowData.banned){
+                                return '<span class="badge rounded-pill badge-danger">' + "@localizer.Get("BannedSingularM")" + '</span>'
+                            }
+                            else{
+                                return '<span class="badge rounded-pill badge-success">' + "@localizer.Get("Active")" + '</span>'
+                            }
+                        }
+                            
+                    },
+                    { data: 'totalReports' },
+                    { 
+                        data: null,
+                        render: function (data, type, rowData, meta) 
+                        {
+                            return '<a href="/Admin/User/' + rowData.userId + '"  >@localizer.Get("Details")</a>'
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}
